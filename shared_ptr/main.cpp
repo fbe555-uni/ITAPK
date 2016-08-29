@@ -1,19 +1,29 @@
 #include <iostream>
 #include "SharedPtr.h"
+#include "test_class.h"
 
 int main() {
-    std::string hello_world = "Hello World";
-    SharedPtr<std::string, int> mySharedPtr = SharedPtr<std::string, int>(&hello_world);
+    //constructor tests:
+    SharedPtr<TestClass> *my1stPtr = new SharedPtr<TestClass>(new TestClass("FirstClass"));
+    SharedPtr<TestClass> my2ndPtr = *my1stPtr;
+    SharedPtr<TestClass> *my3rdPtr = new SharedPtr<TestClass>(my2ndPtr);
+
+    std::cout << "count: " << my1stPtr->count() << std::endl;
+    delete my1stPtr;
+    std::cout << "count: " << my2ndPtr.count() << std::endl;
+    my2ndPtr = SharedPtr<TestClass>(new TestClass("NotFirstClass"));
+    std::cout << "count: " << my3rdPtr->count() << std::endl;
+    delete my3rdPtr;
 
     //overload tests:
     typedef struct TestStruct{
-      std::string a = "hello"
-      std::string b = "world"
+      std::string a = "hello";
+      std::string b = "world";
     } TestStruct;
 
-    SharedPtr<TestStruct> mySharedPtr = SharedPtr<TestStruct>(TestStruct hw_struct );
-    stdout << "(*mySharedPtr).a << (*mySharedPtr).b returned: " << (*mySharedPtr).a << (*mySharedPtr).b << newline;
-    stdout << "mySharedPtr->a << mySharedPtr->b returned: " << mySharedPtr->a << mySharedPtr->b << newline;
-    
+    SharedPtr<TestStruct> mySharedPtr = SharedPtr<TestStruct>(new TestStruct());
+    std::cout << "(*mySharedPtr).a << (*mySharedPtr).b returned: " << (*mySharedPtr).a << (*mySharedPtr).b << std::endl;
+    std::cout << "mySharedPtr->a << mySharedPtr->b returned: " << mySharedPtr->a << mySharedPtr->b << std::endl;
+
     return 0;
 }

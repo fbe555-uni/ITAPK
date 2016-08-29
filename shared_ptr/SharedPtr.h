@@ -7,69 +7,76 @@
 
 #include <glob.h>
 
-template <typename T, typename D>
-class SharedPtr {
-public:
-    //explicit constructor
-    explicit SharedPtr(T* t) {
-        ptr = t;
-        count_ptr = new size_t;
-        *count_ptr = 1;
-    }
+namespace felhak {
 
-    SharedPtr(const SharedPtr& other){
-        ptr = other.ptr;
-        count_ptr = other.count_ptr;
-        *count_ptr += 1;
-    }
-
-    SharedPtr& operator=(const SharedPtr& other){
-        delete this;
-        ptr = other.ptr;
-        count_ptr = other.count_ptr;
-        *count_ptr += 1;
-        return (SharedPtr &) this;
-    }
-
-    //custom destruction functor
-    SharedPtr(T* t, D d) : SharedPtr(t){
-        dest_ptr = new D(d);
-    }
-
-    ~SharedPtr() {
-        *count_ptr -= 1;
-        if (*count_ptr == 0){
-            delete ptr;
-            delete count_ptr;
+    template<typename T>
+    class SharedPtr {
+    public:
+        //explicit constructor
+        explicit SharedPtr(T *t) {
+            ptr = t;
+            count_ptr = new size_t;
+            *count_ptr = 1;
         }
-    }
 
-    //behave like normal pointer when using the shared ptr
-    const T& operator*(){
+        SharedPtr(const SharedPtr &other) {
+            ptr = other.ptr;
+            count_ptr = other.count_ptr;
+            *count_ptr += 1;
+        }
 
-        return &(*ptr);
-    }
+        SharedPtr &operator=(const SharedPtr &other) {
+            //TODO add self check
+            *count_ptr -= 1;
+            if (*count_ptr == 0) {
+                delete ptr;
+                delete count_ptr;
+            }
+            ptr = other.ptr;
+            count_ptr = other.count_ptr;
+            *count_ptr += 1;
+            return *this;
+        }
 
-    //behave like normal pointer when using the shared ptr
-    const T* operator->(){
+/*    //custom destruction functor
+    SharedPtr(T* t, D d) : SharedPtr(t){
+        dest_ptr = new D(d);(SharedPtr &)
+    }*/
 
-        return ptr;
-    }
+        ~SharedPtr() {
+            *count_ptr -= 1;
+            if (*count_ptr == 0) {
+                delete ptr;
+                delete count_ptr;
+            }
+        }
 
-    virtual const bool operator==(const SharedPtr& lhs, const SharedPtr& rhs){
-        return lhs.ptr == rhs.ptr;
-    }
+        //behave like normal pointer when using the shared ptr
+        T &operator*() const {
 
-    const size_t count(){
+            return *ptr;
+        }
 
-        return *count_ptr;
-    }
+        //behave like normal pointer when using the shared ptr
+        T *operator->() const {
 
-private:
-    D* dest_ptr;
-    T* ptr;
-    size_t* count_ptr;
-};
+            return ptr;
+        }
 
+        virtual const bool operator!=(const SharedPtr &other) {
+            return ptr != other.ptr;
+        }
+
+        size_t count() const {
+
+            return *count_ptr;
+        }
+
+    private:
+        T *ptr;
+        size_t *count_ptr;
+    };
+
+}
 
 #endif //SHARED_PTR_SHAREDPTR_H
