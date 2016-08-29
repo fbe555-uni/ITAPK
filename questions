@@ -2,3 +2,6 @@
 - explicit constructors
 - calling constructors/destructors in = overload
 - other overloads
+- virtual for == overload
+- why/when does one need a functor for cleanup, if objects destructor is called anyways
+- why/how to use external polymophism for described case
