@@ -12,12 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5498dac3-dc21-412c-b6ff-a9b4b3797f07" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../array_template/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../array_template/MyArray.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SharedPtr.h" afterPath="$PROJECT_DIR$/SharedPtr.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test_class.h" afterPath="$PROJECT_DIR$/test_class.h" />
     </list>
     <ignored path="shared_ptr.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -340,7 +335,7 @@
       <updated>1472455988376</updated>
       <workItem from="1472455989654" duration="3692000" />
       <workItem from="1472459699119" duration="12926000" />
-      <workItem from="1472477143904" duration="989000" />
+      <workItem from="1472477143904" duration="1040000" />
     </task>
     <task id="LOCAL-00001" summary="initial SharedPtr class commit -h">
       <created>1472459653640</created>
@@ -356,11 +351,18 @@
       <option name="project" value="LOCAL" />
       <updated>1472471586777</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="SharedPtr class done and tested -h">
+      <created>1472478434860</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1472478434860</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17607000" />
+    <option name="totallyTimeSpent" value="17658000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="960" y="52" width="960" height="1028" extended-state="4" />
@@ -400,7 +402,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial SharedPtr class commit -h" />
     <MESSAGE value="SharedPtr class &quot;done&quot; -h" />
-    <option name="LAST_COMMIT_MESSAGE" value="SharedPtr class &quot;done&quot; -h" />
+    <MESSAGE value="SharedPtr class done and tested -h" />
+    <option name="LAST_COMMIT_MESSAGE" value="SharedPtr class done and tested -h" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
