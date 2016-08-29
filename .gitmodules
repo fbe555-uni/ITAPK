@@ -1,0 +1,3 @@
+[submodule "ittapk_e2016"]
+	path = ittapk_e2016
+	url = https://redmine.ase.au.dk:/courses/ittapk/ittapk_e2016.git
