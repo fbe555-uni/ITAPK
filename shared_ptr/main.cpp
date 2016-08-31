@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SharedPtr.h"
 #include "test_class.h"
+using felhak::SharedPtr;
 
 int main() {
     //constructor tests:

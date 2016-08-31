@@ -38,10 +38,10 @@ namespace felhak {
             return *this;
         }
 
-/*    //custom destruction functor
-    SharedPtr(T* t, D d) : SharedPtr(t){
-        dest_ptr = new D(d);(SharedPtr &)
-    }*/
+//    //custom destruction functor
+//    SharedPtr(T* t, D d) : SharedPtr(t){
+//        dest_ptr = new D(d);(SharedPtr &)
+//    }
 
         ~SharedPtr() {
             *count_ptr -= 1;
