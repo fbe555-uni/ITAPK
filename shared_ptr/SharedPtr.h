@@ -36,7 +36,7 @@ namespace felhak {
             *count_ptr = 1;
         }
 
-        template<typename T, typename D>
+        template<typename D>
         SharedPtr(T *t, D d) : SharedPtr(t){
             _h = new details::ShPtrHelperImpl<T, D>(d);
         };
