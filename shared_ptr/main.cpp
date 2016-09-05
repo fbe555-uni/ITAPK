@@ -3,6 +3,12 @@
 #include "test_class.h"
 using felhak::SharedPtr;
 
+struct CustomDestruct{
+    void operator()(int* i){
+        std::cout << "super custom" << *i << std::endl;
+    }
+};
+
 int main() {
     //constructor tests:
     SharedPtr<TestClass> *my1stPtr = new SharedPtr<TestClass>(new TestClass("FirstClass"));
@@ -26,5 +32,8 @@ int main() {
     std::cout << "(*mySharedPtr).a << (*mySharedPtr).b returned: " << (*mySharedPtr).a << (*mySharedPtr).b << std::endl;
     std::cout << "mySharedPtr->a << mySharedPtr->b returned: " << mySharedPtr->a << mySharedPtr->b << std::endl;
 
+    std::cout << "testing custom destructor:";
+    SharedPtr<int>* cDestrShPtr = new SharedPtr<int>(new int(5), CustomDestruct());
+    delete(cDestrShPtr);
     return 0;
 }

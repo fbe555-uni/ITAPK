@@ -9,6 +9,23 @@
 
 namespace felhak {
 
+    namespace details{
+        template <typename T>
+        struct ShPtrHelper{
+            virtual void operator()(T* t) = 0;
+            virtual ~ShPtrHelper(){}
+        };
+
+        template <typename T, typename D>
+        struct ShPtrHelperImpl : public ShPtrHelper<T>{
+            ShPtrHelperImpl(D d) : _d(d){};
+            void operator()(T* t){
+                _d(t);
+            }
+            D _d;
+        };
+    }
+
     template<typename T>
     class SharedPtr {
     public:
@@ -19,13 +36,18 @@ namespace felhak {
             *count_ptr = 1;
         }
 
+        template<typename T, typename D>
+        SharedPtr(T *t, D d) : SharedPtr(t){
+            _h = new details::ShPtrHelperImpl<T, D>(d);
+        };
+
         SharedPtr(const SharedPtr &other) {
             ptr = other.ptr;
             count_ptr = other.count_ptr;
             *count_ptr += 1;
         }
 
-        SharedPtr &operator=(const SharedPtr &other) {
+        SharedPtr& operator=(const SharedPtr &other) {
             //TODO add self check
             *count_ptr -= 1;
             if (*count_ptr == 0) {
@@ -38,15 +60,15 @@ namespace felhak {
             return *this;
         }
 
-//    //custom destruction functor
-//    SharedPtr(T* t, D d) : SharedPtr(t){
-//        dest_ptr = new D(d);(SharedPtr &)
-//    }
-
         ~SharedPtr() {
             *count_ptr -= 1;
             if (*count_ptr == 0) {
-                delete ptr;
+                if(_h){
+                    (*_h)(ptr);
+                }else{
+                    delete ptr;
+                }
+                delete _h;
                 delete count_ptr;
             }
         }
@@ -72,11 +94,12 @@ namespace felhak {
             return *count_ptr;
         }
 
+
     private:
         T *ptr;
+        details::ShPtrHelper<T>* _h;
         size_t *count_ptr;
     };
-
 }
 
 #endif //SHARED_PTR_SHAREDPTR_H
