@@ -16,7 +16,7 @@ namespace felhak {
         }
 
         template<typename D>
-        MyArray(MyArray<D, size_t> orig){
+        MyArray(MyArray<D, _size> orig){
             array = new T[orig.size()];
             _size = orig.size();
             T* i = begin();

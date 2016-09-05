@@ -5,7 +5,7 @@ int main() {
     myArray.fill(3);
 
 
-    std :: cout << "Looking for '3'? " << (  felhak::myfind(myArray.begin(),myArray.end(),3) !=
+    std :: cout << "Looking for '3'? " << (  felhak::myfind(myArray.begin(),myArray.end(),3.1) !=
                                              myArray.end ()? "found " : "sry no") << std :: endl;
 
     std::cout << "the size of our array is: " << myArray.size() << std::endl;
