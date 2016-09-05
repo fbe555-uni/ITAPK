@@ -16,7 +16,7 @@ namespace felhak {
         }
 
         template<typename D>
-        MyArray(MyArray<D, s> orig){
+        MyArray(const MyArray<D, s>& orig){
             array = new T[s];
             T* i = begin();
             D* j = orig.begin();
@@ -28,7 +28,7 @@ namespace felhak {
         }
 
         template <typename D>
-        MyArray<T, s>& operator=(MyArray<D, s> orig){
+        MyArray<T, s>& operator=(const MyArray<D, s>& orig){
             T* i = begin();
             D* j = orig.begin();
             while(i != end()){
@@ -49,11 +49,11 @@ namespace felhak {
             }
         }
 
-        T *begin() {
+        T *begin() const{
             return array;
         }
 
-        T *end() {
+        T *end() const{
             return array+_size;
         }
 
