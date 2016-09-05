@@ -8,15 +8,15 @@
 #define ARRAY_TEMPLATE_MYARRAY_H
 namespace felhak {
 
-    template<typename T, size_t size_>
+    template<typename T, size_t s>
     class MyArray {
     public:
         MyArray(){
-            array = new T[size_];
+            array = new T[s];
         }
 
         template<typename D>
-        MyArray(MyArray<D, size_t> orig){
+        MyArray(MyArray<D, s> orig){
             array = new T[orig.size()];
             _size = orig.size();
             T* i = begin();
@@ -29,18 +29,15 @@ namespace felhak {
         }
 
         template <typename D>
-        operator=(MyArray<D, size_t> orig){
-            if(_size != orig.size()) {
-                array = new T[orig.size()];
-                _size = orig.size();
-                T* i = begin();
-                D* j = orig.begin();
-                while(i != end()){
-                    *i = *j;
-                    i++;
-                    j++;
-                }
+        MyArray<T, s>& operator=(MyArray<D, s> orig){
+            T* i = begin();
+            D* j = orig.begin();
+            while(i != end()){
+                *i = *j;
+                i++;
+                j++;
             }
+            return *this;
         }
 
         ~MyArray() {
@@ -70,12 +67,12 @@ namespace felhak {
         }
 
     private:
-        size_t _size = size_;
+        size_t _size = s;
         T* array;
     };
 
-    template <typename T>
-    T* myfind (T* first , T* last , const T& v){
+    template <typename T, typename D>
+    T* myfind (T* first , T* last , const D& v){
         for(;first != last; first++){
             if(*first == v) return first;
         }
