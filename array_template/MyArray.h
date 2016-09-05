@@ -48,6 +48,6 @@ namespace felhak {
         for(;first != last; first++){
             if(*first == v) return first;
         }
-        return nullptr;
+        return last;
     }
 }
