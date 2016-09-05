@@ -8,7 +8,7 @@
 #define ARRAY_TEMPLATE_MYARRAY_H
 namespace felhak {
 
-    template<typename T, size_t size>
+    template<typename T, size_t size_>
     class MyArray {
     public:
         MyArray(){}
@@ -22,11 +22,11 @@ namespace felhak {
             }
         }
 
-        T *begin() const {
+        T *begin() {
             return array;
         }
 
-        T *end() const {
+        T *end() {
             return array+_size;
         }
 
@@ -39,8 +39,8 @@ namespace felhak {
         }
 
     private:
-        size_t _size = size;
-        T array[size];
+        size_t _size = size_;
+        T array[size_];
     };
 
     template <typename T>
@@ -48,6 +48,8 @@ namespace felhak {
         for(;first != last; first++){
             if(*first == v) return first;
         }
-        return nullptr;
+        return last;
     }
 }
+
+#endif //ARRAY_TEMPLATE_H
