@@ -17,8 +17,7 @@ namespace felhak {
 
         template<typename D>
         MyArray(MyArray<D, s> orig){
-            array = new T[orig.size()];
-            _size = orig.size();
+            array = new T[s];
             T* i = begin();
             D* j = orig.begin();
             while(i != end()){
@@ -41,7 +40,7 @@ namespace felhak {
         }
 
         ~MyArray() {
-            delete array;
+            delete [] array;
         }
 
         void fill(const T & value) {

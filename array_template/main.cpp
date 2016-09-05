@@ -20,6 +20,7 @@ int main() {
     std::cout << std::endl;
     myIntArray.fill(5);
     myArray = myIntArray;
+    felhak::MyArray<double, 10> myNewArray(myIntArray);
     std::cout << "myArray after assignment:";
     for(double* i = myArray.begin(); i != myArray.end(); i++){
         std::cout << " " << *i;
