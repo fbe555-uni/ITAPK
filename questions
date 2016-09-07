@@ -1,10 +1,3 @@
-**********shared_ptr************
-- explicit constructors
-- calling constructors/destructors in = overload
-- other overloads
-- virtual for == overload
-- why/when does one need a functor for cleanup, if objects destructor is called anyways
-- why/how to use external polymophism for described case
+*********** template array ********************
 
-*************template array**************
--constructor has no length arg.. mistake?
+partial specialization, do we really write a new class definition?
