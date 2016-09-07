@@ -48,7 +48,7 @@ namespace felhak {
         }
 
         SharedPtr& operator=(const SharedPtr &other) {
-            //TODO add self check
+          if(other.ptr == ptr) return *this;
             *count_ptr -= 1;
             if (*count_ptr == 0) {
                 delete ptr;
@@ -83,6 +83,10 @@ namespace felhak {
         T *operator->() const {
 
             return ptr;
+        }
+
+        virtual const bool operator==(const SharedPtr &other) {
+            return ptr == other.ptr;
         }
 
         virtual const bool operator!=(const SharedPtr &other) {

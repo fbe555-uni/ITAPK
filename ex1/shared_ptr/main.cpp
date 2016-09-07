@@ -15,9 +15,18 @@ int main() {
     SharedPtr<TestClass> my2ndPtr = *my1stPtr;
     SharedPtr<TestClass> *my3rdPtr = new SharedPtr<TestClass>(my2ndPtr);
 
+    if (*my1stPtr == *my3rdPtr)
+    {
+        std::cout << "true" << std::endl;
+    }
+    else if(*my1stPtr != *my3rdPtr) {
+        std::cout << "false" << std::endl;
+    }
+
     std::cout << "count: " << my1stPtr->count() << std::endl;
     delete my1stPtr;
     std::cout << "count: " << my2ndPtr.count() << std::endl;
+
     my2ndPtr = SharedPtr<TestClass>(new TestClass("NotFirstClass"));
     std::cout << "count: " << my3rdPtr->count() << std::endl;
     delete my3rdPtr;
