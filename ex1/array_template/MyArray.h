@@ -15,11 +15,11 @@ namespace felhak {
             array = new T[s];
         }
 
-        template<typename D>
-        MyArray(const MyArray<D, s>& orig){
+        template<typename U>
+        MyArray(const MyArray<U, s>& orig){
             array = new T[s];
             T* i = begin();
-            D* j = orig.begin();
+            U* j = orig.begin();
             while(i != end()){
                 *i = *j;
                 i++;
@@ -27,10 +27,10 @@ namespace felhak {
             }
         }
 
-        template <typename D>
-        MyArray<T, s>& operator=(const MyArray<D, s>& orig){
+        template <typename U>
+        MyArray<T, s>& operator=(const MyArray<U, s>& orig){
             T* i = begin();
-            D* j = orig.begin();
+            U* j = orig.begin();
             while(i != end()){
                 *i = *j;
                 i++;
@@ -70,8 +70,16 @@ namespace felhak {
         T* array;
     };
 
-    template <typename T, typename D>
-    T* myfind (T* first , T* last , const D& v){
+    template<typename T, size_t s>
+    MyArray<T*,s>::~MyArray(){
+        for(T** i = begin(); i != end(); i++){
+            delete *i;
+        }
+        delete [] array;
+    }
+
+    template <typename T, typename U>
+    T* myfind (T* first , T* last , const U& v){
         for(;first != last; first++){
             if(*first == v) return first;
         }
