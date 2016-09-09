@@ -57,7 +57,7 @@ namespace felhak {
             return array+_size;
         }
 
-        T& operator[](int i) {
+        T& operator[](int const i) {
             return *(array+i);
         }
 
@@ -70,13 +70,13 @@ namespace felhak {
         T* array;
     };
 
-    template<typename T, size_t s>
-    MyArray<T*,s>::~MyArray(){
-        for(T** i = begin(); i != end(); i++){
-            delete *i;
-        }
-        delete [] array;
-    }
+//    template<typename T, size_t s>
+//    MyArray<T*,s>::~MyArray(){
+//        for(T** i = begin(); i != end(); i++){
+//            delete *i;
+//        }
+//        delete [] array;
+//    }
 
     template <typename T, typename U>
     T* myfind (T* first , T* last , const U& v){
