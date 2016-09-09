@@ -19,7 +19,7 @@ int main() {
     {
         std::cout << "true" << std::endl;
     }
-    else if(*my1stPtr != *my3rdPtr) {
+    else if(*my1stPtr != my2ndPtr) {
         std::cout << "false" << std::endl;
     }
 
