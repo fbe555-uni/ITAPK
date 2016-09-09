@@ -9,19 +9,20 @@
 
 namespace felhak {
 
-    namespace details{
-        template <typename T>
-        struct ShPtrHelper{
-            virtual void operator()(T* t) = 0;
-            virtual ~ShPtrHelper(){}
+    namespace details {
+        template<typename T>
+        struct ShPtrHelper {
+            virtual void operator()(T *t) = 0;
+            virtual ~ShPtrHelper() {}
         };
 
-        template <typename T, typename D>
-        struct ShPtrHelperImpl : public ShPtrHelper<T>{
-            ShPtrHelperImpl(D d) : _d(d){};
-            void operator()(T* t){
+        template<typename T, typename D>
+        struct ShPtrHelperImpl : public ShPtrHelper<T> {
+            ShPtrHelperImpl(D d) : _d(d) {};
+            void operator()(T *t) {
                 _d(t);
             }
+
             D _d;
         };
     }
@@ -37,18 +38,19 @@ namespace felhak {
         }
 
         template<typename D>
-        SharedPtr(T *t, D d) : SharedPtr(t){
+        SharedPtr(T *t, D d) : SharedPtr(t) {
             _h = new details::ShPtrHelperImpl<T, D>(d);
         };
 
-        SharedPtr(const SharedPtr &other) {
-            ptr = other.ptr;
-            count_ptr = other.count_ptr;
+        SharedPtr(const SharedPtr &other) : ptr(other.ptr), count_ptr(other.count_ptr) {
+            if (other._h) {
+                *_h = *other._h;
+            }
             *count_ptr += 1;
         }
 
-        SharedPtr& operator=(const SharedPtr &other) {
-          if(other.ptr == ptr) return *this;
+        SharedPtr &operator=(const SharedPtr &other) {
+            if (other.ptr == ptr) return *this;
             *count_ptr -= 1;
             if (*count_ptr == 0) {
                 delete ptr;
@@ -57,15 +59,18 @@ namespace felhak {
             ptr = other.ptr;
             count_ptr = other.count_ptr;
             *count_ptr += 1;
+            if (other._h) {
+                *_h = *other._h;
+            }
             return *this;
         }
 
         ~SharedPtr() {
             *count_ptr -= 1;
             if (*count_ptr == 0) {
-                if(_h){
+                if (_h) {
                     (*_h)(ptr);
-                }else{
+                } else {
                     delete ptr;
                 }
                 delete _h;
@@ -101,7 +106,7 @@ namespace felhak {
 
     private:
         T *ptr;
-        details::ShPtrHelper<T>* _h;
+        details::ShPtrHelper<T> *_h = NULL;
         size_t *count_ptr;
     };
 }

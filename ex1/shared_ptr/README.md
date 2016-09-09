@@ -20,7 +20,11 @@ shared pointer newShPtr to the same resource with a count of three, and the mySh
 is destroyed, the resource will be destroyed as well, and then we have 3 counts of
 newShPtr pointing to an invalid resource.
 
-###INSERT CODE SNIPPET FOR THE ABOVE    
+#### CODE SNIPPET FOR THE ABOVE    
+   TestClass* myNormalPtr = new TestClass("FirstClass");
+   SharedPtr<TestClass> *my1stPtr = new SharedPtr<TestClass>(myNormalPtr);
+   SharedPtr<TestClass> my2ndPtr = myNormalPtr;
+   this wont compile since the default constructor is declared explicit
 
 ### 2.2 Overloading
 #### 2.2.1 Which overloads do we use?

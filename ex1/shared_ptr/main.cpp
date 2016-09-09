@@ -11,9 +11,13 @@ struct CustomDestruct{
 
 int main() {
     //constructor tests:
-    SharedPtr<TestClass> *my1stPtr = new SharedPtr<TestClass>(new TestClass("FirstClass"));
+    TestClass* myNormalPtr = new TestClass("FirstClass");
+    SharedPtr<TestClass> *my1stPtr = new SharedPtr<TestClass>(myNormalPtr);
+  //  SharedPtr<TestClass> my2ndPtr = myNormalPtr; this does not compile due to explicit <3
     SharedPtr<TestClass> my2ndPtr = *my1stPtr;
     SharedPtr<TestClass> *my3rdPtr = new SharedPtr<TestClass>(my2ndPtr);
+
+
 
     if (*my1stPtr == *my3rdPtr)
     {
