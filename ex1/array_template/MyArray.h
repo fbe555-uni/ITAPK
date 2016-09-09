@@ -11,6 +11,8 @@ namespace felhak {
     template<typename T, size_t s>
     class MyArray {
     public:
+        typedef T value_type;
+
         MyArray(){
             array = new T[s];
         }
@@ -77,14 +79,6 @@ namespace felhak {
 //        }
 //        delete [] array;
 //    }
-
-    template <typename T, typename U>
-    T* myfind (T* first , T* last , const U& v){
-        for(;first != last; first++){
-            if(*first == v) return first;
-        }
-        return last;
-    }
 }
 
 #endif //ARRAY_TEMPLATE_H

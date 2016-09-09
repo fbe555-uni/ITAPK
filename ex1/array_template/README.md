@@ -35,3 +35,26 @@ compiler will do the necessary conversion if possible. In our implementation the
 allow arrays of different length, since the length of the array is part of the type through the parameterization. Even
 though it would be possible to create a new internal array, and return the right length through size, the MyArray object
 would still be typed MyArray<T,s> with the original length.
+
+## Exercise 2 - Partial specialization
+
+## Exercise 3 - Accumulation
+
+### 3.1 - Accumulation template functions
+#### General considerations:
+* In the given implementation our accumulation function is parameterized with the type U, which it expects to implement 
+  the typedef value_type. The value_type typedef is implemented in all std containers to allow templated utility func-
+  tions to extract the type of the elements when parameterized by a container type. For example if one where to make the 
+  call "myAccumulation< MyArray<int, 20> >(myArray)" then the U::value_type would be an int.
+
+* The line "typename U::value_type m = typename U::value_type();" creates a new U::value_type variable on the stack 
+  called m. In the given implementation this is the variable used to accumulate all the container objects by using the 
+  += operator
+
+* The type held in value_type needs to correspond to the type pointertype returned by begin, end and operator[], and in 
+  this specific function we expect the type to work with operator+=
+
+#### MyArray support and functionality verification:
+In order to make this work with the MyArray class, the typedef is added to the class. The given myAccumulation implemen-
+tation is added to the main.cpp file at the end, and used on both a MyArray and a std::vector object. This can all be
+found in the main.cpp.
