@@ -12,7 +12,6 @@ typename U:: value_type myAccumulation ( const U& u) {
     }
     return m;
 }
-
 template <typename T, typename U>
 T* myfind (T* first , T* last , const U& v){
     for(;first != last; first++){
@@ -20,7 +19,13 @@ T* myfind (T* first , T* last , const U& v){
     }
     return last;
 }
-
+template < typename T, typename V>
+T** myfind (T** first , T** last , const V& v){
+    for(;first != last; first++){
+        if(**first == v) return first;
+    }
+    return last;
+};
 //******************** main **************************
 
 int main() {
