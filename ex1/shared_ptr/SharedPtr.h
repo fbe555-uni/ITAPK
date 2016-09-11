@@ -36,6 +36,7 @@ namespace felhak {
             ptr = t;
             count_ptr = new size_t;
             *count_ptr = 1;
+            _h = NULL;
         }
 
         template<typename D>
