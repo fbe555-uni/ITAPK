@@ -19,6 +19,7 @@ namespace felhak {
         template<typename T, typename D>
         struct ShPtrHelperImpl : public ShPtrHelper<T> {
             ShPtrHelperImpl(D d) : _d(d) {};
+
             void operator()(T *t) {
                 _d(t);
             }
@@ -35,6 +36,7 @@ namespace felhak {
             ptr = t;
             count_ptr = new size_t;
             *count_ptr = 1;
+            _h = NULL;
         }
 
         template<typename D>
@@ -90,14 +92,6 @@ namespace felhak {
             return ptr;
         }
 
-        virtual const bool operator==(const SharedPtr &other) {
-            return ptr == other.ptr;
-        }
-
-        virtual const bool operator!=(const SharedPtr &other) {
-            return ptr != other.ptr;
-        }
-
         size_t count() const {
 
             return *count_ptr;
@@ -109,6 +103,17 @@ namespace felhak {
         details::ShPtrHelper<T> *_h = NULL;
         size_t *count_ptr;
     };
+
+    template<typename T, typename U>
+    bool operator==(const SharedPtr<T> &a, const SharedPtr<U> &b) {
+        return &(*a) == &(*b);
+    }
+
+    template<typename T, typename U>
+    bool operator!=(const SharedPtr<T> &a, const SharedPtr<U> &b) {
+        return &(*a) != &(*b);;
+    }
+
 }
 
 #endif //SHARED_PTR_SHAREDPTR_H
