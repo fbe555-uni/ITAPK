@@ -78,7 +78,7 @@ void productDBRead(ProductList& pl, const std::string& fileName)
     std::ifstream pFile( fileName.c_str() );
     std::istream_iterator<std::ifstream> begin_it(pFile);
     std::istream_iterator<std::ifstream> end_it;
-    copy(begin_it, end_it, std::back_inserter(pl));
+    std::copy(begin_it, end_it, std::back_inserter(pl));
 
 //  while( !pFile.eof() )
 //  {
@@ -97,7 +97,7 @@ void printAll(const ProductList& pl)
     std::cout << "##################################################" << std::endl;
     std::cout << "Printing out all products..." << std::endl;
     std::cout << "----------------------------" << std::endl;
-    std::ostream_iterator<char> out_it(cout);
+    std::ostream_iterator<char> out_it(std::cout);
     copy(pl.begin(), pl.end(), out_it);
 //    for(ProductList::const_iterator iter = pl.begin(); iter != pl.end(); ++iter)
 //    {

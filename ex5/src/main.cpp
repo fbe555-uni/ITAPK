@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ProductSystem/algo.cpp"
+#include "../ProductSystem/algo.cpp"
 int main()
 {
     bool        running = true;
