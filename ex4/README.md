@@ -14,16 +14,17 @@ ling on the index given (an out of bounds index leads to a
 seg-fault or just bad data).
 
 ##### Strong guarantee rework of snippet 1
+In this rework it is "free" to add the strong guarantee
 ```c++
 class Test { // Some code  };
 template < typename T, int N>
 class MyArray
 {
 public :
-    T& operator []( size_t i)
+    T& operator [](size_t i)
       {
         if (i >= N) {
-          throw throw std::out_of_range ("index out of bounds, mofo");
+          throw std::out_of_range ("index out of bounds, mofo");
         }
         return data_[i];
       }
@@ -56,6 +57,7 @@ class should just add one in the case when capacity == 0.
 
 ##### Strong guarantee rework of snippet 2
 
+
 ```c++
 class Test { // Some code  };
 template < typename T>
@@ -64,33 +66,33 @@ class MyVector
 public :
   MyVector ( size_t capacity ) :
     capacity_ ( capacity ), count_ (0) , data_(new T[ capacity )) {}
-    bool full () const { return ( count_ == capacity_ ; }
-    void push_back ( const T& oneMore )
-      {
-        if(full ())
-          {
+  bool full () const { return ( count_ == capacity_ ; }
+  void push_back ( const T& oneMore )
+    {
+      if(full ())
+        {
               //Added capacity_ check to ensure capacity growth in case of an empty container
-            if (capacity_ == 0) {
-              capacity_ += 1;
-            }
+          if (capacity_ == 0) {
+            capacity_ += 1;
+          }
 
-            capacity_ *= 2;
+          capacity_ *= 2;
               //Added try/catch to ensure no leaks
-            try {
+          try {
             T* newData = new T[ capacity_ ];
 
             std :: copy(data_ , data_+count_ , newData );
-            }
-            catch {
-              delete [] newData ;
-            }
-            std :: swap(data_ , newData );
-            delete [] newData ;
-
           }
-          data_[ count_ ] = oneMore ;
-          ++ count_ ;
+          catch {
+            delete [] newData ;
+          }
+          std :: swap(data_ , newData );
+          delete [] newData ;
+
         }
+        data_[ count_ ] = oneMore ;
+        ++ count_ ;
+      }
 private :
   size_t capacity_ ;
   size_t count_ ;
@@ -195,6 +197,7 @@ public :
   }
   void overWrite ( const Key* key , const Blob* blob)
   {
+    //It is assumed that the assignments of key and blob are no-throw.
     *key_ = *key;
     *blob_ = *blob;
   }
@@ -204,10 +207,10 @@ public :
     delete blob_;
   }
 private :
-  Key* key_;
-  Blob* blob_;
+  std::auto_ptr<Key> key_;
+  std::auto_ptr<Blob> blob_;
 };
-/* Using */
+//Using
 void f()
 {
   DataSet ds(new Key , new Blob);

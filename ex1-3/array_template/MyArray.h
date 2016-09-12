@@ -72,11 +72,16 @@ namespace felhak {
         T* array;
     };
 
+    //Partial specialisation starts here
     template <typename T, size_t s>
     class MyArray<T*, s>{
     public:
         MyArray(){
             array = new T*[s];
+            for(T** i = begin(); i != end(); i++)
+            {
+                *i = nullptr;
+            }
         }
 
         template<typename U>
@@ -110,17 +115,11 @@ namespace felhak {
             delete [] array;
         }
 
-        void fill(T* const value) {
-            for(T** i = begin(); i != end(); i++){
-                *i = value;
-            }
-        }
-
-        T *begin() const{
+        T **begin() const{
             return array;
         }
 
-        T *end() const{
+        T **end() const{
             return array+_size;
         }
 

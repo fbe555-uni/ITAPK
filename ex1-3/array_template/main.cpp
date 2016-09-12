@@ -22,7 +22,8 @@ T* myfind (T* first , T* last , const U& v){
 template < typename T, typename V>
 T** myfind (T** first , T** last , const V& v){
     for(;first != last; first++){
-        if(**first == v) return first;
+
+        if(*first && **first == v) return first;
     }
     return last;
 };
@@ -66,5 +67,14 @@ int main() {
         std::cout << "myAccumulation(myArray) (should be 5): " << myAccumulation(myArray) << std::endl;
     }
 
+    //partial specialisation test
+    {
+        felhak::MyArray<std::string*,5> my;
+        my [5] = new std::string ("Hello"); // Assuming that my is a MyArray of string pointers
+        std::cout << *my[5] << std::endl;
+        std :: cout << " Looking for 'Hello'? " << ( myfind (my.begin (), my.end (),
+                                                              std :: string ("Hello")) != my.end ()? " found " : "sry no") << std :: endl;
+
+    }
     return 0;
 }
