@@ -126,6 +126,8 @@ void addItem(ProductList& pl)
 */
 void productDBWrite(const ProductList& pl, const std::string& fileName)
 {
+    std::ofstream pFile(fileName.c_str());
+    std::copy(pl.begin(), pl.end(), std::ostream_iterator<Product>(pFile, "\n"));
 }
 
 
