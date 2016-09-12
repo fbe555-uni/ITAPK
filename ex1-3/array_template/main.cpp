@@ -69,8 +69,9 @@ int main() {
 
     //partial specialisation test
     {
-        felhak::MyArray<std::string*,5> my;
-        my [5] = new std::string ("Hello"); // Assuming that my is a MyArray of string pointers
+        felhak::MyArray<std::string*,6> my;
+        my[0] = new std::string("0");
+        my[5] = new std::string ("Hello"); // Assuming that my is a MyArray of string pointers
         std::cout << *my[5] << std::endl;
         std :: cout << " Looking for 'Hello'? " << ( myfind (my.begin (), my.end (),
                                                               std :: string ("Hello")) != my.end ()? " found " : "sry no") << std :: endl;
