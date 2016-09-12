@@ -1,0 +1,1 @@
+/media/winlin/apk/ex1/shared_ptr/build/CMakeFiles/shared_ptr.dir

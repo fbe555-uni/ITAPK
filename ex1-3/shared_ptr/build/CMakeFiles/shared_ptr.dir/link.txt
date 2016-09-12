@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++11 -v   CMakeFiles/shared_ptr.dir/main.cpp.o  -o shared_ptr -rdynamic 
