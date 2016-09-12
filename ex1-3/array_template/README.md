@@ -41,52 +41,31 @@ would still be typed MyArray<T,s> with the original length.
 Since this is a partial specialization, one needs to define the specialization for the whole class. Apart from obviously
 changing the destructor so that delete is called on all elements, the return types need to be updated so that where it 
 was previously T is now T* and where it was T* is now T**: 
+Our partial specialization does not provide a fill function. While it might make sense to set all elements to NULL, as-
+signing all pointers to point to the same object would make the delete fail, since it would then call delete on the same
+memory twice. If one wanted the fill with null functionality a fillWithNull() function could be implemented for the par-
+tial specialization.
 
-It is evident from inspecting the code for the primary template MyArray that if an instantiation
-is parameterized by a pointer element e.g. std::string* , thus an allocated resource, then these
-will not be deallocated upon MyArray ’s destruction.
-Therefore create a partial specialization that caters for pointers and add a destructor that
-traverse the array and deletes each and every element using delete .
-Things to consider in this endeavor:
-• The return type for functions begin() and end()
-• The return type for function operator[](int) especially, remember code like this must
-work: my[2] = new std::string , assuming it handles std::string* elements!
-• What do you propose to do with the function fill() (that is implement - then how or
-drop it) ? - Explanation required!
-Exercise 2.2 Finding a specific element in our array of pointers
-Again we want to be able ti find a specific element in our array. In that respect we could use the
-template function myfind() which we created earlier, however it would not work as expected,
-but rather just compare pointers. We therefore need to create an overload of this template
-function to work with our new partial class template.
-The desired signature for this template function is:
-Listing 2.1: Using template function myfind() for our new partial class template
-template < typename T, typename V>
-T** myfind (T** first , T** last , const V& v)
-1
-2
-A simple usage scenario could be:
-3Templates
-Søren Hansen <sha@ase.au.dk>
-V1.2
-Listing 2.2: Using template function myfind() for our new partial class template
-my [5] = new std :: string ("Hello "); // Assuming that my is a MyArray of
-string pointers
-1
-2
-3
-std :: cout << " Looking for 'Hello '? " << ( myfind (my.begin (), my.end (),
-std :: string (" Hello ")) != my.end ()? " found " : "sry no") << std :: endl;
-Exercise 2.3 Reflection
-In this particular design it was chosen that a partial specialization would be the choice to handle
-the deallocation scheme.
-If you had had the choice designwise, would you have done the same?
-Whether yes or no, discuss pros and cons regarding this solution or this solution as opposed to
-your preferred solution.
-Simply stating one point about another design is not an answer.
+### Exercise 2.2 Finding a specific element in our array of pointers
+
+
+### Exercise 2.3 Reflection
+This way of supporting allocated elements is not particularly elegant, since the whole class basically has to be written 
+again even though there's only a minimal change in the actual functionality. One advantage is the capability of not pro-
+viding fill, since using it would be unsafe. 
+One method to improve the implementation would be to have a base class with the common functionality, and then writing 
+the base template and partial specializations as child classes to this class. This way only the destructor and fill would
+have to be defined differently.
+Another aproach to handling this would be to not provide the specialization, but require the user to use smart pointers
+for the elements, in wich case the original implementation would work without fault. This would lead to much cleaner code,
+but obviously requires the user to realize not to use raw pointers.
+Lastly having the option to pass in a custom destructor in a similar fashion to the sharedPtr exercise could solve the 
+problem, with a medium of extra code. 
 
 ## Exercise 3 - Accumulation
 
 ### 3.1 - Accumulation template functions
+
 #### General considerations:
 * In the given implementation our accumulation function is parameterized with the type U, which it expects to implement 
   the typedef value_type. The value_type typedef is implemented in all std containers to allow templated utility func-
