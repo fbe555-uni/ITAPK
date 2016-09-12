@@ -26,5 +26,29 @@ the subsequent operation goes out of bounds. To fix this, the
 class should just add one in the case when capacity == 0.
 
 #### Snippet 3
-Both the constructors already provide the strong guarantee since if the new call throws, nothing has been done yet, and thus no rollback is needed.
-The assignment operator currently provides the basic guarantee, since no memory gets allocated if the call to new throws. The strong guarantee is not fulfilled since the old data is deleted before the call to new, and thus is lost if it throws. To upgrade this, the function could start out creating the new memory, then using strcpy to copy over the new data, then using swap on the new and the old memory, and calling delete on the new (which now holds the old data). This way if the call to new throws, the old data is intact.
+Both the constructors already provide the strong guarantee
+since if the new call throws, nothing has been done yet, and
+thus no rollback is needed.
+The assignment operator currently provides the basic guaran-
+tee, since no memory gets allocated if the call to new
+throws. The strong guarantee is not fulfilled since the old
+data is deleted before the call to new, and thus is lost if
+it throws. To upgrade this, the function could start out
+creating the new memory, then using strcpy to copy over the
+new data, then using swap on the new and the old memory, and
+calling delete on the new (which now holds the old data).
+This way if the call to new throws, the old data is intact.
+
+#### Snippet 4
+This snippet is unsafe, since the constructor throws an
+exception, without cleaning up the dynamic class members.
+Since the object is never fully initialized if the exception
+is thrown, the destructor is not invoked. To solve this, the
+class should either call delete on the dynamic members
+before throwing, or use autoPtr or similar.
+Assuming that the Key and Blob class assignment operators
+provide no-throw guarantees, so does the overwrite. If the
+assignments can throw, the overwrite provides only the basic
+guarantee, since it could fail after overwriting one, and
+there would be no way to roll back the first overwrite (in
+the current impl.).
