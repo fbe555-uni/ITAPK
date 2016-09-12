@@ -13,9 +13,6 @@
 #include <vector>
 #include <string>
 
-
-#define PRODUCT_DB_FILE		"product.db"
-
 class Product
 {
 public:
@@ -76,9 +73,9 @@ void productDBRead(ProductList& pl, const std::string& fileName)
 {
     pl.clear();
     std::ifstream pFile( fileName.c_str() );
-    std::istream_iterator<std::ifstream> begin_it(pFile);
-    std::istream_iterator<std::ifstream> end_it;
-    copy(begin_it, end_it, std::back_inserter(pl));
+    std::istream_iterator<Product> begin_it(pFile);
+    std::istream_iterator<Product> end_it;
+    std::copy(begin_it, end_it, std::back_inserter(pl));
 
 //  while( !pFile.eof() )
 //  {
@@ -97,7 +94,7 @@ void printAll(const ProductList& pl)
     std::cout << "##################################################" << std::endl;
     std::cout << "Printing out all products..." << std::endl;
     std::cout << "----------------------------" << std::endl;
-    std::ostream_iterator<char> out_it(cout);
+    std::ostream_iterator<Product> out_it(std::cout, "\n\r");
     copy(pl.begin(), pl.end(), out_it);
 //    for(ProductList::const_iterator iter = pl.begin(); iter != pl.end(); ++iter)
 //    {
@@ -113,6 +110,14 @@ void printAll(const ProductList& pl)
 */
 void addItem(ProductList& pl)
 {
+    std::string productName;
+    float productPrice;
+    std::cout << "Please enter the product name: ";
+    std::cin >> productName;
+    std::cout << std::endl << "Please enter the product price: ";
+    std::cin >> productPrice;
+    pl.push_back(Product(productName, productPrice));
+    std::cout << "Product added." << std::endl;
 }
 
 
