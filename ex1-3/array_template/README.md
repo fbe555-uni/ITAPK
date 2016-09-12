@@ -37,6 +37,52 @@ though it would be possible to create a new internal array, and return the right
 would still be typed MyArray<T,s> with the original length.
 
 ## Exercise 2 - Partial specialization
+### Exercise 2.1 Pointers
+Since this is a partial specialization, one needs to define the specialization for the whole class. Apart from obviously
+changing the destructor so that delete is called on all elements, the return types need to be updated so that where it 
+was previously T is now T* and where it was T* is now T**: 
+
+It is evident from inspecting the code for the primary template MyArray that if an instantiation
+is parameterized by a pointer element e.g. std::string* , thus an allocated resource, then these
+will not be deallocated upon MyArray ’s destruction.
+Therefore create a partial specialization that caters for pointers and add a destructor that
+traverse the array and deletes each and every element using delete .
+Things to consider in this endeavor:
+• The return type for functions begin() and end()
+• The return type for function operator[](int) especially, remember code like this must
+work: my[2] = new std::string , assuming it handles std::string* elements!
+• What do you propose to do with the function fill() (that is implement - then how or
+drop it) ? - Explanation required!
+Exercise 2.2 Finding a specific element in our array of pointers
+Again we want to be able ti find a specific element in our array. In that respect we could use the
+template function myfind() which we created earlier, however it would not work as expected,
+but rather just compare pointers. We therefore need to create an overload of this template
+function to work with our new partial class template.
+The desired signature for this template function is:
+Listing 2.1: Using template function myfind() for our new partial class template
+template < typename T, typename V>
+T** myfind (T** first , T** last , const V& v)
+1
+2
+A simple usage scenario could be:
+3Templates
+Søren Hansen <sha@ase.au.dk>
+V1.2
+Listing 2.2: Using template function myfind() for our new partial class template
+my [5] = new std :: string ("Hello "); // Assuming that my is a MyArray of
+string pointers
+1
+2
+3
+std :: cout << " Looking for 'Hello '? " << ( myfind (my.begin (), my.end (),
+std :: string (" Hello ")) != my.end ()? " found " : "sry no") << std :: endl;
+Exercise 2.3 Reflection
+In this particular design it was chosen that a partial specialization would be the choice to handle
+the deallocation scheme.
+If you had had the choice designwise, would you have done the same?
+Whether yes or no, discuss pros and cons regarding this solution or this solution as opposed to
+your preferred solution.
+Simply stating one point about another design is not an answer.
 
 ## Exercise 3 - Accumulation
 

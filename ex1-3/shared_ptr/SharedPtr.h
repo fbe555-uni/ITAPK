@@ -32,22 +32,17 @@ namespace felhak {
     class SharedPtr {
     public:
         //explicit constructor
-        explicit SharedPtr(T *t) {
-            ptr = t;
+        explicit SharedPtr(T* const t): ptr(t){
             count_ptr = new size_t;
             *count_ptr = 1;
-            _h = NULL;
         }
 
         template<typename D>
-        SharedPtr(T *t, D d) : SharedPtr(t) {
+        SharedPtr(T* const t, D const d) : SharedPtr(t) {
             _h = new details::ShPtrHelperImpl<T, D>(d);
         };
 
-        SharedPtr(const SharedPtr &other) : ptr(other.ptr), count_ptr(other.count_ptr) {
-            if (other._h) {
-                *_h = *other._h;
-            }
+        SharedPtr(const SharedPtr &other) : ptr(other.ptr), count_ptr(other.count_ptr), _h(other._h) {
             *count_ptr += 1;
         }
 
@@ -55,15 +50,18 @@ namespace felhak {
             if (other.ptr == ptr) return *this;
             *count_ptr -= 1;
             if (*count_ptr == 0) {
-                delete ptr;
+                if (_h) {
+                    (*_h)(ptr);
+                } else {
+                    delete ptr;
+                }
+                delete _h;
                 delete count_ptr;
             }
             ptr = other.ptr;
             count_ptr = other.count_ptr;
             *count_ptr += 1;
-            if (other._h) {
-                *_h = *other._h;
-            }
+            _h = other._h;
             return *this;
         }
 
@@ -100,7 +98,7 @@ namespace felhak {
 
     private:
         T *ptr;
-        details::ShPtrHelper<T> *_h = NULL;
+        details::ShPtrHelper<T> *_h = nullptr;
         size_t *count_ptr;
     };
 

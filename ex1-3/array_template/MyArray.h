@@ -76,12 +76,12 @@ namespace felhak {
     class MyArray<T*, s>{
     public:
         MyArray(){
-            array = new T[s];
+            array = new T*[s];
         }
 
         template<typename U>
         MyArray(const MyArray<U, s>& orig){
-            array = new T[s];
+            array = new T*[s];
             T** i = begin();
             U* j = orig.begin();
             while(i != end()){
@@ -92,7 +92,7 @@ namespace felhak {
         }
 
         template <typename U>
-        MyArray<T, s>& operator=(const MyArray<U, s>& orig){
+        MyArray<T*, s>& operator=(const MyArray<U, s>& orig){
             T** i = begin();
             U* j = orig.begin();
             while(i != end()){
@@ -110,7 +110,7 @@ namespace felhak {
             delete [] array;
         }
 
-        void fill(const T & value) {
+        void fill(T* const value) {
             for(T** i = begin(); i != end(); i++){
                 *i = value;
             }
@@ -124,7 +124,7 @@ namespace felhak {
             return array+_size;
         }
 
-        T& operator[](int i) {
+        T*& operator[](int i) {
             return *(array+i);
         }
 
@@ -134,7 +134,7 @@ namespace felhak {
 
     private:
         size_t _size = s;
-        T* array;
+        T** array;
     };
 
 }

@@ -9,6 +9,11 @@ struct CustomDestruct{
     }
 };
 
+typedef struct TestStruct{
+    std::string a = "hello";
+    std::string b = "world";
+} TestStruct;
+
 int main() {
     //constructor tests:
     {
@@ -39,12 +44,7 @@ int main() {
     }
     //overload tests:
     {
-        typedef struct TestStruct{
-            std::string a = "hello";
-            std::string b = "world";
-        } TestStruct;
-
-        SharedPtr<TestStruct> mySharedPtr = SharedPtr<TestStruct>(new TestStruct());
+        SharedPtr<TestStruct> mySharedPtr = SharedPtr<TestStruct>(new TestStruct);
         std::cout << "(*mySharedPtr).a << (*mySharedPtr).b returned: " << (*mySharedPtr).a << (*mySharedPtr).b << std::endl;
         std::cout << "mySharedPtr->a << mySharedPtr->b returned: " << mySharedPtr->a << mySharedPtr->b << std::endl;
 
