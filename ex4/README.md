@@ -3,7 +3,7 @@ ITAPK Exercise for Lecture 4 - Exceptions
 
 Exercise 1 Safety Guarantees
 ----------------------------
-### Exercise 1.1 Code
+### Exercise 1.1/2 Code
 Here follows a brief consideration of each of the snippets individually
 
 #### Snippet 1
@@ -12,6 +12,35 @@ nothing that has any error handling. The class doesn't uphold
 the guarantee fully, in the sense that there's no error hand-
 ling on the index given (an out of bounds index leads to a
 seg-fault or just bad data).
+
+
+```c++
+class Test { /* Some code */ };
+template < typename T, int N>
+class MyArray
+{
+public :
+    T& operator []( size_t i)
+      {
+        if (i >= N) {
+          throw throw std::out_of_range ("index out of bounds, mofo");;
+        }
+        return data_[i];
+      }
+private :
+      T
+      data_[N];
+};
+
+/* Using */
+void f()
+{
+    MyArray <Test , 10> my;
+    Test t;
+
+    my [5] = t;
+}
+```
 
 #### Snippet 2
 The class in it's current form fails to provide even the basic
@@ -24,6 +53,48 @@ The class has another fault, since if instantiated with 0
 capacity, the \*=2 operation fails to expand the capacity and
 the subsequent operation goes out of bounds. To fix this, the
 class should just add one in the case when capacity == 0.
+
+```c++
+class Test { /* Some code */ };
+template < typename T>
+class MyVector
+{
+public :
+  MyVector ( size_t capacity ) :
+    capacity_ ( capacity ), count_ (0) , data_(new T[ capacity )) {}
+    bool full () const { return ( count_ == capacity_ ; }
+    void push_back ( const T& oneMore )
+      {
+        if(full ())
+          {
+            capacity_ *= 2;
+            T* newData = new T[ capacity_ ];
+
+            std :: copy(data_ , data_+count_ , newData );
+            std :: swap(data_ , newData );
+            delete [] newData ;
+          }
+          data_[ count_ ] = oneMore ;
+          ++ count_ ;
+        }
+private :
+  size_t capacity_ ;
+  size_t count_ ;
+  T* data_;
+};
+
+
+
+/* Using */
+void f()
+{
+  MyVector <Test > my (20);
+
+  Test t;
+
+  my. push_back (t);
+}
+```
 
 #### Snippet 3
 Both the constructors already provide the strong guarantee since if the new call throws, nothing has been done yet, and thus no rollback is needed.
