@@ -13,9 +13,9 @@ the guarantee fully, in the sense that there's no error hand-
 ling on the index given (an out of bounds index leads to a
 seg-fault or just bad data).
 
-
+##### Strong guarantee rework of snippet 1
 ```c++
-class Test { /* Some code */ };
+class Test { // Some code  };
 template < typename T, int N>
 class MyArray
 {
@@ -23,7 +23,7 @@ public :
     T& operator []( size_t i)
       {
         if (i >= N) {
-          throw throw std::out_of_range ("index out of bounds, mofo");;
+          throw throw std::out_of_range ("index out of bounds, mofo");
         }
         return data_[i];
       }
@@ -32,14 +32,14 @@ private :
       data_[N];
 };
 
-/* Using */
+// Using
 void f()
 {
     MyArray <Test , 10> my;
     Test t;
 
     my [5] = t;
-}
+};
 ```
 
 #### Snippet 2
@@ -54,8 +54,10 @@ capacity, the \*=2 operation fails to expand the capacity and
 the subsequent operation goes out of bounds. To fix this, the
 class should just add one in the case when capacity == 0.
 
+##### Strong guarantee rework of snippet 2
+
 ```c++
-class Test { /* Some code */ };
+class Test { // Some code  };
 template < typename T>
 class MyVector
 {
@@ -67,12 +69,24 @@ public :
       {
         if(full ())
           {
+              //Added capacity_ check to ensure capacity growth in case of an empty container
+            if (capacity_ == 0) {
+              capacity_ += 1;
+            }
+
             capacity_ *= 2;
+              //Added try/catch to ensure no leaks
+            try {
             T* newData = new T[ capacity_ ];
 
             std :: copy(data_ , data_+count_ , newData );
+            }
+            catch {
+              delete [] newData ;
+            }
             std :: swap(data_ , newData );
             delete [] newData ;
+
           }
           data_[ count_ ] = oneMore ;
           ++ count_ ;
@@ -100,7 +114,7 @@ void f()
 Both the constructors already provide the strong guarantee
 since if the new call throws, nothing has been done yet, and
 thus no rollback is needed.
-The assignment operator currently provides the basic guaran-
+The assignment operator currently provides the basic guaran
 tee, since no memory gets allocated if the call to new
 throws. The strong guarantee is not fulfilled since the old
 data is deleted before the call to new, and thus is lost if
@@ -109,6 +123,49 @@ creating the new memory, then using strcpy to copy over the
 new data, then using swap on the new and the old memory, and
 calling delete on the new (which now holds the old data).
 This way if the call to new throws, the old data is intact.
+
+##### Strong guarantee rework of snippet 3
+
+```c++
+class String
+{
+public :
+  String () : s_( nullptr ){}
+  String ( const char* s) : s_(new char[ strlen (s)+1])
+  {
+      std :: strcpy (s_ , s);
+  }
+  String ( const String & other)
+  : s_(new char[ strlen (other.s_)+1])
+  {
+      std :: strcpy (s_ , other.s_);
+  }
+  String & operator =( const String & other)
+  {
+
+    char* s = new char[ strlen (other.s_)+1];
+    std :: strcpy (s , other.s_);
+    std :: swap (s_, s);
+    delete [] s;
+    return *this;
+  }
+  ~String ()
+  {
+    delete [] s_;
+  }
+private :
+  char* s_;
+};
+//Using
+void f()
+{
+  String s("Hello world");
+
+  String aCopy(s);
+
+  s = "Hello girls";
+}
+```
 
 #### Snippet 4
 This snippet is unsafe, since the constructor throws an
@@ -123,3 +180,43 @@ assignments can throw, the overwrite provides only the basic
 guarantee, since it could fail after overwriting one, and
 there would be no way to roll back the first overwrite (in
 the current impl.).
+
+##### Strong guarantee rework of snippet 4
+
+```c++
+class DataSet
+{
+public :
+  DataSet (Key* key , Blob* blob)
+  : key_(key), blob_(blob)
+  {
+      if(!key -> isValid ())
+      throw InvalidKey (key ->id());
+  }
+  void overWrite ( const Key* key , const Blob* blob)
+  {
+    *key_ = *key;
+    *blob_ = *blob;
+  }
+  ∼DataSet ()
+  {
+    delete key_;
+    delete blob_;
+  }
+private :
+  Key* key_;
+  Blob* blob_;
+};
+/* Using */
+void f()
+{
+  DataSet ds(new Key , new Blob);
+
+  {
+      Key k( getKeyValue ());
+      Blob b( fetchDBBlobByKey (k));
+
+    ds. overWrite (&k, &b);
+  }
+}
+```
