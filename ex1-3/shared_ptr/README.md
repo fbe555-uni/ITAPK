@@ -31,8 +31,10 @@ newShPtr pointing to an invalid resource.
 The -> and * operator have been overloaded to accommodate our needs, and access the
 right value when using our pointer. The equality operator might be a useful overload as well.
 
-#### 2.2.3 Comparison Overloads
-
+#### 2.2.3 Comparison Overload
+The comparison overload is imeplemented so that i has the ability to compare pointers from a
+base class with child classes. This is done through templates where the two arguments has the pos-
+sibility of being a different class, thus allowing the comparsion of base-child class.
 
     if (*my1stPtr == *my3rdPtr)
     {
