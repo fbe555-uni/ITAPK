@@ -140,8 +140,8 @@ void printPoorlySellingProducts(const ProductList& pl)
 /***********************************************************
  *                    Discount functor                     *
  ***********************************************************/
-struct discountFunctor{
-    discountFunctor(float percentDiscount): _dis((1-(percentDiscount/100)){}
+struct DiscountFunctor{
+    DiscountFunctor(float percentDiscount): _dis((1-(percentDiscount/100))){}
     void operator()(Product& p) {
         p.setPrice(p.price() * _dis);
     }
@@ -160,7 +160,7 @@ void addDiscountUsingForEach(ProductList& pl, float percentDiscount)
 /**
  * Set a discount on all products - Using transform()
  */
-void addDiscountUsingTransform(ProductList& pl)
+void addDiscountUsingTransform(ProductList& pl, float percentDiscout)
 {
 
 }
