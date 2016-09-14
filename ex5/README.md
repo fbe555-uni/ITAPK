@@ -30,6 +30,11 @@ A newline charactor is passed to the itterator, to be inserted between elements.
 Tested using menu item 1, then 3, then 4 and verifying the file with less.
 
 ###Exercise 1.2 Algorithmic manipulations
+####Exercise 1.2.1 Too few items sold
+We used the function `std::remove_copy_if()` by giving it the stard and end of our productlist,
+an iterator to print directly to `std::cout` and a struct that implements the comparison of an
+arbitrary sales value with the product list sales, copying only the ones qualifying as badly
+selling products.
 
 ###Exercise 1.3 Discount
 

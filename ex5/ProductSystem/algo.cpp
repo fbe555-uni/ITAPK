@@ -132,7 +132,7 @@ struct salesComp
 {
     salesComp(const int sales) : _sales(sales){}
     bool operator()(const Product& p){
-        return p.sold() < _sales;
+        return p.sold() > _sales;
     }
     int _sales;
 };
