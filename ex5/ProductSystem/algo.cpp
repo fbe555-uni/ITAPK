@@ -148,6 +148,16 @@ struct DiscountFunctor{
     float _dis;
 };
 
+struct DiscountTransFunctor{
+    DiscountTransFunctor(float percentDiscount): _dis((1-(percentDiscount/100))){}
+    Product operator()(Product& p){
+        Product new_p = Product(p);
+        new_p.setPrice(p.price()*_dis);
+        return new_p;
+
+    }
+    float _dis;
+};
 /**
  * Set a discount on all products - Using for_each()
  */
@@ -162,7 +172,9 @@ void addDiscountUsingForEach(ProductList& pl, float percentDiscount)
  */
 void addDiscountUsingTransform(ProductList& pl, float percentDiscout)
 {
-
+    std::cout << "#########################################################" << std::endl << "Printing discounted product list: " << std::endl;
+    std::transform(pl.begin(),pl.end(), std::ostream_iterator<Product>(std::cout, "\n\r"), DiscountTransFunctor(percentDiscout));
+    std::cout << "Please note this discount is not applied to the actual product list!" << std::endl << "#########################################################" << std::endl;
 }
 
 

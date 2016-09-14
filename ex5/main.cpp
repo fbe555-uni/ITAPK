@@ -1,8 +1,8 @@
 #include <iostream>
 #include "ProductSystem/algo.cpp"
 
-//#define PRODUCT_DB_FILE		"/home/felix/winlinShare/apk/ex5/ProductSystem/product.db"
-#define PRODUCT_DB_FILE     "/home/huxx/Documents/ITAPK/ex5/ProductSystem/product.db"
+#define PRODUCT_DB_FILE		"/home/felix/winlinShare/apk/ex5/ProductSystem/product.db"
+//#define PRODUCT_DB_FILE     "/home/huxx/Documents/ITAPK/ex5/ProductSystem/product.db"
 
 int main()
 {
