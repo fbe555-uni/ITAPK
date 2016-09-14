@@ -52,11 +52,17 @@ int main()
                 break;
 
             case '6':
-                addDiscountUsingForEach(pl);
+                std::cout << "Please specify the discount in percent: ";
+                float discount = 0;
+                std::cin >> discount;
+                addDiscountUsingForEach(pl, discount);
                 break;
 
             case '7':
-                addDiscountUsingTransform(pl);
+                std::cout << "Please specify the discount in percent: ";
+                float discount = 0;
+                std::cin >> discount;
+                addDiscountUsingTransform(pl, discount);
                 break;
 
             case '8':

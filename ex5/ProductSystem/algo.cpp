@@ -64,8 +64,6 @@ std::istream& operator>> ( std::istream& i, Product& p )
     return i >> p.name_ >> p.price_ >> p.sold_;
 }
 
-
-
 /**
  * Read products from file
  */
@@ -136,14 +134,26 @@ void productDBWrite(const ProductList& pl, const std::string& fileName)
  */
 void printPoorlySellingProducts(const ProductList& pl)
 {
+
 }
 
+/***********************************************************
+ *                    Discount functor                     *
+ ***********************************************************/
+struct discountFunctor{
+    discountFunctor(float percentDiscount): _dis((1-(percentDiscount/100)){}
+    void operator()(Product& p) {
+        p.setPrice(p.price() * _dis);
+    }
+    float _dis;
+};
 
 /**
  * Set a discount on all products - Using for_each()
  */
-void addDiscountUsingForEach(ProductList& pl)
+void addDiscountUsingForEach(ProductList& pl, float percentDiscount)
 {
+    std::for_each(pl.begin(), pl.end(), DiscountFunctor(percentDiscount));
 }
 
 
@@ -152,6 +162,7 @@ void addDiscountUsingForEach(ProductList& pl)
  */
 void addDiscountUsingTransform(ProductList& pl)
 {
+
 }
 
 

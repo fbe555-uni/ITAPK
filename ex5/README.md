@@ -30,3 +30,7 @@ A newline charactor is passed to the itterator, to be inserted between elements.
 Tested using menu item 1, then 3, then 4 and verifying the file with less.
 
 ###Exercise 1.2 Algorithmic manipulations
+
+###Exercise 1.3 Discount
+
+####Exercise 1.3.1 Using for_each
