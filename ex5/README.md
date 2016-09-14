@@ -36,6 +36,25 @@ an iterator to print directly to `std::cout` and a struct that implements the co
 arbitrary sales value with the product list sales, copying only the ones qualifying as badly
 selling products.
 
-###Exercise 1.3 Discount
+###Exercise 1.2.2 Discount
 
-####Exercise 1.3.1 Using for_each
+####Exercise 1.2.2.1 Using for_each
+Using std::for_each to apply the discount, all that is needed is a functor taking a single product
+reference, and applying a discount to it's price. The discount is given to the functor through the 
+constructor. The struct DiscountFunctor is defined above the function implementation, and simply 
+takes a discount percentage in the constructor which is saved as a price conversion factor, that is
+then applied to the product price in the operator overload.
+Having the functor, the addDiscountUsingForEach consists of only one line, namely the call to 
+std::for_each.
+NB: I added the discount to the function prototypes and to the main, so that the function can be 
+    tested for user defined discount values.
+
+####Exercise 1.2.2.2 Using transform
+Using transform the functor needs to return a new Product object, since it doesn't modify the objects
+in place. The second functor struct is placed right after the other, and it can be seen that the im-
+plementation is almost the same, only using the copy constructor to make a new object first. 
+The addDiscountUsingTransform implementation contains a few output lines, but the actual functional
+-ity is again contained in a single line containing the call to transform. The only two differences
+from the foreach approach is the different functor, and the fact that there's a target itterator, in
+this case being a ostream_itterator created from cout with a newline added between each element.
+
