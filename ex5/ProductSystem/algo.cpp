@@ -130,12 +130,31 @@ void productDBWrite(const ProductList& pl, const std::string& fileName)
     std::copy(pl.begin(), pl.end(), std::ostream_iterator<Product>(pFile, "\n"));
 }
 
+struct salesComp
+{
+    salesComp(const int sales) : _sales(sales){}
+    bool operator()(const Product& p){
+        return p.sold() < _sales;
+    }
+    int _sales;
+};
+
+//bool checkNumberOfSales(const int _sales, const Product& product)
+//{
+//    return product.sold() < _sales;
+//}
 
 /**
  * Print poorly selling products
  */
 void printPoorlySellingProducts(const ProductList& pl)
 {
+    std::ostream_iterator<Product> out_it(std::cout, "\n\r");
+
+    std::remove_copy_if(pl.begin(),
+                        pl.end(),
+                        out_it,
+                        salesComp(10));
 }
 
 
