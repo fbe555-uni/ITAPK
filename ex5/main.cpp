@@ -28,7 +28,7 @@ int main()
         std::cout << "'q' Quit" << std::endl;
         std::cout << "Your choice: ";
         std::cin >> choice;
-
+        float discount = 0;
         switch(choice)
         {
             case '1':
@@ -52,11 +52,15 @@ int main()
                 break;
 
             case '6':
-                addDiscountUsingForEach(pl);
+                std::cout << "Please specify the discount in percent: ";
+                std::cin >> discount;
+                addDiscountUsingForEach(pl, discount);
                 break;
 
             case '7':
-                addDiscountUsingTransform(pl);
+                std::cout << "Please specify the discount in percent: ";
+                std::cin >> discount;
+                addDiscountUsingTransform(pl, discount);
                 break;
 
             case '8':
@@ -66,6 +70,9 @@ int main()
             case 'q':
             case 'Q':
                 running = false;
+                break;
+            default:
+            std::cout << "Invalid choice! Try again." << std::endl;
         }
 
 
