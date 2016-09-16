@@ -65,7 +65,9 @@ Accumulate works on the vector since it's a single-type, multi-value container, 
 need to make a functor or anything like that for it to use.
 
 #### Exercise 1.2.4
-For this we create a simple discount calculator member function and 
+For this we create a simple discount calculator member function and use it in a lambda expression in
+the newly created `addDiscoutUsingLambda(ProductList, float)`. This updates every single element in the
+ProductList with the new price calculated with the member function.
 
 ###Exercise 1.3 Reflection
 In our opinion the use of algorithm significantly improves the code clarity in two ways:
