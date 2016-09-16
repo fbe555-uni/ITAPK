@@ -1,5 +1,17 @@
 #STL Algorithms
 
+##Building and directory structure
+To build the tests, just use cmake the usual way:
+```
+mkdir build
+cd build
+cmake ..
+make
+```
+after this, the two different executables are stl for Exercise 1 and MyArray for Exercise 2.
+
+The source code for each of these are found in ProductSystem and MyArray respectively.
+
 ##Exercise 1 Basic STL
 
 ###Exercise 1.1 istream_operator/ostream_operator
@@ -66,7 +78,7 @@ need to make a functor or anything like that for it to use.
 
 #### Exercise 1.2.4
 For this we create a simple discount calculator member function and use it in a lambda expression in
-the newly created `addDiscoutUsingLambda(ProductList, float)`. This updates every single element in the
+the newly created `addDiscountUsingLambda(ProductList, float)`. This updates every single element in the
 ProductList with the new price calculated with the member function.
 
 ###Exercise 1.3 Reflection
@@ -79,3 +91,32 @@ algorithm calls have meaningfull names, contrary to a normal loop.
 Lastly using algorithms provide another benefit, not related to the code clarity, since using the STL
 algorithms prevent errors due to typos or logic errors in the implementations of the algorithm. Less
 code -> fewer errors!
+
+##Exercise 2 - using algorithms
+In order to use the stl algorithms the MyArray class from the template exercise is modified to provide
+an iterator. Note that the partial specialization and the free functions from the exercise have been
+removed.
+Since the underlying datastructure provides efficient random access, the implemented iterator is also
+a random access iterator. To make this a class MyArray_iterator is implemented, which inherits from 
+the base class std::iterator<std::random_access_iterator_tag, T> where T is the template type of the 
+MyArray elements. This provides the necessary typedefs such as value_type etc. The class then needs to
+implement the functionalities required for a random access iterator, namely:
+
+* constructors - default and copy
+* pre- and post- increment and decrement operators
+* \+ operator for difference type
+* \- operator for differece type and for other iterator
+* All the equality and comparison operators
+* \* and -> operators
+* the index operator returning deref of object at given index
+
+Since the underlying structure uses is a c array, and iterator semantics are modeled after the pointer,
+most of the implemented operations more or less apply the given operation directly to the underlying 
+pointer.
+
+The MyArray class was then altered so that begin and end return iterators rather than pointers, and the 
+template handin test was modyfied accordingly, and a calls to std::copy and std::accumulate were added.
+The calls cbegin and cend were also added to MyArray, implemented simply by typing the created iterator
+with const T rather than just T.
+
+
