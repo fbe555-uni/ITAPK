@@ -205,11 +205,7 @@ void calcTotalSoldProducts(ProductList &pl) {
               << "Printing total amount of products sold" << std::endl;
     std::transform(pl.begin(), pl.end(), std::back_inserter(sold_product_count), std::mem_fun_ref(&Product::sold)); /////sold_product_count);
     int accum = std::accumulate(sold_product_count.begin(),
-                    sold_product_count.end(),
-                    0,
-                    [](int a, int b) {
-                        return a + b;
-                    });
+                    sold_product_count.end(), 0);
     std::cout << accum << std::endl;
     std::cout << "########################################################" << std::endl;
 }

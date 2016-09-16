@@ -58,6 +58,15 @@ The addDiscountUsingTransform implementation contains a few output lines, but th
 from the foreach approach is the different functor, and the fact that there's a target itterator, in
 this case being a ostream_itterator created from cout with a newline added between each element.
 
+#### Exercise 1.2.3
+Using transform on the `<vector<int> sold_product_count` we read the number of sales into the vector
+with the member function `sold()` and accumulate and save them in `int accum` using `std::accumulate`. 
+Accumulate works on the vector since it's a single-type, multi-value container, and therefore there is no
+need to make a functor or anything like that for it to use.
+
+#### Exercise 1.2.4
+For this we create a simple discount calculator member function and 
+
 ###Exercise 1.3 Reflection
 In our opinion the use of algorithm significantly improves the code clarity in two ways:
 Firstly, the code is shortened, since loops can be replaced with statements like for_each. This is
