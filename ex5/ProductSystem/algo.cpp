@@ -37,6 +37,10 @@ public:
         return sold_;
     }
 
+    void setDiscount(float discountPercentage) {
+        price_ = price_*(1-(discountPercentage/100));
+    }
+
     friend std::istream &operator>>(std::istream &i, Product &p);
 
     friend std::ostream &operator<<(std::ostream &o, const Product &p);
@@ -189,14 +193,12 @@ void addDiscountUsingTransform(ProductList &pl, float percentDiscout) {
     std::cout << "Please note this discount is not applied to the actual product list!" << std::endl
               << "#########################################################" << std::endl;
 }
-
-struct TotalSoldFunctor{
-    TotalSoldFunctor();
-
-    int operator()(Product &p) {
-        return p.sold();
-    }
-};
+void addDiscountUsingLambda(ProductList &pl, float percentDiscount) {
+    std::for_each(pl.begin(), pl.end(),
+                  [percentDiscount](Product &p){
+                      p.setDiscount(percentDiscount);
+                  });
+}
 
 /**
  * Calculate the total amount of sold products
@@ -204,7 +206,7 @@ struct TotalSoldFunctor{
 void calcTotalSoldProducts(ProductList &pl) {
     std::vector<unsigned int> sold_product_count;
     std::cout << "########################################################" << std::endl
-              << "Printing total amount of sould products" << std::endl;
+              << "Printing total amount of products sold" << std::endl;
     std::transform(pl.begin(), pl.end(), std::back_inserter(sold_product_count), std::mem_fun_ref(&Product::sold)); /////sold_product_count);
     int accum = std::accumulate(sold_product_count.begin(),
                     sold_product_count.end(),

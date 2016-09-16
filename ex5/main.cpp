@@ -1,8 +1,8 @@
 #include <iostream>
 #include "ProductSystem/algo.cpp"
 
-#define PRODUCT_DB_FILE		"/home/felix/winlinShare/apk/ex5/ProductSystem/product.db"
-//#define PRODUCT_DB_FILE     "/home/huxx/Documents/ITAPK/ex5/ProductSystem/product.db"
+//#define PRODUCT_DB_FILE		"/home/felix/winlinShare/apk/ex5/ProductSystem/product.db"
+#define PRODUCT_DB_FILE     "/home/huxx/Documents/apk/ex5/ProductSystem/product.db"
 
 int main()
 {
@@ -23,6 +23,7 @@ int main()
         std::cout << "'6' Set a discount on all products (using for_each() )" << std::endl;
         std::cout << "'7' Set a discount on all products (using transform() )" << std::endl;
         std::cout << "'8' Calculate the total amount of sold products" << std::endl;
+        std::cout << "'9' Set a discount on all products (using lambda )" << std::endl;
 
 
         std::cout << "'q' Quit" << std::endl;
@@ -65,6 +66,12 @@ int main()
 
             case '8':
                 calcTotalSoldProducts(pl);
+                break;
+
+            case '9':
+                std::cout << "Please specify the discount in percent: ";
+                std::cin >> discount;
+                addDiscountUsingLambda(pl, discount);
                 break;
 
             case 'q':
