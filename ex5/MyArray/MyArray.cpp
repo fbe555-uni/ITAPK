@@ -1,40 +1,38 @@
-#include <glob.h>
+//
+// Created by felix on 9/16/16.
+//
 
-#ifndef ARRAY_TEMPLATE_MYARRAY_H
-#define ARRAY_TEMPLATE_MYARRAY_H
+#include "MyArray.h"
+
 namespace felhak {
+    MyArray_iterator::MyArray_iterator(): _ptr(nullptr) {}
+    MyArray_iterator::MyArray_iterator(T* ptr): _ptr(ptr) {}
+    template <typename U, size_t s>
+    MyArray_iterator::MyArray_iterator(const MyArray<U, s>& myArray) : MyArray_iterator(myArray.begin()) {}
 
-    template<typename T, size_t s>
-    class MyArray{};
-
-    template<typename T>
-    class MyArray_iterator : public std::iterator<std::random_access_iterator_tag, T>{
-    private:
-        T* _ptr;
-    public:
-        MyArray_iterator();
-        MyArray_iterator(T* ptr);
-        template <typename U, size_t s>
-        MyArray_iterator(const MyArray<U, s>& myArray);
         template <typename U>
-        MyArray_iterator(const MyArray_iterator<U>& it);
-        MyArray_iterator& operator++();
-        MyArray_iterator& operator--();
-        MyArray_iterator& operator++(int);
-        MyArray_iterator& operator--(int);
-        MyArray_iterator& operator+(int i);
-        MyArray_iterator& operator-(int i);
+        MyArray_iterator(const MyArray_iterator<U>& it) : _ptr(it._ptr){}
 
-        bool operator==(const MyArray_iterator& rhs);
-        bool operator!=(const MyArray_iterator& rhs);
-        bool operator<(const MyArray_iterator& rhs);
-        bool operator<=(const MyArray_iterator& rhs);
-        bool operator>(const MyArray_iterator& rhs);
-        bool operator>=(const MyArray_iterator& rhs);
+        MyArray_iterator& operator++() {++_ptr;return *this;}
+        MyArray_iterator& operator--() {--_ptr;return *this;}
+        MyArray_iterator& operator++(int) {MyArray_iterator tmp(*this); operator++(); return tmp;}
+        MyArray_iterator& operator--(int) {MyArray_iterator tmp(*this); operator--(); return tmp;}
 
-        T& operator*();
-        T& operator->();
-        T& operator[](int i);
+        MyArray_iterator& operator+(int i) {_ptr += i; return *this;}
+        MyArray_iterator& operator-(int i) {_ptr -= i; return *this;}
+
+        bool operator==(const MyArray_iterator& rhs) {return _ptr==rhs._ptr;}
+        bool operator!=(const MyArray_iterator& rhs) {return _ptr!=rhs._ptr;}
+        bool operator<(const MyArray_iterator& rhs) {return _ptr<rhs._ptr;}
+        bool operator<=(const MyArray_iterator& rhs) {return _ptr<=rhs._ptr;}
+        bool operator>(const MyArray_iterator& rhs) {return _ptr>rhs._ptr;}
+        bool operator>=(const MyArray_iterator& rhs) {return _ptr>=rhs._ptr;}
+
+        T& operator*() {return *_ptr;}
+        T& operator->() {return *_ptr;}
+        T& operator[](int i) {return *(_ptr+i);}
+
+
     };
 
     template<typename T, size_t s>

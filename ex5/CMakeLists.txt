@@ -3,5 +3,8 @@ project(stl)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES ProductSystem/main.cpp)
+
 add_executable(stl ${SOURCE_FILES})
+
+add_executable(MyArray MyArray/main.cpp MyArray/MyArray.cpp)

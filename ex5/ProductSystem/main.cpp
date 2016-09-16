@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ProductSystem/algo.cpp"
+#include "algo.cpp"
 
 #define PRODUCT_DB_FILE		          "/home/felix/winlinShare/apk/ex5/ProductSystem/product.db"
 #define PRODUCT_DB_FILE_SECONDARY     "/home/huxx/Documents/apk/ex5/ProductSystem/product.db"
