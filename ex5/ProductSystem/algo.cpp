@@ -67,20 +67,15 @@ std::istream& operator>> ( std::istream& i, Product& p )
 /**
  * Read products from file
  */
-void productDBRead(ProductList& pl, const std::string& fileName)
+bool productDBRead(ProductList& pl, const std::string& fileName)
 {
     pl.clear();
-    std::ifstream pFile( fileName.c_str() );
+    std::ifstream pFile(fileName.c_str());
+    if(!pFile.is_open()) return false;
     std::istream_iterator<Product> begin_it(pFile);
     std::istream_iterator<Product> end_it;
     std::copy(begin_it, end_it, std::back_inserter(pl));
-
-//  while( !pFile.eof() )
-//  {
-//    Product p;
-//    pFile >> p;
-//    if( pFile ) pl.push_back( p );
-//  }
+    return true;
 }
 
 

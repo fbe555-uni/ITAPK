@@ -1,8 +1,8 @@
 #include <iostream>
 #include "ProductSystem/algo.cpp"
 
-#define PRODUCT_DB_FILE		"/home/felix/winlinShare/apk/ex5/ProductSystem/product.db"
-//#define PRODUCT_DB_FILE     "/home/huxx/Documents/ITAPK/ex5/ProductSystem/product.db"
+#define PRODUCT_DB_FILE		          "/home/felix/winlinShare/apk/ex5/ProductSystem/product.db"
+#define PRODUCT_DB_FILE_SECONDARY     "/home/huxx/Documents/ITAPK/ex5/ProductSystem/product.db"
 
 int main()
 {
@@ -32,7 +32,14 @@ int main()
         switch(choice)
         {
             case '1':
-                productDBRead(pl, PRODUCT_DB_FILE);
+                if(!productDBRead(pl, PRODUCT_DB_FILE)){
+                    if(!productDBRead(pl, PRODUCT_DB_FILE_SECONDARY)){
+                        std::cout << "None of the default product files were found." << std::endl << "Please enter a valid .db file path: ";
+                        std::string path;
+                        std::cin >> path;
+                        if(!productDBRead(pl, path.c_str())) std::cout << "The specified file could not be opened. No db was loaded." << std::endl;
+                    }
+                }
                 break;
 
             case '2':
