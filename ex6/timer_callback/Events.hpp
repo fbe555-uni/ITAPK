@@ -6,29 +6,28 @@
 /**
  * Event
  */
-class Event
-{
+class Event {
 public:
-  Event()
-    : creationTime_(std::chrono::system_clock::now())
-  {
-  }
-  std::chrono::time_point<std::chrono::system_clock> creationTime() const
-  {
-    return creationTime_;
-  }
-  
+    Event()
+            : creationTime_(std::chrono::system_clock::now()) {
+    }
+
+    std::chrono::time_point<std::chrono::system_clock> creationTime() const {
+        return creationTime_;
+    }
+
 private:
-  std::chrono::time_point<std::chrono::system_clock> creationTime_;
+    std::chrono::time_point<std::chrono::system_clock> creationTime_;
 };
 
 
 /**
  * EventOther
  */
-class EventOther : public Event {};
+class EventOther : public Event {
+};
 
-std::ostream& operator<<(std::ostream& os, const Event& ev);
+std::ostream &operator<<(std::ostream &os, const Event &ev);
 
 
 #endif
