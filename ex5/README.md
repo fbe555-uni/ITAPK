@@ -58,3 +58,13 @@ The addDiscountUsingTransform implementation contains a few output lines, but th
 from the foreach approach is the different functor, and the fact that there's a target itterator, in
 this case being a ostream_itterator created from cout with a newline added between each element.
 
+###Exercise 1.3 Reflection
+In our opinion the use of algorithm significantly improves the code clarity in two ways:
+Firstly, the code is shortened, since loops can be replaced with statements like for_each. This is
+mostly true when using lambda functions, since functor definitions add a significant number of lines 
+and also present the issue of where they should be implemented.
+Secondly and most importently, using an algorithm signifies at a glance what you are doing, since the 
+algorithm calls have meaningfull names, contrary to a normal loop. 
+Lastly using algorithms provide another benefit, not related to the code clarity, since using the STL
+algorithms prevent errors due to typos or logic errors in the implementations of the algorithm. Less
+code -> fewer errors!
