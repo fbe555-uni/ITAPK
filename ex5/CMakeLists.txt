@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 2.8)
 project(stl)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -7,4 +7,4 @@ set(SOURCE_FILES ProductSystem/main.cpp)
 
 add_executable(stl ${SOURCE_FILES})
 
-add_executable(MyArray MyArray/main.cpp MyArray/MyArray.cpp)
+add_executable(MyArray MyArray/main.cpp)
