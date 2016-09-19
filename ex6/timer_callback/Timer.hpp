@@ -26,8 +26,8 @@ private:
     std::thread *thread_;
     bool terminator_;
     std::map<int, boost::function<void(const std::shared_ptr<Event> &)> > callbacks_;
+    int next_id_ = 0;
 };
 
 
 #endif
-t 

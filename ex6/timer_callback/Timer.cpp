@@ -31,13 +31,18 @@ int Timer::timerThreadFunction() {
     return 0;
 }
 
+void Timer::notifyAll(const std::shared_ptr<Event> &any) {
+    for(auto &ent: callbacks_){
+        ent.second(any);
+    }
+}
 
 
 int Timer::attach(std::function<void(const std::shared_ptr<Event> &)> cb) {
-
-    return 0;
+    callbacks_[next_id_] = cb;
+    return next_id_++;
 }
 
 void Timer::detach(int cbId) {
-
+    callbacks_.erase(cbId);
 }
