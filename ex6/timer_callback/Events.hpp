@@ -12,6 +12,8 @@ public:
             : creationTime_(std::chrono::system_clock::now()) {
     }
 
+    virtual ~Event(){}
+
     std::chrono::time_point<std::chrono::system_clock> creationTime() const {
         return creationTime_;
     }

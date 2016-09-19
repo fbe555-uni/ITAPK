@@ -22,12 +22,14 @@ std::mutex stdioProt;
 std::string event2String(const std::shared_ptr<Event>& event){
     std::stringstream ss;
 
-    if(typeid(*event) == typeid(Event)) {
-        ss << "Event: ";
-    }else if(typeid(*event) == typeid(EventOther)){
+    //if(dynamic_cast<EventOther*>(&(*event)) != 0){
+    //ss << typeid(*event).name();
+    if(typeid(*event) == typeid(EventOther)){
         ss << "EventOther: ";
+    }else if(typeid(*event) == typeid(Event)){
+        ss << "Event: ";
     }else{
-        ss << "Unknown Event derivation: ";
+        ss << "Unknown derivative: ";
     }
     ss << *event;
     return ss.str();
@@ -79,18 +81,6 @@ private:
 
 
 int main() {
-    Event e;
-    EventOther eo;
-    Event* e_ptr = new Event();
-    Event* eo_ptr = new EventOther();
-    std::shared_ptr<Event> eo_shptr = std::make_shared<EventOther>();
-
-    std::cout << "e: " << typeid(e).name() << std::endl;
-    std::cout << "eo: " << typeid(eo).name() << std::endl;
-    std::cout << "*e_ptr: " << typeid(*e_ptr).name() << std::endl;
-    std::cout << "*eo_ptr: " << typeid(*eo_ptr).name() << std::endl;
-    std::cout << "*eo_shptr: " << typeid(*eo_shptr).name() << std::endl;
-
 
     // Try to make several timers with different callbacks
     Timer t1(4);
