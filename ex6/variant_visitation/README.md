@@ -5,7 +5,11 @@ The type Profanity has been declared, it generates
 a random profanity from a pre determined list and writes
 it to a string.
 
-###Exercise 1.1 FELIX KIG PÅ Q HER
+###Exercise 1.1 Type not streamable
+To implement this your mother can use which() to determine which of the types
+are currently "the one in use" by the variant, and then make a switch case, much like
+the visitor to handle the whatever we want to do with the current type. The switch case is not
+in the code.
 
 ###Exercise 1.2 Fix the streamable issue
 The stream operator has been overloaded to stream the profanity, so that's good.
@@ -18,7 +22,7 @@ the variant, or get a compile-time error if he fails to do so.
 Visitation requires a visitation object that overloads the function call operator `operator()`.
 
 ###Functor
-The functor writes a small message when a type is accesed stating the type
+The functor writes a small message when a type is accessed stating the type
 and the value of the variable.
 
 ###Compile-time error
@@ -48,4 +52,8 @@ and surely enough, the compiler warns me that there is no match for a call to th
 type which have not been implemented, which ensure that i do not make a mistake of 
 forgetting something before compiling.
 
-##Exercise 3 SNAK MED FELIX OM DET HER
+##Exercise 3
+In general the case of multiple events would be a good place to use the boost::variant and visitation.
+In example the timer exercise deals with multiple event types through polymorphism requiring real time type information.
+instead this could have been implemented with boost::variant and visitation, giving a clearer interface, making it
+easier to deal with the different types of events. 
