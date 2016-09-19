@@ -90,15 +90,15 @@ int main() {
     int functor = t1.attach(tf);
     t1.attach(boost::bind(withAnExtra, _1, "extra tick-tock"));
     std::cout << "callbacks added. waiting for 3 seconds." << std::endl;
-    std::chrono::milliseconds sleepFor(5000);
+    std::chrono::milliseconds sleepFor(3000);
     std::this_thread::sleep_for(sleepFor);
 
     std::cout << "Removing the freeFunction and functor callbacks to test detach" << std::endl;
     t1.detach(free);
     t1.detach(functor);
     std::cout << "Adding two reference object callback." << std::endl;
-    ReferenceObj r1, r2;
-    r1.call(std::make_shared<Event>());
+    std::shared_ptr<ReferenceObj> r1 = std::make_shared<ReferenceObj>();
+    std::shared_ptr<ReferenceObj> r2 = std::make_shared<ReferenceObj>();
     t1.attach(boost::bind(&ReferenceObj::call, r1, _1));
     t1.attach(boost::bind(&ReferenceObj::call, r2, _1));
     std::cout << "ReferenceObj callbacks added. will now start printing the objects gotCalled() value." << std::endl;
@@ -106,8 +106,8 @@ int main() {
     for (;;) {
         std::chrono::milliseconds sleepFor(1000);
         std::this_thread::sleep_for(sleepFor);
-        std::cout << "r1 called " << r1.gotCalled() << " times." << std::endl;
-        std::cout << "r2 called " << r2.gotCalled() << " times." << std::endl;
+        std::cout << "r1 called " << r1->gotCalled() << " times." << std::endl;
+        std::cout << "r2 called " << r2->gotCalled() << " times." << std::endl;
 
 
     }
