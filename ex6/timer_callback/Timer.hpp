@@ -8,6 +8,7 @@
 #include <chrono>
 #include <boost/any.hpp>
 #include <boost/function.hpp>
+#include <mutex>
 
 class Timer {
 public:
@@ -27,6 +28,7 @@ private:
     bool terminator_;
     std::map<int, boost::function<void(const std::shared_ptr<Event> &)> > callbacks_;
     int next_id_ = 0;
+    std::mutex mapProt_;
 };
 
 
