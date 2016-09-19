@@ -7,6 +7,7 @@
 #include <functional>
 #include <chrono>
 #include <boost/any.hpp>
+#include <boost/function.hpp>
 
 class Timer {
 public:
@@ -24,7 +25,9 @@ private:
     int eventTimer_;
     std::thread *thread_;
     bool terminator_;
+    std::map<int, boost::function<void(const std::shared_ptr<Event> &)> > callbacks_;
 };
 
 
 #endif
+t 

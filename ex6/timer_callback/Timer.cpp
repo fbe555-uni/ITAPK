@@ -31,10 +31,13 @@ int Timer::timerThreadFunction() {
     return 0;
 }
 
-void Timer::detach(int cbId) {
 
-}
 
 int Timer::attach(std::function<void(const std::shared_ptr<Event> &)> cb) {
+
     return 0;
+}
+
+void Timer::detach(int cbId) {
+
 }
