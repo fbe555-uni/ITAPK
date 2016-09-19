@@ -20,15 +20,18 @@ public:
         std::cout << sensorName << ": " << sensorValue << std::endl;
     }
 };
+typedef boost::signals2::signal<void (const std::string&, double)> sensor_signal;
 
 int main() {
 
-    boost::signals2::signal<void(const std::string&, double)> sensorSig;
+    sensor_signal sensorSig;
     sensorSig.connect(freeSlot);
     sensorSig.connect(slotFunctor());
     std::shared_ptr<SlotRefObj> sro = std::make_shared<SlotRefObj>();
     sensorSig.connect(boost::bind(&SlotRefObj::slotMe, sro, _1, _2));
-    sensorSig("SlotinessSensor", 114);
+    sensorSig.connect(
+            sensor_signal::slot_type(&SlotRefObj::slotMe, sro, _1, _2).track(sro));
+    sensorSig("SaltinessSensor", 114);
 
     return 0;
 }
