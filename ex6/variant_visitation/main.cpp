@@ -54,7 +54,7 @@ public:
 int main() {
     boost::variant<int, Profanity, double> u = 20.2;
     std::cout << u << std::endl; //profanity print.
-
+    u.which();
 
     std::string res = boost::apply_visitor( my_visitor(), u);
     std::cout << res;
