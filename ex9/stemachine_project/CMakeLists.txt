@@ -9,3 +9,5 @@ add_executable(simplestates ${SIMPLE_STATES_SRC})
 set(MULTI_HIERARCH_SRC Radio/MultipleHierarchicalStates/radio.cpp)
 add_executable(multiHierarch ${MULTI_HIERARCH_SRC})
 
+set(GUARDED_TRANSITION_CUSTOM_REACTION Radio/GuardedTransInCustomReact/radio.cpp)
+add_executable(guardedTransition ${GUARDED_TRANSITION_CUSTOM_REACTION})

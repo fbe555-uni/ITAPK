@@ -21,3 +21,10 @@ sarily the statemachine, but could be another state. If the state you're
 defining has substates, the third parameter is used to define the inital
 substate.
 
+### Ex 1.3 GuardedTransInCustomReact
+In this exercise we added a check to see if the state   we're trying to 
+enter is valid. We do this by adding a bool to the EvCDState that deter-
+mines whether or not the input CD is valid, if it is valid, we change 
+to CD Playing. If it is not valid, the state is returned to Radio Playing.
+The interesting stuff happens in `CDLoading`, where the validity check 
+happens. We use `boost::mpl` to hanlde multiple events as one.

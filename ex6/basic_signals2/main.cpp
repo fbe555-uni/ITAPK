@@ -27,11 +27,12 @@ int main() {
     sensor_signal sensorSig;
     sensorSig.connect(freeSlot);
     sensorSig.connect(slotFunctor());
-    std::shared_ptr<SlotRefObj> sro = std::make_shared<SlotRefObj>();
+    std::weak_ptr<SlotRefObj> sro = std::make_shared<SlotRefObj>();
     sensorSig.connect(boost::bind(&SlotRefObj::slotMe, sro, _1, _2));
     sensorSig.connect(
             sensor_signal::slot_type(&SlotRefObj::slotMe, sro, _1, _2).track(sro));
     sensorSig("SaltinessSensor", 114);
 
+
     return 0;
-}
+} 
