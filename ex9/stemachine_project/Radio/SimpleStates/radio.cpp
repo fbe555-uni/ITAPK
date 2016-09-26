@@ -20,7 +20,7 @@
  * {
  *    PRINT_ENTRY_EXIT(0, Test)
  * };
- * 
+ *
  * Note the missing ;
  * param 1 - Is state inner level - denoted on printout with '*'
  * param 2 - Is the name of the class in question. No quotes!
@@ -45,30 +45,49 @@ namespace sc = boost::statechart;
  * Events that can be handled
  */
 
+struct EvAMTuner : sc::event<EvAMTuner>{
+    PRINT_ENTRY_EXIT(0, EvAMTuner)
+};
 
+struct EvFMTuner : sc::event<EvFMTuner> {
+    PRINT_ENTRY_EXIT(0, EvFMTuner)
+};
 
 /**
  * Machine definition and the top level states
  * forward declarations
  */
+struct FMTuner;
+struct AMTuner;
 
-
+struct Radio : sc::state_machine<Radio, FMTuner>{};
 
 /**
  * FMTuner
  */
-
-
+struct FMTuner : sc::simple_state<FMTuner, Radio> {
+    typedef sc::transition<EvAMTuner, AMTuner> reactions;
+    PRINT_ENTRY_EXIT(0, FMTuner)
+};
 
 /**
  * AMTuner
  */
-
+struct AMTuner : sc::simple_state<AMTuner, Radio> {
+    typedef sc::transition<EvFMTuner, FMTuner> reactions;
+    PRINT_ENTRY_EXIT(0, AMTuner)
+};
 
 
 int main()
 {
-  /* Instantiate State machine and make it process some relevant events... */
-  
+    Radio myRadio;
+    myRadio.initiate();
+    myRadio.process_event(EvAMTuner());
+    myRadio.process_event(EvFMTuner());
+    myRadio.process_event(EvAMTuner());
+
+    /* Instantiate State machine and make it process some relevant events... */
+
   return 0;
 }

@@ -55,18 +55,18 @@ struct EvFMTuner : sc::event<EvFMTuner> {};
   
 
 /**
- * Machine definition and the top level states
+ * Radio definition and the top level states
  * forward declarations
  */
 struct On;
 struct Off;
-struct Machine : sc::state_machine<Machine, Off> {};
+struct Radio : sc::state_machine<Radio, Off> {};
 
 
 /**
  * Off
  */
-struct Off : sc::simple_state<Off, Machine>
+struct Off : sc::simple_state<Off, Radio>
 {
   typedef sc::transition<EvOn, On>   reactions;
   PRINT_ENTRY_EXIT(0, Off)
@@ -80,7 +80,10 @@ struct Off : sc::simple_state<Off, Machine>
 struct RadioPlaying;
 
 /* Missing 'On' */
-
+struct On : sc::simple_state<On, Radio, RadioPlaying>{
+    typedef sc::transition<EvOff, Off> reactions;
+    PRINT_ENTRY_EXIT(0, On)
+};
 
 /**
  * 'RadioPlaying' and sub states
@@ -89,8 +92,9 @@ struct RadioPlaying;
 struct FMTuner;
 struct AMTuner;
 
-/* Missing 'RadioPlaying' */
-
+struct RadioPlaying : sc::simple_state<RadioPlaying, On, FMTuner>{
+    PRINT_ENTRY_EXIT(1, RadioPlaying);
+};
 
 /**
  * FMTuner
@@ -98,7 +102,7 @@ struct AMTuner;
 struct FMTuner : sc::simple_state<FMTuner, RadioPlaying>
 {
   typedef sc::transition<EvAMTuner, AMTuner> reactions;
-  PRINT_ENTRY_EXIT(1, FMTuner);
+  PRINT_ENTRY_EXIT(2, FMTuner);
 };
 
 
@@ -108,19 +112,19 @@ struct FMTuner : sc::simple_state<FMTuner, RadioPlaying>
 struct AMTuner : sc::simple_state<AMTuner, RadioPlaying>
 {
   typedef sc::transition<EvFMTuner, FMTuner> reactions;
-  PRINT_ENTRY_EXIT(1, AMTuner);
+  PRINT_ENTRY_EXIT(2, AMTuner);
 };
 
 
 
 int main()
 {
-  Machine myMachine;  
-  myMachine.initiate();
+  Radio myRadio;  
+  myRadio.initiate();
 
-  myMachine.process_event(EvOn());
-  myMachine.process_event(EvAMTuner());
-  myMachine.process_event(EvOff());
+  myRadio.process_event(EvOn());
+  myRadio.process_event(EvAMTuner());
+  myRadio.process_event(EvOff());
   
   return 0;
 }
