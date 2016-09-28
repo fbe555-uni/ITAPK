@@ -13,12 +13,8 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8c119e7e-2a8b-41ab-ae2f-1f1d63e956ef" name="Default" comment="fixed cmake for projects -h">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/main.cpp" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../ex09/stemachine_project/.idea/stemachine_project.iml" afterPath="$PROJECT_DIR$/../ex09/stemachine_project/.idea/stemachine_project.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ex10.iml" afterPath="$PROJECT_DIR$/.idea/ex10.iml" />
+    <list default="true" id="8c119e7e-2a8b-41ab-ae2f-1f1d63e956ef" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
     </list>
     <ignored path="ex10.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,6 +59,11 @@
     </leaf>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="huxxcb &lt;hakonprimdahl@gmail.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
@@ -210,12 +211,20 @@
       <option name="presentableId" value="Default" />
       <updated>1475059328420</updated>
       <workItem from="1475059330698" duration="717000" />
-      <workItem from="1475060712939" duration="271000" />
+      <workItem from="1475060712939" duration="287000" />
     </task>
+    <task id="LOCAL-00001" summary="fixed cmake for projects -h">
+      <created>1475060992795</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1475060992795</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="988000" />
+    <option name="totallyTimeSpent" value="1004000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="52" width="1356" height="1027" extended-state="4" />
@@ -252,7 +261,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="fixed cmake for projects -h" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed cmake for projects -h" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
