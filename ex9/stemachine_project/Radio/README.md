@@ -27,4 +27,4 @@ enter is valid. We do this by adding a bool to the EvCDState that deter-
 mines whether or not the input CD is valid, if it is valid, we change 
 to CD Playing. If it is not valid, the state is returned to Radio Playing.
 The interesting stuff happens in `CDLoading`, where the validity check 
-happens. We use `boost::mpl` to hanlde multiple events as one.
+happens. We use `boost::mpl` to handle multiple events at once.

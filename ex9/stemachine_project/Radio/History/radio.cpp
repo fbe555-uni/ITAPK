@@ -191,7 +191,6 @@ int main()
   myMachine.process_event(EvCD());
   
   myMachine.process_event(EvOff());
-  myMachine.process_event(EvOn());
   myMachine.process_event(EvTuner());
   
   return 0;
