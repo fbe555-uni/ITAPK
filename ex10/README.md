@@ -29,9 +29,8 @@ obviously the const modifyer is not appropriate for move, since the
 source object is left empty.
 
 ### part 3: How and when
-Whenever the source will be discarded after (is an rvalue)???
+Whenever the source will be discarded after (is an rvalue) or to gene-
+ralize, it isn't needed to have to copies.
 
-### part 4: Forcing usage
-Howto? good idea whenever one doesn't need the source again?
-
-### part 5: 
+### part : Forcing usage
+To force usage of move operations, std::move() has to be employed.

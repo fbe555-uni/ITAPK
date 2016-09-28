@@ -2,6 +2,8 @@
 #include <future>
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <iterator>
 
 class Algo
 {
