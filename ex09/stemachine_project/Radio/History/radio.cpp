@@ -9,6 +9,7 @@
 #include <boost/statechart/simple_state.hpp>
 #include <boost/statechart/transition.hpp>
 #include <boost/statechart/custom_reaction.hpp>
+#include <boost/statechart/shallow_history.hpp>
 
 
 /**
@@ -93,7 +94,8 @@ struct Off : sc::simple_state<Off, Machine>
 struct CDLoading;
 struct CDPlaying;
 struct RadioPlaying;
-struct On : sc::simple_state<On, Machine, RadioPlaying>
+struct On : sc::simple_state<On, Machine, boost::mpl::list<sc::shallow_history<RadioPlaying> >, sc::has_shallow_history >
+
 {
   typedef sc::transition<EvOff, Off>   reactions;
   
@@ -107,8 +109,23 @@ struct On : sc::simple_state<On, Machine, RadioPlaying>
  */
 struct FMTuner;
 struct AMTuner;
+struct RadioPlaying : sc::simple_state<RadioPlaying, On, boost::mpl::list<sc::shallow_history<FMTuner> >,
+        sc::has_shallow_history>
+{
+  typedef boost::mpl::list<sc::transition<EvCDInserted, CDLoading>,
+                           sc::custom_reaction<EvCD>
+                           >reactions;
 
-/* Missing implementation for state 'RadioPlaying' */
+  sc::result react(const EvCD& ev)
+  {
+    if(context<Machine>().cdIn_)
+      return transit<CDPlaying>();
+    else
+      return discard_event();
+  }
+  
+  PRINT_ENTRY_EXIT(1, RadioPlaying);
+};
 
 
 /**
@@ -177,7 +194,6 @@ int main()
   myMachine.process_event(EvCD());
   
   myMachine.process_event(EvOff());
-  myMachine.process_event(EvOn());
   myMachine.process_event(EvTuner());
   
   return 0;

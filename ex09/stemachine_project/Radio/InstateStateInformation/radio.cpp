@@ -64,13 +64,13 @@ struct EvCDState : sc::event<EvCDState>
   
 
 /**
- * Machine definition and the top level states
+ * Radio definition and the top level states
  * forward declarations
  */
 
 struct On;
 struct Off;
-struct Machine : sc::state_machine<Machine, Off>
+struct Radio : sc::state_machine<Radio, Off>
 {
   bool cdIn_;
 };
@@ -79,7 +79,7 @@ struct Machine : sc::state_machine<Machine, Off>
 /**
  * Off
  */
-struct Off : sc::simple_state<Off, Machine>
+struct Off : sc::simple_state<Off, Radio>
 {
   typedef sc::transition<EvOn, On>   reactions;
   PRINT_ENTRY_EXIT(0, Off)
@@ -93,7 +93,7 @@ struct Off : sc::simple_state<Off, Machine>
 struct CDLoading;
 struct CDPlaying;
 struct RadioPlaying;
-struct On : sc::simple_state<On, Machine, RadioPlaying>
+struct On : sc::simple_state<On, Radio, RadioPlaying>
 {
   typedef sc::transition<EvOff, Off>   reactions;
   
@@ -107,22 +107,27 @@ struct On : sc::simple_state<On, Machine, RadioPlaying>
  */
 struct FMTuner;
 struct AMTuner;
-struct RadioPlaying : sc::simple_state<RadioPlaying, On, FMTuner>
-{
-  typedef boost::mpl::list<sc::transition<EvCDInserted, CDLoading>,
-                           sc::custom_reaction<EvCD>
-                           >reactions;
 
-  sc::result react(const EvCD& ev)
-  {
-    if(context<Machine>().cdIn_)
-      return transit<CDPlaying>();
-    else
-      return discard_event();
-  }
-  
-  PRINT_ENTRY_EXIT(1, RadioPlaying);
+struct RadioPlaying : sc::simple_state<RadioPlaying, On, FMTuner>{
+    void printMissingCD(){
+        std::cout << "CD missing" << std::endl;
+    }
+
+    sc::result react(const EvCD& ev) {
+        if (context<Radio>().cdIn_)
+            return transit<CDPlaying>();
+        else{
+            printMissingCD();
+            return discard_event();
+        }
+    }
+
+    typedef boost::mpl::list<
+            sc::custom_reaction<EvCD>,
+            sc::transition<EvCDInserted, CDLoading>
+    > reactions;
 };
+/* Missing implementation for state 'RadioPlaying' */
 
 
 /**
@@ -179,19 +184,20 @@ struct CDPlaying : sc::simple_state<CDPlaying, On>
 
 int main()
 {
-  Machine myMachine;  
-  myMachine.initiate();
+  Radio myRadio;  
+  myRadio.initiate();
 
-  myMachine.process_event(EvOn());
-  myMachine.process_event(EvAMTuner());
-  myMachine.process_event(EvCDInserted());
-  myMachine.process_event(EvCDState(true));
-  myMachine.process_event(EvTuner());
-  myMachine.cdIn_ = true;
-  myMachine.process_event(EvCD());
+  myRadio.process_event(EvOn());
+  myRadio.process_event(EvAMTuner());
+  myRadio.process_event(EvCDInserted());
+  myRadio.process_event(EvCDState(true));
+  myRadio.process_event(EvTuner());
+  myRadio.cdIn_ = false;
+  myRadio.process_event(EvCD());
   
-  myMachine.process_event(EvOff());
-  myMachine.process_event(EvTuner());
+  myRadio.process_event(EvOff());
+  myRadio.process_event(EvOn());
+  myRadio.process_event(EvTuner());
   
   return 0;
 }

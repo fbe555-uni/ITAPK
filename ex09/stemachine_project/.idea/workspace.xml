@@ -5,6 +5,8 @@
       <config projectName="stemachine_project" targetName="multiHierarch" />
       <config projectName="stemachine_project" targetName="simplestates" />
       <config projectName="stemachine_project" targetName="stemachine_project" />
+      <config projectName="stemachine_project" targetName="history" />
+      <config projectName="stemachine_project" targetName="instateStateinfo" />
       <config projectName="stemachine_project" targetName="guardedTransition" />
     </generated>
   </component>
@@ -14,9 +16,18 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <list default="true" id="1d40ecee-a0f6-49fc-80bb-343a5a3489dd" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Radio/History/radio.cpp" afterPath="$PROJECT_DIR$/Radio/History/radio.cpp" />
+=======
+    <list default="true" id="1d40ecee-a0f6-49fc-80bb-343a5a3489dd" name="Default" comment="ex9 done">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/stemachine_project.iml" afterPath="$PROJECT_DIR$/.idea/stemachine_project.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Radio/History/radio.cpp" afterPath="$PROJECT_DIR$/Radio/History/radio.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Radio/InstateStateInformation/radio.cpp" afterPath="$PROJECT_DIR$/Radio/InstateStateInformation/radio.cpp" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Radio/README.md" afterPath="$PROJECT_DIR$/Radio/README.md" />
     </list>
     <ignored path="stemachine_project.iws" />
@@ -37,6 +48,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
       <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
@@ -60,16 +72,25 @@
         </entry>
       </file>
       <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+=======
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
         <entry file="file://$PROJECT_DIR$/Radio/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+          <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="FIRST">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
               <first_editor relative-caret-position="435">
                 <caret line="29" column="61" selection-start-line="29" selection-start-column="61" selection-end-line="29" selection-end-column="61" />
+=======
+              <first_editor relative-caret-position="439">
+                <caret line="48" column="3" selection-start-line="48" selection-start-column="3" selection-end-line="48" selection-end-column="3" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
                 <folding />
               </first_editor>
               <second_editor />
             </state>
           </provider>
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
         </entry>
       </file>
       <file leaf-file-name="radio.cpp" pinned="false" current-in-tab="false">
@@ -89,12 +110,17 @@
               <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
               <folding />
             </state>
+=======
+          <provider editor-type-id="MarkdownFxPreviewEditor">
+            <state />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
           </provider>
         </entry>
       </file>
       <file leaf-file-name="radio.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Radio/MultipleHierarchicalStates/radio.cpp">
+        <entry file="file://$PROJECT_DIR$/Radio/History/radio.cpp">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
             <state relative-caret-position="1455">
               <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
               <folding />
@@ -118,6 +144,13 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
+=======
+            <state relative-caret-position="2371">
+              <caret line="182" column="10" selection-start-line="182" selection-start-column="10" selection-end-line="182" selection-end-column="10" />
+              <folding>
+                <element signature="e#177#196#0" expanded="true" />
+              </folding>
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
             </state>
           </provider>
         </entry>
@@ -135,8 +168,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/Radio/GuardedTransInCustomReact/radio.cpp" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/Radio/History/radio.cpp" />
         <option value="$PROJECT_DIR$/Radio/README.md" />
         <option value="$PROJECT_DIR$/Radio/History/radio.cpp" />
       </list>
@@ -149,10 +183,16 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <option name="x" value="2" />
     <option name="y" value="52" />
     <option name="width" value="948" />
     <option name="height" value="1027" />
+=======
+    <option name="y" value="24" />
+    <option name="width" value="1366" />
+    <option name="height" value="720" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -307,9 +347,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../ex7-8" />
   </component>
   <component name="RunManager" selected="Application.guardedTransition">
+=======
+  </component>
+  <component name="RunManager" selected="Application.history">
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
     <configuration default="true" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" PASS_PARENT_ENVS_2="true" PROJECT_NAME="stemachine_project" TARGET_NAME="stemachine_project" CONFIG_NAME="Debug" TEST_MODE="SUITE_TEST">
       <envs />
       <method />
@@ -491,12 +536,22 @@
       <envs />
       <method />
     </configuration>
-    <list size="5">
+    <configuration default="false" name="instateStateinfo" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="stemachine_project" TARGET_NAME="instateStateinfo" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="stemachine_project" RUN_TARGET_NAME="instateStateinfo">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="history" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="stemachine_project" TARGET_NAME="history" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="stemachine_project" RUN_TARGET_NAME="history">
+      <envs />
+      <method />
+    </configuration>
+    <list size="7">
       <item index="0" class="java.lang.String" itemvalue="Application.Build All" />
       <item index="1" class="java.lang.String" itemvalue="Application.stemachine_project" />
       <item index="2" class="java.lang.String" itemvalue="Application.multiHierarch" />
       <item index="3" class="java.lang.String" itemvalue="Application.simplestates" />
       <item index="4" class="java.lang.String" itemvalue="Application.guardedTransition" />
+      <item index="5" class="java.lang.String" itemvalue="Application.instateStateinfo" />
+      <item index="6" class="java.lang.String" itemvalue="Application.history" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
@@ -513,8 +568,13 @@
       <option name="presentableId" value="Default" />
       <updated>1474875899055</updated>
       <workItem from="1474875900574" duration="1149000" />
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
       <workItem from="1474877149785" duration="8246000" />
       <workItem from="1475048618262" duration="30000" />
+=======
+      <workItem from="1474877149785" duration="5882000" />
+      <workItem from="1474885222893" duration="2216000" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
     </task>
     <task id="LOCAL-00001" summary="initial commit for ex9">
       <created>1474876606831</created>
@@ -541,6 +601,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <option name="totallyTimeSpent" value="9425000" />
   </component>
   <component name="ToolWindowManager">
@@ -552,6 +613,21 @@
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32983193" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+=======
+    <option name="totallyTimeSpent" value="9247000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="24" width="1366" height="720" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26612905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32983193" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -566,6 +642,26 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32983193" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26612905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -580,8 +676,13 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit for ex9" />
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <MESSAGE value="made exercise 1.3 +readme -h" />
     <option name="LAST_COMMIT_MESSAGE" value="made exercise 1.3 +readme -h" />
+=======
+    <MESSAGE value="ex9 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="ex9 done" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -590,8 +691,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="180">
+          <caret line="12" column="32" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
           <folding />
         </state>
       </provider>
@@ -606,6 +707,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Radio/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Radio/SimpleStates/radio.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="915">
+          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Radio/MultipleHierarchicalStates/radio.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1455">
+          <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Radio/InstateStateInformation/radio.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2520">
+          <caret line="168" column="23" selection-start-line="168" selection-start-column="23" selection-end-line="168" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Radio/SimpleStates/SConstruct">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
+    <entry file="file://$PROJECT_DIR$/Radio/GuardedTransInCustomReact/radio.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2580">
+          <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+          <folding>
+            <element signature="e#177#196#0" expanded="true" />
+          </folding>
+=======
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp" />
     <entry file="file://$PROJECT_DIR$/Radio/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
@@ -650,6 +816,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp" />
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <entry file="file://$PROJECT_DIR$/Radio/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -665,35 +832,51 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+    <entry file="file://$PROJECT_DIR$/Radio/SimpleStates/radio.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="915">
+          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Radio/SimpleStates/SConstruct">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+        <state relative-caret-position="1455">
+          <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <entry file="file://$PROJECT_DIR$/main.cpp" />
     <entry file="file://$PROJECT_DIR$/Radio/SimpleStates/radio.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="915">
           <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+=======
+    <entry file="file://$PROJECT_DIR$/Radio/InstateStateInformation/radio.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2520">
+          <caret line="168" column="23" selection-start-line="168" selection-start-column="23" selection-end-line="168" selection-end-column="23" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
     <entry file="file://$PROJECT_DIR$/Radio/MultipleHierarchicalStates/radio.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1455">
           <caret line="97" column="0" selection-start-line="97" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+=======
     <entry file="file://$PROJECT_DIR$/Radio/GuardedTransInCustomReact/radio.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2580">
@@ -704,8 +887,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="57" selection-start-line="15" selection-start-column="57" selection-end-line="15" selection-end-column="57" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Radio/History/radio.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD:ex9/stemachine_project/.idea/workspace.xml
+        <state relative-caret-position="2580">
+          <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+=======
+        <state relative-caret-position="2371">
+          <caret line="182" column="10" selection-start-line="182" selection-start-column="10" selection-end-line="182" selection-end-column="10" />
+>>>>>>> c2393fa597dc87900ce5406c594ae8606901c1cd:ex09/stemachine_project/.idea/workspace.xml
+          <folding>
+            <element signature="e#177#196#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Radio/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="439">
+            <caret line="48" column="3" selection-start-line="48" selection-start-column="3" selection-end-line="48" selection-end-column="3" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+      <provider editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
           <first_editor relative-caret-position="435">
             <caret line="29" column="61" selection-start-line="29" selection-start-column="61" selection-end-line="29" selection-end-column="61" />

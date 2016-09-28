@@ -11,3 +11,9 @@ add_executable(multiHierarch ${MULTI_HIERARCH_SRC})
 
 set(GUARDED_TRANSITION_CUSTOM_REACTION Radio/GuardedTransInCustomReact/radio.cpp)
 add_executable(guardedTransition ${GUARDED_TRANSITION_CUSTOM_REACTION})
+
+set(INSTATE_STATEINFO_SRC Radio/InstateStateInformation/radio.cpp)
+add_executable(instateStateinfo ${INSTATE_STATEINFO_SRC})
+
+set(HISTORY_SRC Radio/History/radio.cpp)
+add_executable(history ${HISTORY_SRC})
