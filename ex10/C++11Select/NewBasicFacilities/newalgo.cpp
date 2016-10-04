@@ -13,13 +13,15 @@
 
 class Product {
 public:
-    Product(const std::string &name, double price, unsigned int sold = 0)
+
+    Product(const std::string &name, double price, unsigned int sold = 0) //not done here for clarity
             : name_(name), price_(price), sold_(sold) {}
 
     Product()
             : name_(""), price_(0), sold_(0) {}
 
-    const std::string &name() const {
+
+    std::string name() const{ //auto name()const -> decltype(name_) { //for getters and setters
         return name_;
     }
 
@@ -32,15 +34,16 @@ public:
         price_ *= (100.0 - discount) / 100.0;
     }
 
-    double price() const {
+
+    double price() const { // auto return again. same reason
         return price_;
     }
 
-    void setPrice(double newPrice) {
+    void setPrice(double newPrice) { //member getter and setter argument decltype doesn't work due to missing acces to price_
         price_ = newPrice;
     }
 
-    unsigned int sold() const {
+    unsigned int sold() const { //getter again
         return sold_;
     }
 
@@ -102,7 +105,7 @@ void productDBRead(ProductList &pl, const std::string &fileName) {
 //   for(ProductList::const_iterator iter = pl.begin(); iter != pl.end(); ++iter)
 //   {
 //     std::cout << *iter << std::endl;
-//   }  
+//   }
 //   std::cout << "##################################################" << std::endl;
 // }
 void printAll(const ProductList &pl) {
@@ -163,7 +166,8 @@ void printPoorlySellingProducts(const ProductList &pl) {
     std::cout << "##################################################" << std::endl;
     std::cout << "Printing out those products that have only been sold a few times..." << std::endl;
     std::cout << "------------------------" << std::endl;
-    std::remove_copy_if(pl.begin(), pl.end(), std::ostream_iterator<Product>(std::cout, "\n"), ALot(10));
+
+    std::remove_copy_if(pl.begin(), pl.end(), std::ostream_iterator<Product>(std::cout, "\n"), ALot(10)); // use lambda
 }
 
 
@@ -185,7 +189,8 @@ private:
 void addDiscountUsingForEach(ProductList &pl) {
     std::cout << "##################################################" << std::endl;
     std::cout << "Giving all products a discount using for_each()..." << std::endl;
-    std::for_each(pl.begin(), pl.end(), DiscountUsingForEach(0.9));
+
+    std::for_each(pl.begin(), pl.end(), DiscountUsingForEach(0.9)); // use lambda instead
     std::cout << "##################################################" << std::endl;
 }
 
@@ -210,7 +215,8 @@ void addDiscountUsingTransform(ProductList &pl) {
     std::cout << "##################################################" << std::endl;
     std::cout << "Giving all products a discount using transform..." << std::endl;
     std::transform(pl.begin(), pl.end(), std::ostream_iterator<Product>(std::cout, "\n"),
-                   DiscountUsingTransform(0.9));
+
+                   DiscountUsingTransform(0.9)); // use lambda
     std::cout << "##################################################" << std::endl;
 }
 
@@ -234,13 +240,15 @@ void calcTotalSoldProducts(ProductList &pl) {
 void addDiscountOpt(ProductList &pl) {
     std::cout << "##################################################" << std::endl;
     std::cout << "Giving all products a discount using binders..." << std::endl;
-    std::for_each(pl.begin(), pl.end(), std::bind2nd(std::mem_fun_ref(&Product::setDiscount), 10));
+
+    std::for_each(pl.begin(), pl.end(), std::bind2nd(std::mem_fun_ref(&Product::setDiscount), 10)); //lambda?
     std::cout << "##################################################" << std::endl;
 }
 
 
 int main() {
-    auto running = true;
+
+    bool running = true;
     ProductList pl;
 
     while (running) {
@@ -305,6 +313,7 @@ int main() {
             case 'Q':
                 running = false;
             default:break;
+
         }
 
 

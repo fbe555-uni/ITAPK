@@ -4,7 +4,7 @@ project(c11_select)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
-set(NEW_BASIC_FACILITIES C++11Select/NewBasicFacilities/newalgo.cpp)
+set(NEW_BASIC_FACILITIES C++11Select/NewBasicFacilities/newalgo.cpp C++11Select/VariadicTypelist/typeList.h)
 add_executable(newBasicFacilities ${NEW_BASIC_FACILITIES})
 
 set(THREADING C++11Select/Threading/async_algo.cpp)
