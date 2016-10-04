@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/C++11Select/Threading/async_algo.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/C++11Select/VariadicTypelist/typeList.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/C++11Select/NewBasicFacilities/newalgo.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>

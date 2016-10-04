@@ -26,7 +26,7 @@ public:
     /**
      * Setting the discount as a percentage
      */
-    void setDiscount(auto discount) { //dubious - what happens when user passes bull? ambiguous interface presentation
+    void setDiscount(double discount) {
         discount = (discount < 0 ? 0 : discount);
         discount = (discount > 100 ? 100 : discount);
         price_ *= (100.0 - discount) / 100.0;
@@ -36,7 +36,7 @@ public:
         return price_;
     }
 
-    void setPrice(auto newPrice) { //member getter and setter argument
+    void setPrice(double newPrice) { //member getter and setter argument decltype doesn't work due to missing acces to price_
         price_ = newPrice;
     }
 

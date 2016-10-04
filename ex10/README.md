@@ -34,3 +34,7 @@ ralize, it isn't needed to have to copies.
 
 ### part : Forcing usage
 To force usage of move operations, std::move() has to be employed.
+
+
+##Ex3 variadic templates
+To implement a typelist using variadic templates, 
