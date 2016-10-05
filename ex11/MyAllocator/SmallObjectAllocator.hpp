@@ -3,6 +3,9 @@
 
 #include "SmallObjectHeap.hpp"
 
+namespace {
+
+}
 template <typename T>
 class SmallObjectAllocator
 {
@@ -37,8 +40,16 @@ public:
 	void deallocate( pointer p, size_type size )	{ ::operator delete( p ); }
 	size_type max_size() const						{ return size_type( -1 ) / sizeof( T ); }
 
-	void construct( pointer p, const value_type& x )	{ /* Constructing object */ }
-	void destroy( pointer p )							{ /* Destructing object */ }
+	void construct( pointer p, const value_type& x )
+    {
+		new(static_cast<void*>(p)) value_type(x);
+	}
+
+
+	void destroy( pointer p )
+    {
+        /* Destructing object */
+    }
 };
 
 template<>
