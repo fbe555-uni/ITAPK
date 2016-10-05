@@ -2,6 +2,7 @@
 #define SMALL_OBJECT_HEAP_HPP_INCLUDED
 
 #include <vector>
+#include <set>
 
 namespace details
 {
@@ -27,7 +28,7 @@ namespace details
 		// allocate block from page. Return NULL if no block is avaible
 		void* allocate();
 
-		// free block. Only pointers previously allocated with allocate are leagel
+		// free block. Only pointers previously allocated with allocate are legal
 		void deallocate( void* p );
 
 	private:
@@ -95,18 +96,30 @@ public:
 
     void* allocate(){
         for(auto i: pageList){
-            if(i->blocksFree() > 0) return i->allocate();
+            if(i.second.blocksFree() > 0){
+                void* ptr = i.second.allocate();
+                i.first.insert(ptr);
+                return ptr;
+            }
         }
-        pageList.pushBack(Page());
-        pageList.back().initialize(objSize, pageSize);
-        return pageList.back().allocate();
+        pageList.push_back(make_pair(std::set<void*>(), details::Page()));
+        pageList.back().second.initialize(objSize, pageSize);
+        void* ptr = pageList.back().second.allocate();
+        pageList.back().first.insert(ptr);
+        return ptr;
     }
 
-    
+    void deallocate(void* mem){
+        for(auto i: pageList){
+            if(i.first.erase(mem)) i.second.deallocate(mem);
+        }
+    }
+
+
 private:
     SmallObjectHeap(){}
-    std::list<Page> pageList;
-    static SmallObjectHeap<objSize, pageSize> instance();
+    std::list<std::pair<std::set<void *>, details::Page> > pageList;
+    static SmallObjectHeap<objSize, pageSize> instance;
 };
 
 #endif	// SMALL_OBJECT_HEAP_HPP_INCLUDED
