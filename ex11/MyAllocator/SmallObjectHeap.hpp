@@ -80,7 +80,33 @@ namespace details
 		++blocksAvailable_;
 	}
 
-
 } // namespace details
+
+
+template <std::size_t objSize, int pageSize = 100>
+
+class SmallObjectHeap{
+
+public:
+    //default parameter for page size allows user to use a fitting page size to avoid internal fragmentation
+    static SmallObjectHeap<objSize, pageSize>* getInstance(){
+        return &instance;
+    }
+
+    void* allocate(){
+        for(auto i: pageList){
+            if(i->blocksFree() > 0) return i->allocate();
+        }
+        pageList.pushBack(Page());
+        pageList.back().initialize(objSize, pageSize);
+        return pageList.back().allocate();
+    }
+
+    
+private:
+    SmallObjectHeap(){}
+    std::list<Page> pageList;
+    static SmallObjectHeap<objSize, pageSize> instance();
+};
 
 #endif	// SMALL_OBJECT_HEAP_HPP_INCLUDED
