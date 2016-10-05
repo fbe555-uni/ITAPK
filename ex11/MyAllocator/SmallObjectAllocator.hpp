@@ -2,6 +2,7 @@
 #define SMALLOBJECTALLOCATOR_HPP_INCLUDED
 
 #include "SmallObjectHeap.hpp"
+#include <stddef.h>
 
 namespace details{
   //  inline void destruct(char*){}
