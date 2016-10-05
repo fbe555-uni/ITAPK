@@ -3,8 +3,11 @@
 
 #include "SmallObjectHeap.hpp"
 
-namespace {
-
+namespace details{
+  //  inline void destruct(char*){}
+  //  inline void destruct(wchar_t*) {}
+    template <typename T>
+    inline void destruct(T* t) {t->~T();}
 }
 template <typename T>
 class SmallObjectAllocator
@@ -46,10 +49,12 @@ public:
 	}
 
 
+
 	void destroy( pointer p )
     {
-        /* Destructing object */
+        details::destruct(p);
     }
+
 };
 
 template<>
