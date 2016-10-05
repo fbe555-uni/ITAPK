@@ -27,7 +27,7 @@ namespace details
 		// allocate block from page. Return NULL if no block is avaible
 		void* allocate();
 
-		// free block. Only pointers previously allocated with allocate are leagel
+		// free block. Only pointers previously allocated with allocate are legal
 		void deallocate( void* p );
 
 	private:
@@ -95,18 +95,18 @@ public:
 
     void* allocate(){
         for(auto i: pageList){
-            if(i->blocksFree() > 0) return i->allocate();
+            if(i.blocksFree() > 0) return i.allocate();
         }
-        pageList.pushBack(Page());
+        pageList.push_back(details::Page());
         pageList.back().initialize(objSize, pageSize);
         return pageList.back().allocate();
     }
 
-    
+
 private:
     SmallObjectHeap(){}
-    std::list<Page> pageList;
-    static SmallObjectHeap<objSize, pageSize> instance();
+    std::list<details::Page> pageList;
+    static SmallObjectHeap<objSize, pageSize> instance;
 };
 
 #endif	// SMALL_OBJECT_HEAP_HPP_INCLUDED
