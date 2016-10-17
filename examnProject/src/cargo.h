@@ -10,9 +10,9 @@
 namespace CMS{
 
     //Constants
-    typedef std::ratio<1, 1> BASE_LOAD_FACTOR;
-    typedef std::ratio<1, 2> LIQUID_LOAD_FACTOR;
-    typedef std::ratio<2, 1> LIVESTOCK_LOAD_FACTOR;
+    const double BASE_LOAD_FACTOR = 1;
+    const double LIQUID_LOAD_FACTOR = 0.5;
+    const double LIVESTOCK_LOAD_FACTOR = 2;
 
     //Cargo types
     enum CargoType{
@@ -69,36 +69,18 @@ namespace CMS{
         static const bool value = true;
     };
 
-    template <bool Condition, typename TrueResult, typename FalseResult>
-    struct TMP_IF;
-
-    template <typename TrueResult, typename FalseResult>
-    struct TMP_IF<true, TrueResult, FalseResult>{
-        typedef TrueResult Result;
-    };
-
-    template <typename TrueResult, typename FalseResult>
-    struct TMP_IF<false, TrueResult, FalseResult>{
-        typedef FalseResult Result;
-    };
-
-    template <CargoType ct, int w>
-    struct LOAD_TIME{
-        typedef TMP_IF< IS_LIQUID<ct>::value, LIQUID_LOAD_FACTOR,
-                TMP_IF< IS_LIVESTOCK<ct>::value, LIVESTOCK_LOAD_FACTOR, BASE_LOAD_FACTOR >::Result
-                >::Result factor;
-        static const int value = factor::num*w/factor::den;
-    };
-
     //Cargo struct
     struct Cargo{
-        Cargo(CargoType ct, int weight) : _cargoType(ct), _weight(weight), _loadTime(LOAD_TIME<ct, weight>::value)
+        Cargo(CargoType ct, int weight) : _cargoType(ct), _weight(weight)
         {
+            if(IS_LIQUID<_cargoType>::value) _loadTime = _weight*LIQUID_LOAD_FACTOR;
+            else if(IS_LIVESTOCK<_cargoType>::value) _loadTime = weight * LIVESTOCK_LOAD_FACTOR;
+            else _loadTime = weight*BASE_LOAD_FACTOR;
         }
 
         const CargoType _cargoType;
         const int _weight;
-        const int _loadTime;
+        int _loadTime;
     };
 
 };
