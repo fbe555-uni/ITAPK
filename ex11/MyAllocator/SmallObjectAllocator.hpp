@@ -38,10 +38,12 @@ public:
 
 	pointer allocate( size_type n, const_pointer = 0 )
 	{
-		return static_cast<pointer>( ::operator new( n * sizeof( T ) ) );
+		return static_cast<pointer>(SmallObjectHeap<n>::getInstance()->allocate());
 	}
 
-	void deallocate( pointer p, size_type size )	{ ::operator delete( p ); }
+	void deallocate( pointer p, size_type size )	{
+        SmallObjectHeap<size>::getInstance()->deallocate(static_cast<void*>(p));
+    }
 	size_type max_size() const						{ return size_type( -1 ) / sizeof( T ); }
 
 	void construct( pointer p, const value_type& x )
