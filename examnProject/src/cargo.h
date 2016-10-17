@@ -5,12 +5,14 @@
 #ifndef CMS_CARGO_H
 #define CMS_CARGO_H
 
+#include <ratio>
+
 namespace CMS{
 
     //Constants
-    const double BASE_LOAD_FACTOR = 1;
-    const double LIQUID_LOAD_FACTOR = 0.5;
-    const double LIVESTOCK_LOAD_FACTOR = 2;
+    typedef std::ratio<1, 1> BASE_LOAD_FACTOR;
+    typedef std::ratio<1, 2> LIQUID_LOAD_FACTOR;
+    typedef std::ratio<2, 1> LIVESTOCK_LOAD_FACTOR;
 
     //Cargo types
     enum CargoType{
@@ -26,53 +28,77 @@ namespace CMS{
     };
 
     //TMP structs
-    template <CargoType ct>
-    struct IS_LIQUID<ct>{
-        static bool value = false;
+    template <CargoType CT>
+    struct IS_LIQUID{
+        static const bool value = false;
     };
 
+    template <>
     struct IS_LIQUID<OIL>{
-        static bool value = true;
+        static const bool value = true;
     };
 
+    template <>
     struct IS_LIQUID<GASOLINE>{
-        static bool value = true;
+        static const bool value = true;
     };
 
+    template <>
     struct IS_LIQUID<WATER>{
-        static bool value = true;
+        static const bool value = true;
     };
 
 
-    template <CargoType ct>
-    struct IS_LIVESTOCK<ct>{
-        static bool value = false;
+    template <CargoType CT>
+    struct IS_LIVESTOCK{
+        static const bool value = false;
     };
 
+    template <>
     struct IS_LIVESTOCK<SHEEP>{
-        static bool value = true;
+        static const bool value = true;
     };
 
+    template <>
     struct IS_LIVESTOCK<COWS>{
-        static bool value = true;
+        static const bool value = true;
     };
 
+    template <>
     struct IS_LIVESTOCK<PIGS>{
-        static bool value = true;
+        static const bool value = true;
+    };
+
+    template <bool Condition, typename TrueResult, typename FalseResult>
+    struct TMP_IF;
+
+    template <typename TrueResult, typename FalseResult>
+    struct TMP_IF<true, TrueResult, FalseResult>{
+        typedef TrueResult Result;
+    };
+
+    template <typename TrueResult, typename FalseResult>
+    struct TMP_IF<false, TrueResult, FalseResult>{
+        typedef FalseResult Result;
+    };
+
+    template <CargoType ct, int w>
+    struct LOAD_TIME{
+        typedef TMP_IF< IS_LIQUID<ct>::value, LIQUID_LOAD_FACTOR,
+                TMP_IF< IS_LIVESTOCK<ct>::value, LIVESTOCK_LOAD_FACTOR, BASE_LOAD_FACTOR >::Result
+                >::Result factor;
+        static const int value = factor::num*w/factor::den;
     };
 
     //Cargo struct
     struct Cargo{
-        Cargo(CargoType ct, double weight) : _cargoType(ct), _weight(weight)
+        Cargo(CargoType ct, int weight) : _cargoType(ct), _weight(weight), _loadTime(LOAD_TIME<ct, weight>::value)
         {
-            if(IS_LIQUID<_cargoType>::value) _loadTime = _weight * LIQUID_LOAD_FACTOR;
-            else if(IS_LIVESTOCK<_cargoType>::value) _loadTime = _weight * LIVESTOCK_LOAD_FACTOR;
-            else _loadTime = _weight * BASE_LOAD_FACTOR;
         }
 
-        CargoType _cargoType;
-        double _weight;
-        double _loadTime;
+        const CargoType _cargoType;
+        const int _weight;
+        const int _loadTime;
     };
 
 };
