@@ -21,7 +21,9 @@ namespace CMS{
     IS_VALID_TANKER_CARRIAGE<ct,
     template<boost::mpl::list>
 */
+    struct Train{
 
+    };
 
 }
 

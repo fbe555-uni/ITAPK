@@ -2,6 +2,7 @@
 // Created by felix on 10/17/16.
 //
 #include <list>
+#include <iostream>
 #include "trains.h"
 #include "cargo.h"
 
@@ -19,11 +20,8 @@ namespace CMS{
     class Platform{
     public:
         Platform();
-        void Arrive(); // Whenever a train arrives at a platform it will wend out a signal, occupying this platform
-        void Depart(); // Whenever a train leaves a platform it will send out a signal, freeing this platform
-        void Status(); // Tells whether a platform is occupied.
+        void Status(); // Tells if a platform is occupied.
     private:
-        int _number;
         Train _train;
         std::list<Cargo> _cargo;
     };

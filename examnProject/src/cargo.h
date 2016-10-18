@@ -84,9 +84,7 @@ namespace CMS{
 
     template <CargoType ct, int w>
     struct LOAD_TIME{
-        typedef TMP_IF< IS_LIQUID<ct>::value, LIQUID_LOAD_FACTOR,
-                TMP_IF< IS_LIVESTOCK<ct>::value, LIVESTOCK_LOAD_FACTOR, BASE_LOAD_FACTOR >::Result
-                >::Result factor;
+        typedef TMP_IF< IS_LIQUID<ct>::value, LIQUID_LOAD_FACTOR, TMP_IF< IS_LIVESTOCK<ct>::value, LIVESTOCK_LOAD_FACTOR, BASE_LOAD_FACTOR >::Result>::Result factor;
         static const int value = factor::num*w/factor::den;
     };
 
