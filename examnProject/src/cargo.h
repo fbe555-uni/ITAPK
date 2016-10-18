@@ -79,6 +79,7 @@ namespace CMS{
     inline std::ostream& operator<<(std::ostream& out, Cargo const* cargo){
         out << cargo->weight << " kg of " << typeid(*cargo).name();
         out << " (" << cargo->loadTime << "s needed for loading)";
+        return out;
     }
 
     //TMP structs

@@ -6,9 +6,23 @@
 #define CMS_TRAINS_H
 
 #include <boost/mpl/list.hpp>
+#include <iostream>
 #include "cargo.h"
 
 namespace CMS{
+
+    class Train{
+    public:
+        Train(){
+
+        }
+        //STUB
+    };
+
+    inline std::ostream& operator<<(std::ostream& out, Train& train){
+        out << "STUB TRAIN PRINT";
+        return out;
+    }
 /*
     template<CargoType H, CL T>
     struct CL<H, T>{
