@@ -17,7 +17,7 @@ namespace CMS{
         void Status(); // Tells if a platform is occupied.
     private:
         Train _train;
-        std::list<Cargo> _cargo;
+        std::list<Cargo>* _cargo;
     };
 
     class Station{
