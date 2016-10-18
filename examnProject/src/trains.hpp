@@ -14,10 +14,12 @@ namespace ST3000{
     class Train{
     public:
         Train(){
-
+            id++;
+            ID = "Train " + id;
         }
         //STUB
     private:
+        std::string ID;
         static int id;
     };
 

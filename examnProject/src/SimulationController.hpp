@@ -17,7 +17,7 @@ public:
     boost::signals2::signal<void(ST3000::Train,ST3000::Station)> trainArrivedAtStation;
     boost::signals2::signal<void(ST3000::Train)> trainUnloadedAndSend;
 
-    SimulationController(ST3000::CMS* cms);
+    SimulationController(ST3000::CMS* cms, std::list<ST3000::Train>);
 
     //Slots *************************************************************
     struct ReceiveTrainAndUnload {
@@ -41,7 +41,7 @@ public:
 
 private:
     ST3000::CMS *cms_;
-    std::list<ST3000::Train> trains;
+    std::list<ST3000::Train> _trains;
 };
 
 
