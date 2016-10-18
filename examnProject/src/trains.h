@@ -9,13 +9,17 @@
 #include "cargo.h"
 
 namespace CMS{
+    /*
     //Locomotive:
-    template<double capacity>
+    template<int capacity>
     struct Locomotive<capacity>{
         Locomotive() : _capacity(capacity){}
         double _capacity;
     };
 /*
+    template<CargoType ct ...>
+    struct CARGO_LIST<ct, L>
+
     //Carriage:
     template<CargoType ct, boost::mpl::list L>
     IS_VALID_TANKER_CARRIAGE<ct,

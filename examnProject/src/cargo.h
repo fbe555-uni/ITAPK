@@ -6,6 +6,7 @@
 #define CMS_CARGO_H
 
 #include <ratio>
+#include <iostream>
 
 namespace CMS{
 
@@ -71,17 +72,54 @@ namespace CMS{
 
     //Cargo struct
     struct Cargo{
-        Cargo(CargoType ct, int weight) : _cargoType(ct), _weight(weight)
+        Cargo(CargoType ct, int w) : cargoType(ct), weight(w), loadTime(1)
         {
-            if(IS_LIQUID<_cargoType>::value) _loadTime = _weight*LIQUID_LOAD_FACTOR;
-            else if(IS_LIVESTOCK<_cargoType>::value) _loadTime = weight * LIVESTOCK_LOAD_FACTOR;
-            else _loadTime = weight*BASE_LOAD_FACTOR;
+            //if(IS_LIQUID<cargoType>::value) loadTime = weight*LIQUID_LOAD_FACTOR;
+            //else if(IS_LIVESTOCK<cargoType>::value) loadTime = weight * LIVESTOCK_LOAD_FACTOR;
+            //else loadTime = weight*BASE_LOAD_FACTOR;
         }
 
-        const CargoType _cargoType;
-        const int _weight;
-        int _loadTime;
+        const CargoType cargoType;
+        const int weight;
+        int loadTime;
     };
+
+    std::ostream& operator<<(std::ostream& out, const Cargo& cargo){
+        out << cargo.weight << " kg of ";
+        switch(cargo.cargoType){
+            case TIMBER:
+                out << "timber";
+                break;
+            case COAL:
+                out << "coal";
+                break;
+            case GRAINS:
+                out << "grains";
+                break;
+            case OIL:
+                out << "oil";
+                break;
+            case GASOLINE:
+                out << "gasoline";
+                break;
+            case WATER:
+                out << "water";
+                break;
+            case SHEEP:
+                out << "sheep";
+                break;
+            case COWS:
+                out << "cows";
+                break;
+            case PIGS:
+                out << "pigs";
+                break;
+            default:
+                out << "XXX";
+                break;
+        }
+        out << " (" << cargo.loadTime << "s needed for loading)";
+    }
 
 };
 #endif //CMS_CARGO_H
