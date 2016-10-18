@@ -22,5 +22,5 @@ void CMS::Platform::Status() {
     for(auto item:Platform::_cargo){
         std::cout << item << std::endl;
     }
-    std::cout << "Train on platform: " <<
+    std::cout << "Train on platform: " << std::endl;
 }

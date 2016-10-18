@@ -10,12 +10,6 @@
 #define CMS_STATION_H
 
 namespace CMS{
-    class Station{
-    public:
-        void Status(); // Lists platforms and their status
-    private:
-        std::list<Platform> _platforms;
-    };
 
     class Platform{
     public:
@@ -25,6 +19,15 @@ namespace CMS{
         Train _train;
         std::list<Cargo> _cargo;
     };
+
+    class Station{
+    public:
+        void Status(); // Lists platforms and their status
+    private:
+        std::list<Platform> _platforms;
+    };
+
+
 }
 
 #endif //CMS_STATION_H
