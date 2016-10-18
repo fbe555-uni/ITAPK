@@ -82,7 +82,9 @@ namespace CMS{
         return out;
     }
 
-    //TMP structs
+    /*******************************************************************
+     **             TMP EVALUATION/CONDITION STRUCTS                  **
+     *******************************************************************/
     template <typename CT>
     struct IS_LIQUID_CARGO{
         static const bool value = false;
@@ -123,6 +125,81 @@ namespace CMS{
     struct IS_LIVESTOCK_CARGO<Pigs>{
         static const bool value = true;
     };
+
+    // is same type tmp boolean
+    template<typename T, typename U>
+    struct IS_SAME_TYPE{
+        static const bool value = false;
+    };
+
+    template<typename T>
+    struct IS_SAME_TYPE<T, T>{
+        static const bool value = true;
+    };
+
+    //TODO: check if works for subclasses else: std::is_base_of<Cargo, H>
+    template<typename T>
+    struct IS_CARGO{
+        static const bool value = IS_SAME_TYPE<Cargo, T>::value;
+    };
+
+    /*******************************************************************
+     **                    TMP CARGOLIST STRUCTS                      **
+     *******************************************************************/
+    class CL_NULL_ELEM{};
+
+    template<typename H, typename T>
+    struct CL{
+        typedef H HEAD;
+        typedef T TAIL;
+    };
+
+    template<typename H>
+    struct CL<H, CL_NULL_ELEM>{
+        typedef H HEAD;
+        typedef CL_NULL_ELEM TAIL;
+    };
+
+    template<typename first, typename ... rest>
+    struct CARGO_LIST{
+        typedef CL<first, CL<rest...> > LIST;
+    };
+
+    /*******************************************************************
+     **                      Cargolist utilities                      **
+     *******************************************************************/
+/*
+    template<typename CL, typename T>
+    struct CL_CONTAINS{
+        static const bool value = IS_SAME_TYPE<typename CL::LIST::HEAD, T>::value || CL_CONTAINS<typename CL::LIST::TAIL, T>::value;
+    };
+
+    template<typename T>
+    struct Cl_CONTAINS<CL_NULL_ELEM, T>{
+        static const bool value = false;
+    };
+
+    template<typename CL, typename CONDITION>
+    struct CL_AND_CONDITION{
+        static const bool value = CONDITION<CL::LIST::HEAD>::Value && CL_AND_CONDITION<CL::LIST::TAIL, CONDITION>::value;
+    };
+
+    template<typename CONDITION>
+    struct CL_AND_CONDITION<CL_NULL_ELEM, CONDITION>{
+        static const bool value = true;
+    };
+
+    template<typename CL, typename CONDITION>
+    struct CL_OR_CONDITION{
+        static const bool value = CONDITION<CL::LIST::HEAD>::Value || CL_OR_CONDITION<CL::LIST::TAIL, CONDITION>::value;
+    };
+
+    template<typename CONDITION>
+    struct CL_OR_CONDITION<CL_NULL_ELEM, CONDITION>{
+        static const bool value = false;
+    };
+
+*/
 
 };
 #endif //CMS_CARGO_H
