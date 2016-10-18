@@ -7,9 +7,9 @@
 
 #include <boost/mpl/list.hpp>
 #include <iostream>
-#include "cargo.h"
+#include "cargo.hpp"
 
-namespace CMS{
+namespace ST3000{
 
     class Train{
     public:
@@ -17,6 +17,8 @@ namespace CMS{
 
         }
         //STUB
+    private:
+        static int id;
     };
 
     inline std::ostream& operator<<(std::ostream& out, Train& train){

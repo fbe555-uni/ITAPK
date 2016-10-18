@@ -11,7 +11,7 @@
 #include <string.h>
 
 
-namespace CMS{
+namespace ST3000{
 
     //Constants
     const double BASE_LOAD_FACTOR = 1;
