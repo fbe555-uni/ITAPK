@@ -7,12 +7,12 @@
 //#include "SimulationController.hpp"
 
 int main() {
-    std::list<ST3000::Train> trains;
-    trains.push_back(ST3000::Train());
-    trains.push_back(ST3000::Train());
-    trains.push_back(ST3000::Train());
+    std::list<cm::Train> trains;
+    trains.push_back(cm::Train());
+    trains.push_back(cm::Train());
+    trains.push_back(cm::Train());
 
-    ST3000::CMS cms = ST3000::CMS();
+    cm::CMS cms = cm::CMS();
     SimulationController(&cms,trains);
     return 0;
 }

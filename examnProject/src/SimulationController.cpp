@@ -4,11 +4,15 @@
 
 #include "SimulationController.hpp"
 
-SimulationController::SimulationController(ST3000::CMS *cms, std::list<ST3000::Train> trains) {
+SimulationController::SimulationController(cm::CMS *cms, std::list<cm::Train> trains) {
     cms_ = cms;
     _trains = trains;
     cms_->setSimulationController(this);
     cms_->trainLeftStation.connect(ReceiveTrainAndUnload());
     trainUnloadedAndSend.connect(sendTrain());
+
+}
+
+void SimulationController::startSimulation(std::list<cm::Train> train) {
 
 }

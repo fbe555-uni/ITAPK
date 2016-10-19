@@ -9,7 +9,7 @@
 #include <iostream>
 #include "cargo.hpp"
 
-namespace ST3000{
+namespace cm{
 
     class Train{
     public:

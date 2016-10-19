@@ -13,30 +13,30 @@
 
 class SimulationController;
 
-namespace ST3000 {
+namespace cm {
 
     class CMS {
     public:
         //Signals *************************************************************************
-        boost::signals2::signal<void(ST3000::Platform)> trainArrivedAtPlatform;
-        boost::signals2::signal<void(ST3000::Platform)> trainFullyLoaded;
-        boost::signals2::signal<void(ST3000::Train)> trainLeftStation;
+        boost::signals2::signal<void(cm::Platform)> trainArrivedAtPlatform;
+        boost::signals2::signal<void(cm::Platform)> trainFullyLoaded;
+        boost::signals2::signal<void(cm::Train)> trainLeftStation;
 
         //Slots ***************************************************************************
         struct ReceiveTrain {
-            void operator()(ST3000::Train train, ST3000::Station station) {
+            void operator()(cm::Train train, cm::Station station) {
                 std::cout << " CMS Received train: " << train << std::endl;
             }
         };
 
         struct sendTrain {
-            void operator()(ST3000::Platform platform) {
+            void operator()(cm::Platform platform) {
                 std::cout << "CMS Send train from platform: " << platform << std::endl;
             }
         };
 
         struct loadTrain {
-            void operator()(ST3000::Platform platform) {
+            void operator()(cm::Platform platform) {
                 std::cout << "CMS loaded train at platform: " << platform << std::endl;
             }
         };
@@ -46,7 +46,7 @@ namespace ST3000 {
 
     private:
         SimulationController *sim_;
-        std::shared_ptr<ST3000::Station> station_;
+        std::shared_ptr<cm::Station> station_;
     };
 }
 #endif //CMS_CMS_H

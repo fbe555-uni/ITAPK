@@ -9,7 +9,7 @@
 #ifndef CMS_STATION_H
 #define CMS_STATION_H
 
-namespace ST3000{
+namespace cm{
 
     class Platform{
     public:

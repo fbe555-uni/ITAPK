@@ -4,7 +4,7 @@
 
 #include "CMS.hpp"
 
-void ST3000::CMS::setSimulationController(SimulationController *s) {
+void cm::CMS::setSimulationController(SimulationController *s) {
     sim_ = s;
 
         sim_->trainArrivedAtStation.connect(ReceiveTrain());

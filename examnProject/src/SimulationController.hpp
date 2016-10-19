@@ -8,40 +8,37 @@
 #include "trains.hpp"
 #include "CMS.hpp"
 
-namespace ST3000{class CMS;}
+namespace cm{class CMS;}
 
 class SimulationController {
 public:
 
     //Signals ***********************************************************
-    boost::signals2::signal<void(ST3000::Train,ST3000::Station)> trainArrivedAtStation;
-    boost::signals2::signal<void(ST3000::Train)> trainUnloadedAndSend;
+    boost::signals2::signal<void(cm::Train,cm::Station)> trainArrivedAtStation;
+    boost::signals2::signal<void(cm::Train)> trainUnloadedAndSend;
 
-    SimulationController(ST3000::CMS* cms, std::list<ST3000::Train>);
+    SimulationController(cm::CMS* cms, std::list<cm::Train>);
 
     //Slots *************************************************************
     struct ReceiveTrainAndUnload {
-        void operator()(ST3000::Train train) {
+        void operator()(cm::Train train) {
             std::cout << " Sim Received train: " << train << std::endl;
         }
     };
 
     struct sendTrain {
-        void operator()(ST3000::Train train) {
+        void operator()(cm::Train train) {
             std::cout << "Sim Send train: " << train << std::endl;
         }
     };
     //*******************************************************************
 
 
-    void startSimulation(){
-        //send list of trains to the CMS system.
-
-    }
+    void startSimulation(std::list<cm::Train> train);
 
 private:
-    ST3000::CMS *cms_;
-    std::list<ST3000::Train> _trains;
+    cm::CMS *cms_;
+    std::list<cm::Train> _trains;
 };
 
 

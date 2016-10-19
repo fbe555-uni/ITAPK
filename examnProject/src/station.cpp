@@ -5,7 +5,7 @@
 
 #include "station.hpp"
 
-void ST3000::Station::Status() {
+void cm::Station::Status() {
     int i = 0;
     for (auto item:Station::_platforms) {
         std::cout << "Status from platform " << i++ << ":" << std::endl;
@@ -13,11 +13,11 @@ void ST3000::Station::Status() {
     }
 }
 
-ST3000::Station::Station(std::string n) {
+cm::Station::Station(std::string n) {
     _name = n;
 }
 
-void ST3000::Platform::Status() {
+void cm::Platform::Status() {
     std::cout << "Cargo on platform: " << std::endl;
     for (auto item:*Platform::_cargo) {
         std::cout << &item << std::endl;
@@ -25,9 +25,9 @@ void ST3000::Platform::Status() {
     std::cout << "Train on platform: " << _train << std::endl;
 }
 
-ST3000::Platform::Platform(){
+cm::Platform::Platform(){
     id++;
     ID = "Platform " + id;
 }
 
-int ST3000::Platform::id = 0;
+int cm::Platform::id = 0;
