@@ -146,60 +146,44 @@ namespace cm{
     /*******************************************************************
      **                    TMP CARGOLIST STRUCTS                      **
      *******************************************************************/
-    class CL_NULL_ELEM{};
+    struct CL_NULL_ELEM{};
 
-    template<typename H, typename T>
-    struct CL{
+    template<typename H, typename... REST>
+    struct CARGO_LIST{
         typedef H HEAD;
-        typedef T TAIL;
+        typedef CARGO_LIST<REST...> TAIL;
     };
 
     template<typename H>
-    struct CL<H, CL_NULL_ELEM>{
+    struct CARGO_LIST<H>{
         typedef H HEAD;
         typedef CL_NULL_ELEM TAIL;
     };
 
+    /*
+    template<typename... CARGO_TYPES>
+    struct Cargo_LIST{
+        typedef CARGO_LIST<
+    };
+
     template<typename first, typename ... rest>
     struct CARGO_LIST{
-        typedef CL<first, CL<rest...> > LIST;
+        typedef CL<first, CARGO_LIST<rest...>::LIST > LIST;
     };
+     */
 
     /*******************************************************************
      **                      Cargolist utilities                      **
      *******************************************************************/
-/*
+
     template<typename CL, typename T>
     struct CL_CONTAINS{
         static const bool value = IS_SAME_TYPE<typename CL::LIST::HEAD, T>::value || CL_CONTAINS<typename CL::LIST::TAIL, T>::value;
     };
 
     template<typename T>
-    struct Cl_CONTAINS<CL_NULL_ELEM, T>{
+    struct CL_CONTAINS<CL_NULL_ELEM, T>{
         static const bool value = false;
     };
-
-    template<typename CL, typename CONDITION>
-    struct CL_AND_CONDITION{
-        static const bool value = CONDITION<CL::LIST::HEAD>::Value && CL_AND_CONDITION<CL::LIST::TAIL, CONDITION>::value;
-    };
-
-    template<typename CONDITION>
-    struct CL_AND_CONDITION<CL_NULL_ELEM, CONDITION>{
-        static const bool value = true;
-    };
-
-    template<typename CL, typename CONDITION>
-    struct CL_OR_CONDITION{
-        static const bool value = CONDITION<CL::LIST::HEAD>::Value || CL_OR_CONDITION<CL::LIST::TAIL, CONDITION>::value;
-    };
-
-    template<typename CONDITION>
-    struct CL_OR_CONDITION<CL_NULL_ELEM, CONDITION>{
-        static const bool value = false;
-    };
-
-*/
-
 };
 #endif //CMS_CARGO_H

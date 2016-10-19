@@ -35,73 +35,110 @@ namespace cm{
         return out;
     }
 
-/*
-    //Carriage validity classes:
+    /*********************************************************************
+     **                ASSERTION structs for carriage                   **
+     *********************************************************************/
+
+    //First assertion is that all elements are Cargo classes
+    //TODO: fix all elements are cargo
+    /*
+    template<bool, typename CL>
+    struct ALL_ELEMENTS_ARE_CARGO;
+
+    template<typename CL>
+    struct ALL_ELEMENTS_ARE_CARGO<true, CL>{
+        static const bool value = ALL_ELEMENTS_ARE_CARGO<
+                IS_CARGO<typename CL::HEAD>::value,
+                typename CL::TAIL>::value;
+    };
+    template<>
+    struct ALL_ELEMENTS_ARE_CARGO<true, CL_NULL_ELEM>{
+        static const bool value = true;
+    };
+
+    template<typename CL>
+    struct ASSERT_IS_CARGO{
+        static const bool value = ALL_ELEMENTS_ARE_CARGO<IS_CARGO<typename CL::HEAD>::value, typename CL::TAIL>::value;
+    };
+    */
+
+    //Second assertion says that if any of the Cargo types are liquid Cargo types, all must be.
+    template<bool, typename E, typename L>
+    struct ALL_OR_NONE_ARE_LIQUID;
+    template<typename E, typename L>
+    struct ALL_OR_NONE_ARE_LIQUID<true, E, L>{
+        static const bool value = ALL_OR_NONE_ARE_LIQUID<
+                IS_LIQUID_CARGO<E>::value == IS_LIQUID_CARGO<typename L::HEAD>::value,
+                typename L::HEAD, typename L::TAIL>::value;
+    };
+    template<typename E>
+    struct ALL_OR_NONE_ARE_LIQUID<true, E, CL_NULL_ELEM>{
+        static const bool value = IS_LIQUID_CARGO<E>::value;
+    };
+    template<typename CL>
+    struct ASSERT_TANKER_VALIDITY{
+        static const bool value = ALL_OR_NONE_ARE_LIQUID<true, typename CL::HEAD, typename CL::TAIL>::value;
+    };
+
+    //Third assertion says that one may not mix different kinds of livestock in one carriage
+    //OBS: in the current implementation CARGO_LIST<Sheep, Sheep> is illegal.
+    template<bool prevLivestock, bool currLivestock, typename REST>
+    struct ONLY_ONE_KIND_OF_LIVESTOCK;
+
+    template<bool currLivestock, typename REST>
+    struct ONLY_ONE_KIND_OF_LIVESTOCK<false, currLivestock, REST>{
+        static const bool hasLivestock = ONLY_ONE_KIND_OF_LIVESTOCK<
+                currLivestock,
+                IS_LIVESTOCK_CARGO<typename REST::HEAD>::value,
+                typename REST::TAIL>::hasLivestock;
+    };
+    template<typename REST>
+    struct ONLY_ONE_KIND_OF_LIVESTOCK<true, false, REST>{
+        static const bool hasLivestock = ONLY_ONE_KIND_OF_LIVESTOCK<
+                true,
+                IS_LIVESTOCK_CARGO<typename REST::HEAD>::value,
+                typename REST::TAIL>::hasLivestock;
+    };
+    template<bool currLivestock>
+    struct ONLY_ONE_KIND_OF_LIVESTOCK<false, currLivestock, CL_NULL_ELEM>{
+        static const bool hasLivestock = currLivestock;
+    };
+    template<>
+    struct ONLY_ONE_KIND_OF_LIVESTOCK<true, false, CL_NULL_ELEM>{
+        static const bool hasLivestock = true;
+    };
+
+    template<typename CL>
+    struct ASSERT_LIVESTOCK_VALIDITY{
+        static const bool value = ONLY_ONE_KIND_OF_LIVESTOCK<
+                false,
+                IS_LIVESTOCK_CARGO<typename CL::HEAD>::value,
+                typename CL::TAIL>::hasLivestock;
+    };
+
+
+    //Carriage validity class:
+    //TODO: allow for empty carriages
     //this struct instantiates the different assertion structs, and thussly will only compile if they are fulfilled.
     template<typename CL>
     struct IS_A_VALID_CARGO_LIST{
-        typedef ASSERT_IS_CARGO<CL> IS_CARGO;
+        //typedef ASSERT_IS_CARGO<CL> ACCEPTS_CARGO;
         typedef ASSERT_TANKER_VALIDITY<CL> IS_TANKER;
         typedef ASSERT_LIVESTOCK_VALIDITY<CL> HAS_LIVESTOCK;
     };
 
-    //First assertion is that all elements are Cargo classes
-    template<typename CL>
-    struct ASSERT_IS_CARGO<CL>{
-        typedef ALL_ELEMENTS_ARE_CARGO<CL_AND_CONDITION<CL, IS_CARGO> > VALID;
-        static const value = true;
-    };
-    //struct used for error msg name
-    template<>
-    struct ALL_ELEMENTS_ARE_CARGO<true>{};
-
-    //Second assertion says that if any of the Cargo types are liquid Cargo types, all must be.
-    template<typename CL>
-    struct ASSERT_TANKER_VALIDITY{
-        typedef CL_OR_CONDITION<CL, IS_LIQUID_CARGO> HAS_LIQUID;
-        typedef ALL_OR_NONE_ARE_LIQUID<CL_AND_CONDITION<CL, IS_LIQUID_CARGO>::value || HAS_LIQUID::value> VALLID;
-        static const bool value = HAS_LIQUID::value;
-    };
-    template<>
-    struct ALL_OR_NONE_ARE_LIQUID<true>{};
-
-    //Third assertion says that one may not mix different kinds of livestock in one carriage
-    //OBS: in the current implementation CARGO_LIST<Sheep, Sheep> is illegal.
-    template<typename CARGO_LIST>
-    struct ASSERT_LIVESTOCK_VALIDITY{
-        static const bool value = ONLY_ONE_KIND_OF_LIVESTOCK<false, IS_LIVESTOCK_CARGO<CARGO_LIST::LIST::HEAD>::value, CARGO_LIST::LIST::TAIL>::hasLivestock;
-    };
-
-    template<bool currIsLivestock, typename CL>
-    struct ONLY_ONE_KIND_OF_LIVESTOCK<false, currIsLivestock, CL>{
-        static const bool hasLivestock = ONLY_ONE_KIND_OF_LIVESTOCK<currIsLivestock, IS_LIVESTOCK_CARGO<CL::HEAD>::value, CL::TAIL>::hasLivestock;
-    };
-
-    template<bool currIsLivestock, typename CL>
-    struct ONLY_ONE_KIND_OF_LIVESTOCK<true, false, CL>{
-        static const bool hasLivestock = ONLY_ONE_KIND_OF_LIVESTOCK<true, IS_LIVESTOCK_CARGO<CL::HEAD>::value, CL::TAIL>::hasLivestock;
-    };
-
-    template<bool currIsLivestock, CL_NULL_ELEM end>
-    struct ONLY_ONE_KIND_OF_LIVESTOCK<false, currIsLivestock, end>{
-        static const bool hasLivestock = currIsLivestock;
-    };
-
-    template<CL_NULL_ELEM end>
-    struct ONLY_ONE_KIND_OF_LIVESTOCK<true, false, end>{
-        static const bool hasLivestock = true;
-    };
-
     //TODO: add a details namespace to remove clutter
     //Carriage:
-    template<CargoType ct, boost::mpl::list L>
-    IS_VALID_TANKER_CARRIAGE<ct,
-    template<boost::mpl::list>
+    template<typename CL>
+    struct Carriage{
+        typedef IS_A_VALID_CARGO_LIST<CL> META_INFO;
 
-    struct Train{
+        //const bool acceptsCargo = META_INFO::ACCEPTS_CARGO::value;
+        const bool isTanker = META_INFO::IS_TANKER::value;
+        const bool hasLivestock = META_INFO::HAS_LIVESTOCK::value;
 
+        Carriage(){}
     };
-*/
 }
 
 #endif //CMS_TRAINS_H
