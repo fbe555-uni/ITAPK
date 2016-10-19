@@ -7,12 +7,9 @@
 //#include "SimulationController.hpp"
 
 int main() {
-    std::list<cm::Train> trains;
-    trains.push_back(cm::Train());
-    trains.push_back(cm::Train());
-    trains.push_back(cm::Train());
-
-    cm::CMS cms = cm::CMS();
-    SimulationController(&cms,trains);
+    cm::Carriage<cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep> > mixedCarriage = cm::Carriage<cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep> > ();
+    //cm::Carriage<cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep, cm::Cows> > illegalCarriage1 = cm::Carriage<cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep, cm::Cows> > ();
+    //cm::Carriage<cm::CARGO_LIST<cm::Oil, cm::Water> > tankerCarriage = cm::Carriage<cm::CARGO_LIST<cm::Oil, cm::Water> >();
+    //cm::Carriage<cm::CARGO_LIST<cm::Oil, cm::Water, cm::Coal> > illegalCarriage2 = cm::Carriage<cm::CARGO_LIST<cm::Oil, cm::Water, cm::Coal> >();
     return 0;
 }
