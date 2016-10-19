@@ -11,6 +11,9 @@
 
 namespace cm{
 
+    //Train instance creation will have the following syntax
+    //static Train::Ptr&& Train::getInstance<Locomotive<Capacity>, CarriageList<Carriage<CargoList<Cargo...> >...> >();
+
     class Train{
     public:
         Train(){

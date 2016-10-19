@@ -137,10 +137,9 @@ namespace cm{
         static const bool value = true;
     };
 
-    //TODO: check if works for subclasses else: std::is_base_of<Cargo, H>
     template<typename T>
     struct IS_CARGO{
-        static const bool value = IS_SAME_TYPE<Cargo, T>::value;
+        static const bool value = std::is_base_of<Cargo, T>::value;
     };
 
     /*******************************************************************
@@ -150,6 +149,7 @@ namespace cm{
 
     template<typename H, typename... REST>
     struct CARGO_LIST{
+        static_assert(IS_CARGO<H>::value,"CARGO_LISTS may only contain subclasses of cargo.");
         typedef H HEAD;
         typedef CARGO_LIST<REST...> TAIL;
     };
