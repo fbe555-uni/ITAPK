@@ -5,13 +5,13 @@
 #include "CMS.hpp"
 
 void cm::CMS::setSimulationController(SimulationController *s) {
-    sim_ = s;
+        simulationController = s;
 
-        sim_->trainArrivedAtStation.connect(ReceiveTrain());
+        simulationController->trainArrivedAtStation.connect(ReceiveTrain());
+        trainArrivedAtPlatform.connect(LoadTrain());
+        trainFullyLoaded.connect(SendTrain());
+}
 
-        trainArrivedAtPlatform.connect(loadTrain());
-
-        trainFullyLoaded.connect(sendTrain());
-
-
+cm::CMS::CMS(cm::Station *s) {
+    station = s;
 }

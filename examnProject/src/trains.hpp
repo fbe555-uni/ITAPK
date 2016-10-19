@@ -5,22 +5,29 @@
 #ifndef CMS_TRAINS_H
 #define CMS_TRAINS_H
 
+#include <boost/shared_ptr.hpp>
 #include <boost/mpl/list.hpp>
 #include <iostream>
 #include "cargo.hpp"
 
 namespace cm{
 
+
     class Train{
     public:
         Train(){
-            id++;
-            ID = "Train " + id;
+            num_id++;
+            ID = "Train " + num_id;
+        }
+        std::string getID() const{
+            return ID;
         }
         //STUB
+
+        typedef std::unique_ptr<cm::Train> Ptr;
     private:
         std::string ID;
-        static int id;
+        static int num_id;
     };
 
     inline std::ostream& operator<<(std::ostream& out, Train& train){

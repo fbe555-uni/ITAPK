@@ -14,27 +14,28 @@ class SimulationController {
 public:
 
     //Signals ***********************************************************
-    boost::signals2::signal<void(cm::Train,cm::Station)> trainArrivedAtStation;
-    boost::signals2::signal<void(cm::Train)> trainUnloadedAndSend;
+    static boost::signals2::signal<void(cm::Train::Ptr&&, cm::Station*)> trainArrivedAtStation;
+    boost::signals2::signal<void(cm::Train::Ptr&&,cm::Station*)> trainUnloadedAndSend;
 
     SimulationController(cm::CMS* cms, std::list<cm::Train>);
 
     //Slots *************************************************************
     struct ReceiveTrainAndUnload {
-        void operator()(cm::Train train) {
-            std::cout << " Sim Received train: " << train << std::endl;
+        void operator()(cm::Train::Ptr&& train) {
+            std::cout << " Sim Received train: " << *train << std::endl;
         }
     };
 
-    struct sendTrain {
-        void operator()(cm::Train train) {
-            std::cout << "Sim Send train: " << train << std::endl;
+    struct SendTrain {
+        void operator()(cm::Train::Ptr&& train,cm::Station* station) {
+            std::cout << "Sim Send " << *train << " to " << station << std::endl;
+            trainArrivedAtStation(train, station);
         }
     };
     //*******************************************************************
 
 
-    void startSimulation(std::list<cm::Train> train);
+    void startSimulation(std::list<cm::Train>,cm::Station*);
 
 private:
     cm::CMS *cms_;

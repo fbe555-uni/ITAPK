@@ -3,4 +3,4 @@
 //
 
 #include "trains.hpp"
-int cm::Train::id = 0;
+int cm::Train::num_id = 0;

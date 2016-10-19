@@ -3,49 +3,70 @@
 //
 #include <list>
 #include <iostream>
+#include <boost/shared_ptr.hpp>
 #include "trains.hpp"
 #include "cargo.hpp"
 
 #ifndef CMS_STATION_H
 #define CMS_STATION_H
 
-namespace cm{
+namespace cm {
 
-    class Platform{
+
+    class Platform {
     public:
         Platform();
+        Platform(const cm::Platform&);
+
         void Status(); // Tells if a platform is occupied.
-        std::string getID(){
-                return ID;
+        std::string getID() {
+            return ID;
         };
+
+
+        //returns false if there is already a train
+        bool trainArrive(cm::Train::Ptr&&);
+        //returns false if there is no train to remove
+        bool trainDepart(cm::Train::Ptr&&);
+
     private:
-        static int id;
+        static int num_id;
         std::string ID;
-        Train _train;
-        std::list<Cargo>* _cargo;
+        cm::Train::Ptr _train;
+        std::list<cm::Cargo> _cargo;
     };
 
-    inline std::ostream& operator<<(std::ostream& out, Platform& platform){
-        out << platform.getID();
+    inline std::ostream &operator<<(std::ostream &out, Platform &platform) {
+            out << platform.getID();
         return out;
     }
 
-    class Station{
+    class Station {
     public:
         Station(std::string n);
+
         void Status(); // Lists platforms and their status
-        std::string getName(){
+        std::string getName() {
             return _name;
         }
+
+        std::list<Platform>* getPlatforms() const;
     private:
         std::list<Platform> _platforms;
         std::string _name;
     };
 
-    inline std::ostream& operator<<(std::ostream& out, Station& station){
+    inline std::ostream &operator<<(std::ostream &out, Station &station) {
         out << station.getName();
         return out;
     }
+
+    //TODO finish trainQueue
+    class TrainQueue
+    {
+
+        std::list<std::shared_ptr<Train>> trains;
+    };
 
 }
 
