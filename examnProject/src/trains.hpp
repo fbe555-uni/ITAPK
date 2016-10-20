@@ -34,6 +34,7 @@ namespace cm{
 
         bool canHold(Cargo::Ptr);
         bool load(Cargo::Ptr);
+        void unload(Cargo::Ptr);
         int getTotalWeight();
         int getCapacity();
     private:
@@ -96,7 +97,7 @@ namespace cm{
     //OBS: in the current implementation CARGO_LIST<Sheep, Sheep> is illegal.
     template<bool prevLivestock, bool currLivestock, typename REST>
     struct ONLY_ONE_KIND_OF_LIVESTOCK;
-
+    //TODO: Use CL_AND_CONDITION again using nested templates.
     template<bool currLivestock, typename REST>
     struct ONLY_ONE_KIND_OF_LIVESTOCK<false, currLivestock, REST>{
         static const bool hasLivestock = ONLY_ONE_KIND_OF_LIVESTOCK<

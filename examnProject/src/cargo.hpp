@@ -224,6 +224,12 @@ namespace cm{
             return false;
         }
     };
+/*
+    template<typename CL, typename... EXPANDED>
+    struct MAKE_BOOST_VARIANT{
+        typedef MAKE_BOOST_VARIANT<typename CL::TAIL, typename CL::HEAD,
+    };
+*/
 
 
 };
