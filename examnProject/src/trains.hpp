@@ -22,10 +22,7 @@ namespace cm{
 
     public:
         typedef std::shared_ptr<cm::Train> Ptr;
-        Train(){
-            num_id++;
-            ID = "Train " + std::to_string(num_id);
-        }
+        Train();
 
         ~Train(){};
         Train(const Train& t){};
@@ -36,7 +33,7 @@ namespace cm{
         std::string getID() const;
         bool canHold(Cargo::Ptr);
         bool load(Cargo::Ptr);
-        void unload(Cargo::Ptr);
+        std::list<cm::Cargo::Ptr> unload();
         int getTotalWeight();
         int getCapacity();
     private:

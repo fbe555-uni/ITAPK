@@ -16,6 +16,7 @@ public:
     //Signals ***********************************************************
     boost::signals2::signal<void(cm::Train::Ptr)> trainArrivedAtStation;
     boost::signals2::signal<void(cm::Train::Ptr)> trainUnloaded;
+    //*******************************************************************
 
     SimulationController(cm::CMS *cms);
 

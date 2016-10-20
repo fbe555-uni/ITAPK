@@ -19,30 +19,19 @@ namespace cm {
         //Platform(const cm::Platform&);
 
         void Status(); // Tells if a platform is occupied.
-        std::string getID() {
-            return ID;
-        };
-
-        bool isFree() {
-            if (!_train) return true;
-            else return false;
-        }
-
-        cm::Train::Ptr getTrain() {
-            return _train;
-        }
+        std::string getID();
+        cm::Train::Ptr getTrain();
+        std::list<cm::Cargo::Ptr> getCargoList();
 
         //returns false if there is already a train
         bool trainArrive(cm::Train::Ptr);
-
-        //returns false if there is no train to remove
         cm::Train::Ptr trainDepart();
 
     private:
         static int num_id;
         std::string ID;
         cm::Train::Ptr _train;
-        std::list<cm::Cargo> _cargo;
+        std::list<cm::Cargo::Ptr> _cargo;
     };
 
     inline std::ostream &operator<<(std::ostream &out, Platform &platform) {
@@ -55,15 +44,12 @@ namespace cm {
         Station(std::string, int);
 
         void Status(); // Lists platforms and their status
-        std::string getName() {
-            return _name;
-        }
-
+        std::string getName();
         std::list<Platform> *getPlatforms();
 
     private:
-        std::list<Platform> _platforms;
-        std::string _name;
+        std::list<Platform> platforms;
+        std::string name;
     };
 
     inline std::ostream &operator<<(std::ostream &out, Station &station) {
@@ -74,7 +60,7 @@ namespace cm {
     //TODO finish trainQueue
     class TrainQueue {
 
-        std::list<std::shared_ptr<Train>> trains;
+        std::list<cm::Train::Ptr> trains;
     };
 
 }

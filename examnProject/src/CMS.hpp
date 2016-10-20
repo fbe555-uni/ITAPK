@@ -16,7 +16,6 @@ class SimulationController;
 
 namespace cm {
 
-//TODO add rule of five
     class CMS {
 
     public:
@@ -27,7 +26,11 @@ namespace cm {
 
         CMS(std::string, int);
 
-        void setSimulationController(SimulationController *s);
+        void Status(){
+            station.Status();
+        }
+
+        void SetSimulationController(SimulationController *s);
 
         std::string getID() const;
 

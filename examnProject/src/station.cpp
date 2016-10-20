@@ -7,16 +7,16 @@
 
 void cm::Station::Status() {
     int i = 0;
-    for (auto &item:_platforms) {
+    for (auto &item:platforms) {
         std::cout << "Status from " << item << ":" << std::endl;
         item.Status();
     }
 }
 
-cm::Station::Station(std::string n, int num_platforms) : _platforms() {
-    _name = n;
+cm::Station::Station(std::string n, int num_platforms) : platforms() {
+    name = n;
     for (; num_platforms > 0; num_platforms--) {
-        _platforms.push_back(Platform());
+        platforms.push_back(Platform());
 
     }
 }
@@ -24,7 +24,11 @@ cm::Station::Station(std::string n, int num_platforms) : _platforms() {
 //TODO implement add cargo functionality
 
 std::list<cm::Platform> *cm::Station::getPlatforms() {
-    return &_platforms;
+    return &platforms;
+}
+
+std::string cm::Station::getName() {
+        return name;
 }
 
 
@@ -39,7 +43,7 @@ void cm::Platform::Status() {
 
 cm::Platform::Platform() {
     num_id++;
-    ID = "Platform " + std::to_string(num_id);
+    ID = "Platform #" + std::to_string(num_id);
     //Smart pointer version of nullptr
     _train = cm::Train::Ptr();
 }
@@ -66,4 +70,16 @@ cm::Train::Ptr cm::Platform::trainDepart() {
 }
 
 int cm::Platform::num_id = 0;
+
+std::string cm::Platform::getID() {
+        return ID;
+}
+
+cm::Train::Ptr cm::Platform::getTrain() {
+        return _train;
+}
+
+std::list<cm::Cargo::Ptr> cm::Platform::getCargoList() {
+        return _cargo;
+}
 

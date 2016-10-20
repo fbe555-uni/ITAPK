@@ -4,7 +4,7 @@
 
 #include "CMS.hpp"
 
-void cm::CMS::setSimulationController(SimulationController *s) {
+void cm::CMS::SetSimulationController(SimulationController *s) {
     SimControl = s;
 
     SimControl->trainArrivedAtStation.connect([&](cm::Train::Ptr t) {
@@ -25,9 +25,7 @@ std::string cm::CMS::getID() const {
 }
 
 void cm::CMS::ReceiveTrain(cm::Train::Ptr train) {
-        std::cout << std::endl;
-        std::cout << "*********************************************" << std::endl
-                  << "*** CMS Received train: " << *train << std::endl;
+        std::cout << "*** CMS rxeceived train: " << *train << std::endl;
         auto platforms = station.getPlatforms();
         for (auto &platform:*platforms) {
             if (platform.trainArrive(train)) {
@@ -39,15 +37,15 @@ void cm::CMS::ReceiveTrain(cm::Train::Ptr train) {
 }
 
 void cm::CMS::SendTrain(cm::Platform *platform) {
-    std::cout << "*** CMS Send train from: " << *platform << std::endl
-              << "*********************************************" << std::endl;
+    std::cout << "*** CMS send "<< *platform->getTrain() << " from: " << *platform << std::endl;
     trainLeftStation(platform->trainDepart());
     std::cout << std::endl;
 }
 
 void cm::CMS::LoadTrain(cm::Platform *platform) {
-    std::cout << "*** CMS loaded train at: " << *platform << std::endl;
-
-    //todo add load algorithm
+    std::cout << "*** CMS loading " << *platform->getTrain() << std::endl;
+    //    platform->getTrain()->load(platform->getCargoList().front());
+    sleep((unsigned int) (rand() % 20));
+    std::cout << "*** CMS loaded "<< *platform->getTrain()<< " at: " << *platform << std::endl;
     trainFullyLoaded(platform);
 }
