@@ -14,7 +14,7 @@ int main() {
     trains.push_back(cm::Train::Ptr(new cm::Train()));
     trains.push_back(cm::Train::Ptr(new cm::Train()));
 
-    cm::CMS cms("Test Station", 3);
+    cm::CMS cms("Haste Station", 3);
 
     SimulationController sc(&cms);
 

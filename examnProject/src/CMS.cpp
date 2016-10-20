@@ -25,16 +25,16 @@ std::string cm::CMS::getID() const {
 }
 
 void cm::CMS::ReceiveTrain(cm::Train::Ptr train) {
-    std::cout << std::endl;
-    std::cout << "*********************************************" << std::endl
-              << "*** CMS Received train: " << *train << std::endl;
-    auto platforms = station.getPlatforms();
-    for (auto &platform:*platforms) {
-        if (platform.trainArrive(train)) {
-            LoadTrain(&platform);
-            break;
+        std::cout << std::endl;
+        std::cout << "*********************************************" << std::endl
+                  << "*** CMS Received train: " << *train << std::endl;
+        auto platforms = station.getPlatforms();
+        for (auto &platform:*platforms) {
+            if (platform.trainArrive(train)) {
+                LoadTrain(&platform);
+                break;
+            }
         }
-    }
     //todo handle the case when there is not free platforms -> queue
 }
 
@@ -48,6 +48,6 @@ void cm::CMS::SendTrain(cm::Platform *platform) {
 void cm::CMS::LoadTrain(cm::Platform *platform) {
     std::cout << "*** CMS loaded train at: " << *platform << std::endl;
 
-    //todo add unload algorithm
+    //todo add load algorithm
     trainFullyLoaded(platform);
 }

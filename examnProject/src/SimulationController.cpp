@@ -2,6 +2,7 @@
 // Created by huxx on 10/18/16.
 //
 
+#include <thread>
 #include "SimulationController.hpp"
 
 //TODO fix train pointers in this function and the one below (simulationcontroller)
@@ -16,13 +17,18 @@ SimulationController::SimulationController(cm::CMS *cms) : cms_(cms) {
 }
 
 void SimulationController::startSimulation(std::list<cm::Train::Ptr> &trains) {
-    while (!trains.empty()) {
-        SendTrain(*trains.begin());
+    std::thread t[trains.size()];
+    //TODO MAKE PRETTY IF CARE PLS
+    int index = 0;
+    while (trains.size()!=0) {
+        t[index++] = std::thread([this, trains] { this->SendTrain( *trains.begin() ) ; } );
         trains.pop_front();
     }
+    for(;;);
 }
 
 void SimulationController::SendTrain(cm::Train::Ptr train) {
+    //TODO add composer StringStream to all strings
     std::cout << "*** Simulation Controller send " << *train << " to " << cms_->getID() << std::endl
               << "*********************************************" << std::endl;
     trainArrivedAtStation(train);
