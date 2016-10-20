@@ -14,7 +14,6 @@
 class SimulationController;
 
 
-
 namespace cm {
 
 //TODO add rule of five
@@ -22,45 +21,26 @@ namespace cm {
 
     public:
         //Signals *************************************************************************
-        boost::signals2::signal<void(cm::Platform*)> trainArrivedAtPlatform;
-        boost::signals2::signal<void(cm::Platform*)> trainFullyLoaded;
-        boost::signals2::signal<void(cm::Train::Ptr, cm::Station*)> trainLeftStation;
+        boost::signals2::signal<void(cm::Platform *)> trainFullyLoaded;
+        boost::signals2::signal<void(cm::Train::Ptr)> trainLeftStation;
+        //*********************************************************************************
 
+        CMS(std::string, int);
 
-        CMS(cm::Station* station);
-        //Slots ***************************************************************************
-        struct ReceiveTrain {
-            void operator()(cm::Train::Ptr&& train, cm::Station* station) {
-                std::cout << " CMS Received train: " << *train << std::endl;
-                auto platforms=station->getPlatforms();
-                for(auto platform:*platforms){
-                    if (platform.trainArrive(train))
-                        return;
-                }
-            }
-        };
+        void setSimulationController(SimulationController *s);
 
-        struct SendTrain {
-            void operator()(cm::Platform* platform) {
-                std::cout << "CMS Send train from platform: " << platform << std::endl;
-            }
-        };
+        std::string getID() const;
 
-        struct LoadTrain {
-            void operator()(cm::Platform* platform) {
-                std::cout << "CMS loaded train at platform: " << platform << std::endl;
-            }
-        };
+        void ReceiveTrain(cm::Train::Ptr train);
 
-        //**********************************************************************************
-        void setSimulationController(SimulationController* s) ;
-
-
-
+        void SendTrain(cm::Platform *platform);
 
     private:
-        SimulationController *simulationController;
-        cm::Station* station;
+        void LoadTrain(cm::Platform *platform);
+
+        std::string ID;
+        SimulationController *SimControl;
+        cm::Station station;
     };
 }
 #endif //CMS_CMS_H

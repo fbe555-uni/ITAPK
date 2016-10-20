@@ -8,38 +8,27 @@
 #include "trains.hpp"
 #include "CMS.hpp"
 
-namespace cm{class CMS;}
+namespace cm { class CMS; }
 
 class SimulationController {
 public:
 
     //Signals ***********************************************************
-    static boost::signals2::signal<void(cm::Train::Ptr&&, cm::Station*)> trainArrivedAtStation;
-    boost::signals2::signal<void(cm::Train::Ptr&&,cm::Station*)> trainUnloadedAndSend;
+    boost::signals2::signal<void(cm::Train::Ptr)> trainArrivedAtStation;
+    boost::signals2::signal<void(cm::Train::Ptr)> trainUnloaded;
 
-    SimulationController(cm::CMS* cms, std::list<cm::Train>);
+    SimulationController(cm::CMS *cms);
 
-    //Slots *************************************************************
-    struct ReceiveTrainAndUnload {
-        void operator()(cm::Train::Ptr&& train) {
-            std::cout << " Sim Received train: " << *train << std::endl;
-        }
-    };
+    void startSimulation(std::list<cm::Train::Ptr> &);
 
-    struct SendTrain {
-        void operator()(cm::Train::Ptr&& train,cm::Station* station) {
-            std::cout << "Sim Send " << *train << " to " << station << std::endl;
-            trainArrivedAtStation(train, station);
-        }
-    };
-    //*******************************************************************
+    void ReceiveTrain(cm::Train::Ptr train);
 
-
-    void startSimulation(std::list<cm::Train>,cm::Station*);
+    void SendTrain(cm::Train::Ptr train);
 
 private:
+    void UnloadTrain(cm::Train::Ptr train);
+
     cm::CMS *cms_;
-    std::list<cm::Train> _trains;
 };
 
 

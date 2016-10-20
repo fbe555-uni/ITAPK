@@ -17,21 +17,21 @@ namespace cm{
     public:
         Train(){
             num_id++;
-            ID = "Train " + num_id;
+            ID = "Train " + std::to_string(num_id);
         }
         std::string getID() const{
             return ID;
         }
         //STUB
 
-        typedef std::unique_ptr<cm::Train> Ptr;
+        typedef std::shared_ptr<cm::Train> Ptr;
     private:
         std::string ID;
         static int num_id;
     };
 
     inline std::ostream& operator<<(std::ostream& out, Train& train){
-        out << "STUB TRAIN PRINT";
+        out << train.getID();
         return out;
     }
 

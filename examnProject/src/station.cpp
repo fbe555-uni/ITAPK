@@ -7,17 +7,23 @@
 
 void cm::Station::Status() {
     int i = 0;
-    for (auto item:_platforms) {
+    for (auto &item:_platforms) {
         std::cout << "Status from " << item << ":" << std::endl;
         item.Status();
     }
 }
 
-cm::Station::Station(std::string n) {
+cm::Station::Station(std::string n, int num_platforms) : _platforms() {
     _name = n;
+    for (; num_platforms > 0; num_platforms--) {
+        _platforms.push_back(Platform());
+
+    }
 }
 
-std::list<cm::Platform> *cm::Station::getPlatforms() const {
+//TODO implement add cargo functionality
+
+std::list<cm::Platform> *cm::Station::getPlatforms() {
     return &_platforms;
 }
 
@@ -33,27 +39,29 @@ void cm::Platform::Status() {
 
 cm::Platform::Platform() {
     num_id++;
-    ID = "Platform " + num_id;
-    _train = nullptr;
+    ID = "Platform " + std::to_string(num_id);
+    //Smart pointer version of nullptr
+    _train = cm::Train::Ptr();
 }
 
-bool cm::Platform::trainArrive(cm::Train::Ptr&& t) {
+bool cm::Platform::trainArrive(cm::Train::Ptr t) {
     //TODO find out for checks what move assignment leaves behind to check on that.
-    if (_train == nullptr)
-        return false;
-    else {
-        _train = t;
+    if (!_train) {
+        _train = std::move(t);
         return true;
-    }
+    } else
+        return false;
 
 }
+
 //TODO this function is not correctly made, the train should be moved to simcontrol somehow, not set to null.
-bool cm::Platform::trainDepart(cm::Train::Ptr&& t) {
-    if (_train == nullptr)
-        return false;
+cm::Train::Ptr cm::Platform::trainDepart() {
+    cm::Train::Ptr tmp_train = _train;
+    if (!_train)
+        return _train;
     else {
-        _train = nullptr;
-        return true;
+        _train = cm::Train::Ptr();
+        return tmp_train;
     }
 }
 
