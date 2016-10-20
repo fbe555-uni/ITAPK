@@ -21,6 +21,7 @@ namespace cm{
     //Cargo struct
     class Cargo{
     public:
+        typedef std::shared_ptr<Cargo> Ptr;
         Cargo(int w, int lt) : weight(w), loadTime(lt)
         {
         }
@@ -149,13 +150,14 @@ namespace cm{
 
     template<typename H, typename... REST>
     struct CARGO_LIST{
-        static_assert(IS_CARGO<H>::value,"CARGO_LISTS may only contain subclasses of cargo.");
+        static_assert(IS_CARGO<H>::value, "CARGO_LISTS may only contain subclasses of cargo.");
         typedef H HEAD;
         typedef CARGO_LIST<REST...> TAIL;
     };
 
     template<typename H>
     struct CARGO_LIST<H>{
+        static_assert(IS_CARGO<H>::value, "CARGO_LISTS may only contain subclasses of cargo.");
         typedef H HEAD;
         typedef CL_NULL_ELEM TAIL;
     };
@@ -185,5 +187,44 @@ namespace cm{
     struct CL_CONTAINS<CL_NULL_ELEM, T>{
         static const bool value = false;
     };
+
+    template<typename CL>
+    struct CL_NUM_ELEMS{
+        static const int value = 1 + CL_NUM_ELEMS<typename CL::TAIL>::value;
+    };
+
+    template<>
+    struct CL_NUM_ELEMS<CL_NULL_ELEM>{
+        static const int value = 0;
+    };
+
+    //TODO: how about out of bounds?
+    template<typename CL, int index>
+    struct CL_GET_ELEM{
+        typedef typename CL_GET_ELEM<typename CL::TAIL, index-1>::TYPE TYPE;
+    };
+
+    template<typename CL>
+    struct CL_GET_ELEM<CL, 0>{
+        typedef typename CL::HEAD TYPE;
+    };
+
+    template<typename CL>
+    struct CL_RUNTIME_CONTAINS{
+        template<typename T>
+        static bool value(std::shared_ptr<T> c){
+            return bool(dynamic_cast<typename CL::HEAD*>(c.get())) || CL_RUNTIME_CONTAINS<typename CL::TAIL>::value(c);
+        }
+    };
+
+    template <>
+    struct CL_RUNTIME_CONTAINS<CL_NULL_ELEM>{
+        template<typename T>
+        static bool value(std::shared_ptr<T> c){
+            return false;
+        }
+    };
+
+
 };
 #endif //CMS_CARGO_H
