@@ -33,46 +33,55 @@ namespace cm{
     };
 
     class Timber : public Cargo{
+    public:
         Timber(int w): Cargo(w, BASE_LOAD_FACTOR*w){}
         ~Timber(){};
     };
 
     class Coal : public Cargo{
+    public:
         Coal(int w): Cargo(w, BASE_LOAD_FACTOR*w){}
         ~Coal(){};
     };
 
     class Grains : public Cargo{
+    public:
         Grains(int w): Cargo(w, BASE_LOAD_FACTOR*w){}
         ~Grains(){};
     };
 
     class Oil : public Cargo{
+    public:
         Oil(int w): Cargo(w, LIQUID_LOAD_FACTOR*w){}
         ~Oil(){};
     };
 
     class Gasoline: public Cargo{
+    public:
         Gasoline(int w): Cargo(w, LIQUID_LOAD_FACTOR*w){}
         ~Gasoline(){};
     };
 
     class Water: public Cargo{
+    public:
         Water(int w): Cargo(w, LIQUID_LOAD_FACTOR*w){}
         ~Water(){};
     };
 
     class Sheep : public Cargo{
+    public:
         Sheep(int w): Cargo(w, LIVESTOCK_LOAD_FACTOR*w){}
         ~Sheep(){};
     };
 
     class Cows : public Cargo{
+    public:
         Cows(int w): Cargo(w, LIVESTOCK_LOAD_FACTOR*w){}
         ~Cows(){};
     };
 
     class Pigs : public Cargo{
+    public:
         Pigs(int w): Cargo(w, LIVESTOCK_LOAD_FACTOR*w){}
         ~Pigs(){};
     };
@@ -224,12 +233,16 @@ namespace cm{
             return false;
         }
     };
-/*
+
     template<typename CL, typename... EXPANDED>
     struct MAKE_BOOST_VARIANT{
-        typedef MAKE_BOOST_VARIANT<typename CL::TAIL, typename CL::HEAD,
+        typedef typename MAKE_BOOST_VARIANT<typename CL::TAIL, typename CL::HEAD, EXPANDED...>::VARIANT_TYPE VARIANT_TYPE;
     };
-*/
+
+    template<typename... EXPANDED>
+    struct MAKE_BOOST_VARIANT<CL_NULL_ELEM, EXPANDED...>{
+        typedef boost::variant<EXPANDED...> VARIANT_TYPE;
+    };
 
 
 };

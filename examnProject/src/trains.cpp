@@ -3,4 +3,8 @@
 //
 
 #include "trains.hpp"
-int cm::Train::id = 0;
+
+using namespace cm;
+
+int Train::id = 0;
+
