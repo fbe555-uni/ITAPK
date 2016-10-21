@@ -198,7 +198,7 @@ namespace cm {
                 Cargo::Ptr tmp = cargo.back();
                 cargo.pop_back();
                 return tmp;
-            }
+            }else return Cargo::Ptr();
             //TODO: implement wait for load time and return last cargo element
         }
 
@@ -257,22 +257,12 @@ namespace cm {
 
     //FELIX
 
-    /*
-    template<typename CL>
-    struct CARRIAGE_VARIANT_LIST {
-        static std::list<MAKE_BOOST_VARIANT<CL>::VARIANT_TYPE> construct() {
-
-        }
-    };
-    */
-
     /**********************************************************************************
      **                          carriage visitors                                   **
      **********************************************************************************/
     template<typename CL>
     class CanHoldVisitor : public CanHoldVisitor<typename CL::TAIL> {
     public:
-        //CanHoldVisitor(){};
         CanHoldVisitor(Cargo::Ptr c): CanHoldVisitor<typename CL::TAIL>(c){};
         virtual bool operator()(typename CL::HEAD& e) const{
             return e.canHold(cargo);
@@ -291,6 +281,30 @@ namespace cm {
         virtual bool operator()() const{ return false;}
         Cargo::Ptr cargo;
     };
+
+    template<typename CL>
+    class GetTotalWeightVisitor : public GetTotalWeightVisitor<typename CL::TAIL>{
+    public:
+        virtual int operator()(typename CL::HEAD& e) const{
+            return e.getTotalWeight();
+        }
+        using GetTotalWeightVisitor<typename CL::TAIL>::operator();
+    };
+
+    template<>
+    class GetTotalWeightVisitor<CL_NULL_ELEM>: public boost::static_visitor<int>{};
+
+    template<typename CL>
+    class UnloadVisitor : public UnloadVisitor<typename CL::TAIL>{
+        virtual Cargo::Ptr operator()(typename CL::HEAD& e) const{
+            return e.unload();
+        }
+        using UnloadVisitor<typename CL::TAIL>::operator();
+    };
+
+    template<>
+    class UnloadVisitor<CL_NULL_ELEM> : public boost::static_visitor<Cargo::Ptr>{};
+
 
     template<typename CL, typename T>
     struct CARRIAGE_LIST_INITIALIZER{
@@ -328,6 +342,25 @@ namespace cm {
                               ch = ch || boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), cv);
                           });
             return ch;
+        }
+
+        bool load(Cargo::Ptr);
+
+        Cargo::Ptr unload(){
+            Cargo::Ptr c;
+            for(auto carriage: carriages){
+                c = boost::apply_visitor(UnloadVisitor<CARRIAGE_L>(), carriage);
+                if(c) return c;
+            }
+            return c;
+        }
+
+        int getTotalWeight(){
+            int total = 0;
+            for(auto carriage: carriages){
+                total += boost::apply_visitor(GetTotalWeightVisitor<CARRIAGE_L>(), carriage);
+            }
+            return total;
         }
 
         carriagelist_t carriages;
