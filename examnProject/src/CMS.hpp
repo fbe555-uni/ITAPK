@@ -15,8 +15,8 @@ class SimulationController;
 
 
 namespace cm {
-
     class CMS {
+
 
     public:
         //Signals *************************************************************************
@@ -44,6 +44,8 @@ namespace cm {
         std::string ID;
         SimulationController *SimControl;
         cm::Station station;
+
+        void DeQueueTrain();
     };
 }
 #endif //CMS_CMS_H

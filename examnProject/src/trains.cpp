@@ -26,3 +26,15 @@ cm::Train::Train() {
         ID = "Train #" + std::to_string(num_id);
 
 }
+
+bool cm::Train::canHold(cm::Cargo::Ptr) {
+    return false;
+}
+
+int cm::Train::getTotalWeight() {
+    return 0;
+}
+
+int cm::Train::getCapacity() {
+    return 0;
+}

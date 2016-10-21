@@ -11,7 +11,7 @@ SimulationController::SimulationController(cm::CMS *cms) : cms_(cms) {
     cms_->trainLeftStation.connect([&](cm::Train::Ptr t) {
         ReceiveTrain(t);
     });
-    trainUnloaded.connect([&](cm::Train::Ptr t){
+    trainUnloaded.connect([&](cm::Train::Ptr t) {
         SendTrain(t);
     });
 }
@@ -19,19 +19,16 @@ SimulationController::SimulationController(cm::CMS *cms) : cms_(cms) {
 void SimulationController::startSimulation(std::list<cm::Train::Ptr> &trains) {
     std::thread t[trains.size()];
     //TODO MAKE PRETTY IF CARE PLS
-    int index = 1;
-    t[0] = std::thread( [this] {
-        this->cms_->Status();
-    });
-    while (trains.size()!=0) {
-        t[index++] = std::thread([this, trains] { this->SendTrain( *trains.begin() ) ; } );
+    int index = 0;
+    while (trains.size() != 0) {
+        t[index++] = std::thread([this, trains] { this->SendTrain(*trains.begin()); });
         trains.pop_front();
     }
-    for(;;);
+    for (;;);
 }
 
 void SimulationController::SendTrain(cm::Train::Ptr train) {
-    //TODO add composer StringStream to all strings
+    //TODO MAYBE add composer StringStream to all strings
     std::cout << "*** Simulation Controller send " << *train << " to " << cms_->getID() << std::endl;
     trainArrivedAtStation(train);
 }
@@ -48,6 +45,4 @@ void SimulationController::UnloadTrain(cm::Train::Ptr train) {
     std::cout << "*** Simulation Controller unloaded : " << *train << std::endl;
 
     trainUnloaded(train);
-
-
 }

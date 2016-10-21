@@ -4,6 +4,7 @@
 #include <list>
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include <queue>
 #include "trains.hpp"
 #include "cargo.hpp"
 
@@ -20,13 +21,17 @@ namespace cm {
 
         void Status(); // Tells if a platform is occupied.
         std::string getID();
+
         cm::Train::Ptr getTrain();
+
         std::list<cm::Cargo::Ptr> getCargoList();
 
         //returns false if there is already a train
         bool trainArrive(cm::Train::Ptr);
+
         cm::Train::Ptr trainDepart();
 
+        bool isFree();
     private:
         static int num_id;
         std::string ID;
@@ -39,15 +44,19 @@ namespace cm {
         return out;
     }
 
+
     class Station {
     public:
         Station(std::string, int);
 
         void Status(); // Lists platforms and their status
-        std::string getName();
-        std::list<Platform> *getPlatforms();
+        std::string* getName();
 
+        std::list<Platform> *getPlatforms();
+        std::queue<cm::Train::Ptr>* getTrainQueue();
+        bool isFull();
     private:
+        std::queue<cm::Train::Ptr> trainQueue;
         std::list<Platform> platforms;
         std::string name;
     };
@@ -57,11 +66,7 @@ namespace cm {
         return out;
     }
 
-    //TODO finish trainQueue
-    class TrainQueue {
 
-        std::list<cm::Train::Ptr> trains;
-    };
 
 }
 
