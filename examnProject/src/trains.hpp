@@ -40,10 +40,11 @@ namespace cm {
 
         bool load(Cargo::Ptr);
 
-        void unload(Cargo::Ptr);
+        Cargo::Ptr unload();
 
         int getTotalWeight();
 
+        //no visitor for this
         int getCapacity();
 
     private:
