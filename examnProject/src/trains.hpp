@@ -158,21 +158,35 @@ namespace cm {
         typedef IS_A_VALID_CARGO_LIST<CL> META_INFO;
         typedef CL CARGO_LIST;
 
-        const bool isTanker = META_INFO::IS_TANKER::value;
-        const bool hasLivestock = META_INFO::HAS_LIVESTOCK::value;
+        typedef boost::mpl::int_<cap> CAPACITY;
 
-        static const int capacity = cap;
-
-        Carriage() {}
+        Carriage() : cargo(), carriage_cap(cap){}
+        ~Carriage(){}
+        Carriage(const Carriage& other) :carriage_cap(other.carriage_cap){
+            cargo = other.cargo;
+        }
+        Carriage& operator=(const Carriage& other){
+            cargo = other.cargo;
+            return *this;
+        }
+        Carriage(const Carriage&& other):carriage_cap(other.carriage_cap){
+            cargo = std::move(other.cargo);
+        }
+        Carriage& operator=(const Carriage&& other){
+            cargo = std::move(other.cargo);
+            return *this;
+        }
 
         int getTotalWeight() const {
             int load = 0;
             std::for_each(cargo.begin(), cargo.end(), [&load](Cargo::Ptr c) { load += c->weight; });
+            return load;
         }
 
-        bool canHold(Cargo::Ptr c) {
-            if (getTotalWeight() + c->weight > capacity) return false;
-            if (CL_RUNTIME_CONTAINS<CARGO_LIST>::value(c)) return true;
+        bool canHold(Cargo::Ptr c) const{
+            int total = getTotalWeight();
+            if (getTotalWeight() + c->weight > carriage_cap) return false;
+            if (CL_RUNTIME_CONTAINS<CL>::value(c)) return true;
             return false;
         }
 
@@ -181,12 +195,16 @@ namespace cm {
                 cargo.push_back(c);
                 return true;
             } else return false;
-
         }
 
         std::list<Cargo::Ptr> cargo;
+        const bool isTanker = META_INFO::IS_TANKER::value;
+        const bool hasLivestock = META_INFO::HAS_LIVESTOCK::value;
+        const int carriage_cap;
 
     };
+
+
 
     //TODO: add constraints on CARGO_LIST in carriage and CARRIAGE_LIST in train.
 
@@ -213,8 +231,9 @@ namespace cm {
     };
 
     template<typename CL>
-    struct CAPACITY_SUM {
-        static const int value = CL::HEAD::capacity + CAPACITY_SUM<typename CL::TAIL>::value;
+    struct CAPACITY_SUM{
+        static_assert(CL::HEAD::IS_CARRIAGE::value, "CAPACITY_SUM only works for carriages");
+        static const int value = CL::HEAD::CAPACITY::value + CAPACITY_SUM<typename CL::TAIL>::value;
     };
 
     template<>
@@ -235,22 +254,33 @@ namespace cm {
      **                          carriage visitors                                   **
      **********************************************************************************/
     template<typename CL>
-    struct CanHoldVisitor : public CanHoldVisitor<typename CL::TAIL> {
-        CanHoldVisitor(Cargo::Ptr c) : cargo(c){};
-        bool operator()(typename CL::HEAD e) const {
+    class CanHoldVisitor : public CanHoldVisitor<typename CL::TAIL> {
+    public:
+        //CanHoldVisitor(){};
+        CanHoldVisitor(Cargo::Ptr c): CanHoldVisitor<typename CL::TAIL>(c){};
+        virtual bool operator()(typename CL::HEAD& e) const{
             return e.canHold(cargo);
         }
-        Cargo::Ptr cargo;
+        using CanHoldVisitor<typename CL::TAIL>::operator();
+        using CanHoldVisitor<typename CL::TAIL>::cargo;
+
     };
 
     template<>
     struct CanHoldVisitor<CL_NULL_ELEM> : public boost::static_visitor<bool> {
+    public:
+        CanHoldVisitor(Cargo::Ptr c) : cargo(c){}
+        CanHoldVisitor(const CanHoldVisitor& other):cargo(other.cargo){}
+
+        virtual bool operator()() const{ return false;}
+        Cargo::Ptr cargo;
     };
 
     template<typename CL, typename T>
     struct CARRIAGE_LIST_INITIALIZER{
-        static void initializeCarriageList(T cl){
-            cl.push_back(typename CL::HEAD());
+        static void initializeCarriageList(T& cl){
+            typename CL::HEAD elem;
+            cl.push_back(elem);
             CARRIAGE_LIST_INITIALIZER<typename CL::TAIL, T>::initializeCarriageList(cl);
         }
     };
@@ -258,7 +288,7 @@ namespace cm {
 
     template<typename T>
     struct CARRIAGE_LIST_INITIALIZER<CL_NULL_ELEM, T>{
-        static void initializeCarriageList(T cl){}
+        static void initializeCarriageList(T& cl){}
     };
 
     //template<template<int> typename Locomotive L, template<typename H, typename... REST> typename CARRIAGE_LIST CL>
@@ -274,7 +304,7 @@ namespace cm {
             CARRIAGE_LIST_INITIALIZER<CARRIAGE_L, carriagelist_t>::initializeCarriageList(carriages);
         };
 
-        bool canHold(const Cargo::Ptr c) {
+        bool canHold(Cargo::Ptr c) {
             bool ch = false;
             std::for_each(carriages.begin(),
                           carriages.end(),
@@ -287,8 +317,13 @@ namespace cm {
         carriagelist_t carriages;
     };
 
-
-
-
+/*
+    error: passing
+    const cm::CanHoldVisitor<cm::CARRIAGE_LIST<cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >, cm::Carriage<200, cm::CARGO_LIST<cm::Water, cm::Oil> >, cm::Carriage<300, cm::CARGO_LIST<cm::Sheep, cm::Timber, cm::Coal> > > >;
+    ’ as ‘this’ argument of ‘;
+    bool cm::CanHoldVisitor<CL>::operator()(typename CL::HEAD&) ;
+    [with CL = cm::CARRIAGE_LIST<cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >, cm::Carriage<200, cm::CARGO_LIST<cm::Water, cm::Oil> >, cm::Carriage<300, cm::CARGO_LIST<cm::Sheep, cm::Timber, cm::Coal> > >;
+    typename CL::HEAD = cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >]’ discards qualifiers
+*/
 }
 #endif //CMS_TRAINS_H

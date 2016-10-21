@@ -219,17 +219,27 @@ namespace cm{
     };
 
     template<typename CL>
-    struct CL_RUNTIME_CONTAINS{
+    class CL_RUNTIME_CONTAINS{
+    public:
         template<typename T>
-        static bool value(std::shared_ptr<T> c){
-            return bool(dynamic_cast<typename CL::HEAD*>(c.get())) || CL_RUNTIME_CONTAINS<typename CL::TAIL>::value(c);
+        inline static bool value(std::shared_ptr<T>& c){
+            //std::cout << typeid(*c).name() << " " << typeid(typename CL::HEAD()).name()<< std::endl;;
+            if(dynamic_cast<typename CL::HEAD*>(c.get())){
+                //std::cout << "returned true" << std::endl;
+                return true;
+            }
+            else {
+                //std::cout << "returned false" << std::endl;
+                return CL_RUNTIME_CONTAINS<typename CL::TAIL>::value(c);
+            }
         }
     };
 
     template <>
-    struct CL_RUNTIME_CONTAINS<CL_NULL_ELEM>{
+    class CL_RUNTIME_CONTAINS<CL_NULL_ELEM>{
+    public:
         template<typename T>
-        static bool value(std::shared_ptr<T> c){
+        inline static bool value(std::shared_ptr<T>& c){
             return false;
         }
     };
