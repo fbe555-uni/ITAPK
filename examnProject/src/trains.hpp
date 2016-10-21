@@ -177,12 +177,6 @@ namespace cm {
             return *this;
         }
 
-        int getTotalWeight() const {
-            int load = 0;
-            std::for_each(cargo.begin(), cargo.end(), [&load](Cargo::Ptr c) { load += c->weight; });
-            return load;
-        }
-
         bool canHold(Cargo::Ptr c) const{
             int total = getTotalWeight();
             if (getTotalWeight() + c->weight > carriage_cap) return false;
@@ -192,9 +186,25 @@ namespace cm {
 
         bool load(Cargo::Ptr c) {
             if (canHold(c)) {
+                //TODO: wait load time
                 cargo.push_back(c);
                 return true;
             } else return false;
+        }
+
+        Cargo::Ptr unload(){
+            if(!cargo.empty()){
+                Cargo::Ptr tmp = cargo.back();
+                cargo.pop_back();
+                return tmp;
+            }
+            //TODO: implement wait for load time and return last cargo element
+        }
+
+        int getTotalWeight() const {
+            int load = 0;
+            std::for_each(cargo.begin(), cargo.end(), [&load](Cargo::Ptr c) { load += c->weight; });
+            return load;
         }
 
         std::list<Cargo::Ptr> cargo;
@@ -240,6 +250,11 @@ namespace cm {
     struct CAPACITY_SUM<CL_NULL_ELEM> {
         static const int value = 0;
     };
+
+
+    //HAKON
+
+    //FELIX
 
     /*
     template<typename CL>
