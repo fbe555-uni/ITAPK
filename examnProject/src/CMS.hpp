@@ -15,9 +15,21 @@ class SimulationController;
 
 
 namespace cm {
+    struct Event_TrainAtStation{
+        Event_TrainAtStation(Train::Ptr t) : train(t){}
+        Train::Ptr train;
+    };
+    struct Event_TrainAtPlatform{
+        Event_TrainAtPlatform(Train::Ptr t) : train(t){}
+        Train::Ptr train;
+    };
+    struct Event_TrainFullyLoaded{
+        Event_TrainFullyLoaded(Platform* p) : platform_ptr(p){}
+        Platform* platform_ptr;
+    };
+    struct Event_TrainLeftStation{};
+
     class CMS {
-
-
     public:
         //Signals *************************************************************************
         boost::signals2::signal<void(cm::Platform *)> trainFullyLoaded;
@@ -38,6 +50,17 @@ namespace cm {
 
         void SendTrain(cm::Platform *platform);
 
+        class CmsHandleEventVisitor : boost::static_visitor<>{
+        public:
+            CmsHandleEventVisitor(CMS* cms);
+            void operator()(const Event_TrainAtStation& e) const;
+            void operator()(const Event_TrainAtPlatform& e) const;
+            void operator()(const Event_TrainFullyLoaded& e) const;
+            void operator()(const Event_TrainLeftStation& e) const;
+        private:
+            CMS* _cms;
+        };
+
     private:
         void LoadTrain(cm::Platform *platform);
 
@@ -45,7 +68,7 @@ namespace cm {
         SimulationController *SimControl;
         cm::Station station;
 
-        void DeQueueTrain();
+        void DequeueTrains();
     };
 }
 #endif //CMS_CMS_H

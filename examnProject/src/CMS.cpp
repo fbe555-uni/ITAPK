@@ -15,7 +15,7 @@ void cm::CMS::SetSimulationController(SimulationController *s) {
         SendTrain(p);
     });
     trainLeftStation.connect([&](cm::Train::Ptr) {
-        DeQueueTrain();
+        DequeueTrains();
     });
 }
 
@@ -56,7 +56,7 @@ void cm::CMS::LoadTrain(cm::Platform *platform) {
     trainFullyLoaded(platform);
 }
 
-void cm::CMS::DeQueueTrain() {
+void cm::CMS::DequeueTrains() {
     for (auto &platform:*station.getPlatforms()) {
         auto train = station.getTrainQueue()->front();
         station.getTrainQueue()->pop();
@@ -65,4 +65,22 @@ void cm::CMS::DeQueueTrain() {
             std::cout << "Removed " << *train << " from queue" << std::endl;
         }
     }
+}
+
+cm::CMS::CmsHandleEventVisitor::CmsHandleEventVisitor(cm::CMS* cms): _cms(cms){}
+
+void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainAtStation& e) const {
+    _cms->ReceiveTrain(e.train);
+}
+
+void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainAtPlatform& e) const {
+    //start loading thread;
+}
+
+void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainFullyLoaded& e) const {
+    _cms->SendTrain(e.platform_ptr);
+}
+
+void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainLeftStation& e) const {
+    _cms->DequeueTrains();
 }
