@@ -18,16 +18,20 @@ public:
     boost::signals2::signal<void(cm::Train::Ptr)> trainUnloaded;
     //*******************************************************************
 
+    //start event handler thread
     SimulationController(cm::CMS *cms);
 
-    void startSimulation(std::list<cm::Train::Ptr> &);
+    void StartSimulation(std::list<cm::Train::Ptr> &);
 
-    void ReceiveTrain(cm::Train::Ptr train);
+    void EventHandler();
 
-    void SendTrain(cm::Train::Ptr train);
+    void ReceiveTrain(cm::Train::Ptr);
+
+    void SendTrain(cm::Train::Ptr);
 
 private:
-    void UnloadTrain(cm::Train::Ptr train);
+    std::queue<boost::variant<int>> eventQueue;//TODO define variant
+    void UnloadTrain(cm::Train::Ptr);
 
     cm::CMS *cms_;
 };

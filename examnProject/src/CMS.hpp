@@ -29,23 +29,29 @@ namespace cm {
         void Status(){
             station.Status();
         }
+        // start thread event handler
+        void StartCMS();
 
-        void SetSimulationController(SimulationController *s);
+        void EventHandler();
+
+        void SetSimulationController(SimulationController*);
 
         std::string getID() const;
 
-        void ReceiveTrain(cm::Train::Ptr train);
+        void ReceiveTrain(cm::Train::Ptr);
 
-        void SendTrain(cm::Platform *platform);
+        void SendTrain(cm::Platform*);
 
     private:
-        void LoadTrain(cm::Platform *platform);
+        std::queue<boost::variant<int>> eventQueue;//TODO define variant
+
+        void LoadTrain(cm::Platform*);
 
         std::string ID;
         SimulationController *SimControl;
         cm::Station station;
 
-        void DeQueueTrain();
+        void UnQueueTrain();
     };
 }
 #endif //CMS_CMS_H

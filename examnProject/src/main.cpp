@@ -53,7 +53,7 @@ int main() {
 
     SimulationController sc(&cms);
 
-    sc.startSimulation(trains);
+    sc.StartSimulation(trains);
 
     return 0;
 }

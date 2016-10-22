@@ -16,12 +16,12 @@ SimulationController::SimulationController(cm::CMS *cms) : cms_(cms) {
     });
 }
 
-void SimulationController::startSimulation(std::list<cm::Train::Ptr> &trains) {
-    std::thread t[trains.size()];
-    //TODO MAKE PRETTY IF CARE PLS
-    int index = 0;
-    while (trains.size() != 0) {
-        t[index++] = std::thread([this, trains] { this->SendTrain(*trains.begin()); });
+void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
+    std::thread event_sc;
+    event_sc = std::thread([this] {EventHandler();});
+
+    while (trains.size()!=0){
+        SendTrain(trains.front());
         trains.pop_front();
     }
     for (;;);
@@ -29,20 +29,24 @@ void SimulationController::startSimulation(std::list<cm::Train::Ptr> &trains) {
 
 void SimulationController::SendTrain(cm::Train::Ptr train) {
     //TODO MAYBE add composer StringStream to all strings
-    std::cout << "*** Simulation Controller send " << *train << " to " << cms_->getID() << std::endl;
+    std::cout << "*** Simulation Controller send " << train << " to " << cms_->getID() << std::endl;
     trainArrivedAtStation(train);
 }
 
 void SimulationController::ReceiveTrain(cm::Train::Ptr train) {
-    std::cout << "*** Simulation Controller received : " << *train << std::endl;
+    std::cout << "*** Simulation Controller received : " << train << std::endl;
     UnloadTrain(train);
 }
 
 void SimulationController::UnloadTrain(cm::Train::Ptr train) {
-//    std::cout << "*** Simulation Controller unloading :" << *train << std::endl;
-//    sleep((unsigned int) (rand() % 20));
+    std::cout << "*** Simulation Controller unloading :" << train << std::endl;
     train->unload();
-    std::cout << "*** Simulation Controller unloaded : " << *train << std::endl;
+    std::cout << "*** Simulation Controller unloaded : " << train << std::endl;
 
     trainUnloaded(train);
+}
+
+void SimulationController::EventHandler() {
+    boost::apply_visitor(eventQueue.front());
+    eventQueue.pop();
 }

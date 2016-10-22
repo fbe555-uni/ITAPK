@@ -10,12 +10,11 @@ void cm::CMS::SetSimulationController(SimulationController *s) {
     SimControl->trainArrivedAtStation.connect([&](cm::Train::Ptr t) {
         ReceiveTrain(t);
     });
-
     trainFullyLoaded.connect([&](cm::Platform *p) {
         SendTrain(p);
     });
     trainLeftStation.connect([&](cm::Train::Ptr) {
-        DeQueueTrain();
+        UnQueueTrain();
     });
 }
 
@@ -30,10 +29,11 @@ std::string cm::CMS::getID() const {
 void cm::CMS::ReceiveTrain(cm::Train::Ptr train) {
     if (station.isFull()) {
         station.getTrainQueue()->push(train);
-        std::cout << "Added " << *train << " to queue" << std::endl;
+        std::cout << "Added " << train << " to queue" << std::endl;
+        //TODO add conditional to wait for free space
         return;
     }
-    std::cout << "*** CMS received train: " << *train << std::endl;
+    std::cout << "*** CMS received train: " << train << std::endl;
     auto platforms = station.getPlatforms();
     for (auto &platform:*platforms) {
         if (platform.trainArrive(train))
@@ -56,7 +56,7 @@ void cm::CMS::LoadTrain(cm::Platform *platform) {
     trainFullyLoaded(platform);
 }
 
-void cm::CMS::DeQueueTrain() {
+void cm::CMS::UnQueueTrain() {
     for (auto &platform:*station.getPlatforms()) {
         auto train = station.getTrainQueue()->front();
         station.getTrainQueue()->pop();
@@ -65,4 +65,14 @@ void cm::CMS::DeQueueTrain() {
             std::cout << "Removed " << *train << " from queue" << std::endl;
         }
     }
+}
+
+void cm::CMS::EventHandler() {
+    boost::apply_visitor(eventQueue.front());
+    eventQueue.pop();
+}
+
+void cm::CMS::StartCMS() {
+    std::thread event_cms;
+    event_cms = std::thread([this] { EventHandler(); });
 }
