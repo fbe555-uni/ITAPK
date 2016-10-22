@@ -208,7 +208,7 @@ namespace cm {
 
         bool load(Cargo::Ptr c) {
             if (canHold(c)) {
-                std::sleep
+                //std::sleep
                 cargo.push_back(c);
                 return true;
             } else return false;
