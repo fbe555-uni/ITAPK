@@ -9,40 +9,43 @@
 #ifndef CMS_STATION_H
 #define CMS_STATION_H
 
-namespace cm{
+namespace cm {
 
-    class Platform{
+    class Platform {
     public:
         Platform();
+
         void Status(); // Tells if a platform is occupied.
-        std::string getID(){
-                return ID;
+        std::string getID() {
+            return ID;
         };
     private:
         static int id;
         std::string ID;
         Train::Ptr _train;
-        std::list<Cargo>* _cargo;
+        std::list<Cargo> *_cargo;
     };
 
-    inline std::ostream& operator<<(std::ostream& out, Platform& platform){
+    inline std::ostream &operator<<(std::ostream &out, Platform &platform) {
         out << platform.getID();
         return out;
     }
 
-    class Station{
+    class Station {
     public:
         Station(std::string n);
+
         void Status(); // Lists platforms and their status
-        std::string getName(){
+        std::string getName() {
             return _name;
         }
+
     private:
         std::list<Platform> _platforms;
         std::string _name;
     };
 
-    inline std::ostream& operator<<(std::ostream& out, Station& station){
+    inline std::ostream &operator<<(std::ostream &out, Station &station) {
         out << station.getName();
         return out;
     }

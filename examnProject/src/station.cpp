@@ -25,7 +25,7 @@ void cm::Platform::Status() {
     std::cout << "Train on platform: " << _train << std::endl;
 }
 
-cm::Platform::Platform(){
+cm::Platform::Platform() {
     id++;
     ID = "Platform " + id;
 }
