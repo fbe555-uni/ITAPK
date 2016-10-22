@@ -16,7 +16,6 @@
 #include "cargo.hpp"
 
 namespace cm {
-
     //Train instance creation will have the following syntax
     //static Train::Ptr&& Train::getInstance<Locomotive<Capacity>, CarriageList<Carriage<CargoList<Cargo...> >...> >();
 
@@ -194,7 +193,7 @@ namespace cm {
 
         bool load(Cargo::Ptr c) {
             if (canHold(c)) {
-                //TODO: wait load time
+                std::sleep
                 cargo.push_back(c);
                 return true;
             } else return false;
@@ -280,12 +279,12 @@ namespace cm {
     };
 
     template<>
-    struct CanHoldVisitor<CL_NULL_ELEM> : public boost::static_visitor<bool> {
+    class CanHoldVisitor<CL_NULL_ELEM> : public boost::static_visitor<bool> {
     public:
         CanHoldVisitor(Cargo::Ptr c) : cargo(c){}
         CanHoldVisitor(const CanHoldVisitor& other):cargo(other.cargo){}
 
-        virtual bool operator()() const{ return false;}
+        virtual bool operator()() const{return false;}
         Cargo::Ptr cargo;
     };
 
