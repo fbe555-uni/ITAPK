@@ -20,11 +20,11 @@ namespace cm {
         //Signals *************************************************************************
         boost::signals2::signal<void(cm::Platform)> trainArrivedAtPlatform;
         boost::signals2::signal<void(cm::Platform)> trainFullyLoaded;
-        boost::signals2::signal<void(cm::Train)> trainLeftStation;
+        boost::signals2::signal<void(cm::Train::Ptr)> trainLeftStation;
 
         //Slots ***************************************************************************
         struct ReceiveTrain {
-            void operator()(cm::Train train, cm::Station station) {
+            void operator()(cm::Train::Ptr train, cm::Station station) {
                 std::cout << " CMS Received train: " << train << std::endl;
             }
         };

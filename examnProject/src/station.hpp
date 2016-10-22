@@ -21,7 +21,7 @@ namespace cm{
     private:
         static int id;
         std::string ID;
-        Train _train;
+        Train::Ptr _train;
         std::list<Cargo>* _cargo;
     };
 

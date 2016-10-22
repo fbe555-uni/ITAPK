@@ -6,5 +6,4 @@
 
 using namespace cm;
 
-int Train::id = 0;
-
+int Train::nxt_id = 0;

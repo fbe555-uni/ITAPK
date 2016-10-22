@@ -4,7 +4,7 @@
 
 #include "SimulationController.hpp"
 
-SimulationController::SimulationController(cm::CMS *cms, std::list<cm::Train> trains) {
+SimulationController::SimulationController(cm::CMS *cms, std::list<cm::Train::Ptr> trains) {
     cms_ = cms;
     _trains = trains;
     cms_->setSimulationController(this);

@@ -12,6 +12,7 @@
 #include <boost/asio/detail/shared_ptr.hpp>
 #include <algorithm>
 #include <boost/variant/variant.hpp>
+#include <boost/any.hpp>
 #include "cargo.hpp"
 
 namespace cm {
@@ -21,40 +22,46 @@ namespace cm {
 
     class Train {
     public:
-        Train() {
-            id++;
-            ID = "Train " + id;
+        typedef std::shared_ptr<Train> Ptr;
+
+        Train(): _name("Default constructed train"), _id(nxt_id++){}
+        Train(std::string name): _name(name), _id(nxt_id++){}
+        virtual ~Train(){}
+
+        Train(const Train& t): _name(t._name), _id(nxt_id++){}
+        Train &operator=(const Train &t){
+            _name = (t._name);
+            _id = nxt_id++;
+        }
+        Train(const Train &&t): _name(t._name), _id(t._id){}
+        Train &&operator=(const Train &&t){
+            _name = (t._name);
+            _id = t._id;
         }
 
-        ~Train() {};
+        virtual bool canHold(Cargo::Ptr) = 0;
+        virtual bool load(Cargo::Ptr) = 0;
+        virtual Cargo::Ptr unload() = 0;
+        virtual int getTotalWeight() = 0;
+        virtual int getCapacity() = 0;
 
-        Train(const Train &t) {};
-
-        Train &operator=(const Train &t) {};
-
-        Train(const Train &&t) {};
-
-        Train &&operator=(const Train &&t) {};
-
-        bool canHold(Cargo::Ptr);
-
-        bool load(Cargo::Ptr);
-
-        Cargo::Ptr unload();
-
-        int getTotalWeight();
-
-        //no visitor for this
-        int getCapacity();
+        int getID(){return _id;}
+        std::string getName(){return _name;}
 
     private:
-        const int capacity = 0; //wont be zero. STUB
-        std::string ID;
-        static int id;
+        int _id;
+        std::string _name;
+
+        static int nxt_id;
     };
 
     inline std::ostream &operator<<(std::ostream &out, Train &train) {
-        out << "STUB TRAIN PRINT";
+        out << train.getName() << " (uid: " << train.getID() << ")";
+        return out;
+    }
+
+    inline std::ostream &operator<<(std::ostream &out, Train::Ptr& train_ptr){
+        out << *train_ptr;
         return out;
     }
 
@@ -292,10 +299,16 @@ namespace cm {
     };
 
     template<>
-    class GetTotalWeightVisitor<CL_NULL_ELEM>: public boost::static_visitor<int>{};
+    class GetTotalWeightVisitor<CL_NULL_ELEM>: public boost::static_visitor<int>{
+    public:
+        virtual int operator()() const{
+            return 0;
+        }
+    };
 
     template<typename CL>
     class UnloadVisitor : public UnloadVisitor<typename CL::TAIL>{
+    public:
         virtual Cargo::Ptr operator()(typename CL::HEAD& e) const{
             return e.unload();
         }
@@ -303,7 +316,10 @@ namespace cm {
     };
 
     template<>
-    class UnloadVisitor<CL_NULL_ELEM> : public boost::static_visitor<Cargo::Ptr>{};
+    class UnloadVisitor<CL_NULL_ELEM> : public boost::static_visitor<Cargo::Ptr>{
+    public:
+        virtual Cargo::Ptr operator()() const{ return Cargo::Ptr();}
+    };
 
 
     template<typename CL, typename T>
@@ -323,17 +339,18 @@ namespace cm {
 
     //template<template<int> typename Locomotive L, template<typename H, typename... REST> typename CARRIAGE_LIST CL>
     template<typename LOCOMOTIVE, typename CARRIAGE_L>
-    struct TrainImpl {
+    struct TrainImpl: public Train{
         typedef typename MAKE_BOOST_VARIANT<CARRIAGE_L>::VARIANT_TYPE carriagevariant_t;
         typedef std::list<carriagevariant_t> carriagelist_t;
         static const int capacity = CAPACITY_SUM<CARRIAGE_L>::value;
         static_assert(LOCOMOTIVE::capacity >= capacity,
                       "The constructed train does not have a sufficiently strong locomotive to pull all it's carriages.");
 
-        TrainImpl() : carriages() {
+        TrainImpl(std::string name) : Train(name), carriages() {
             CARRIAGE_LIST_INITIALIZER<CARRIAGE_L, carriagelist_t>::initializeCarriageList(carriages);
         };
 
+        //TODO: Rule of 5
         bool canHold(Cargo::Ptr c) {
             bool ch = false;
             std::for_each(carriages.begin(),
@@ -344,7 +361,10 @@ namespace cm {
             return ch;
         }
 
-        bool load(Cargo::Ptr);
+        bool load(Cargo::Ptr){
+            //TODO: implement this function
+            return true;
+        };
 
         Cargo::Ptr unload(){
             Cargo::Ptr c;
@@ -363,16 +383,24 @@ namespace cm {
             return total;
         }
 
+        int getCapacity(){
+            return capacity;
+        }
+
         carriagelist_t carriages;
     };
 
 /*
-    error: passing
-    const cm::CanHoldVisitor<cm::CARRIAGE_LIST<cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >, cm::Carriage<200, cm::CARGO_LIST<cm::Water, cm::Oil> >, cm::Carriage<300, cm::CARGO_LIST<cm::Sheep, cm::Timber, cm::Coal> > > >;
-    ’ as ‘this’ argument of ‘;
-    bool cm::CanHoldVisitor<CL>::operator()(typename CL::HEAD&) ;
-    [with CL = cm::CARRIAGE_LIST<cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >, cm::Carriage<200, cm::CARGO_LIST<cm::Water, cm::Oil> >, cm::Carriage<300, cm::CARGO_LIST<cm::Sheep, cm::Timber, cm::Coal> > >;
-    typename CL::HEAD = cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >]’ discards qualifiers
+   undefined reference to `
+   cm::TrainImpl<cm::Locomotive<1000>,
+        cm::CARRIAGE_LIST<
+            cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >,
+            cm::Carriage<200, cm::CARGO_LIST<cm::Water, cm::Oil> >,
+            cm::Carriage<300, cm::CARGO_LIST<cm::Sheep, cm::Timber> >,
+            cm::Carriage<400, cm::CARGO_LIST<cm::Timber<cm::Coal> >
+        >
+    >::load(std::shared_ptr<cm::Cargo>)'
+collect2: error: ld returned 1 exit status
 */
 }
 #endif //CMS_TRAINS_H
