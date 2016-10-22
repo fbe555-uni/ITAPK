@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <boost/variant/variant.hpp>
 #include <boost/any.hpp>
+#include <thread>
 #include "cargo.hpp"
 
 namespace cm {
@@ -208,7 +209,7 @@ namespace cm {
 
         bool load(Cargo::Ptr c) {
             if (canHold(c)) {
-                //std::sleep
+                std::this_thread::sleep_for(std::chrono::seconds(c->loadTime));
                 cargo.push_back(c);
                 return true;
             } else return false;
@@ -218,9 +219,9 @@ namespace cm {
             if (!cargo.empty()) {
                 Cargo::Ptr tmp = cargo.back();
                 cargo.pop_back();
+                std::this_thread::sleep_for(std::chrono::seconds(tmp->loadTime));
                 return tmp;
             } else return Cargo::Ptr();
-            //TODO: implement wait for load time and return last cargo element
         }
 
         int getTotalWeight() const {

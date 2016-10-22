@@ -4,6 +4,7 @@
 #include "trains.hpp"
 #include "station.hpp"
 #include "CMS.hpp"
+
 //#include "SimulationController.hpp"
 
 int main() {
@@ -21,7 +22,7 @@ int main() {
                     cm::Carriage<250, cm::CARGO_LIST<cm::Sheep, cm::Timber> >,
                     cm::Carriage<350, cm::CARGO_LIST<cm::Grains, cm::Pigs> >
             > > Train2_t;
-
+    /*
     std::vector<cm::Train::Ptr> trainList;
     trainList.push_back(cm::Train::Ptr(new Train1_t("First train")));
     trainList.push_back(cm::Train::Ptr(new Train2_t("Second train")));
@@ -33,6 +34,26 @@ int main() {
               << std::to_string(trainList[1]->canHold(std::make_shared<cm::Grains>(200))) << std::endl;
     std::cout << "Can \"" << trainList[2] << "\" take 50kg cows?: "
               << std::to_string(trainList[2]->canHold(std::make_shared<cm::Cows>(50))) << std::endl;
+
+    cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep> > mixedCarriage = cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep> > ();
+    //cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep, cm::Cows> > illegalCarriage1 = cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep, cm::Cows> > ();
+    //cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water> > tankerCarriage = cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water> >();
+    //cm::Carriage<100, cm::CARGO_LIST<int, cm::Timber, cm::Grains> > notCargoCarriage = cm::Carriage<100, cm::CARGO_LIST<int, cm::Timber, cm::Grains> > ();
+    //cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water, cm::Coal> > illegalCarriage2 = cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water, cm::Coal> >();
+
+    */
+    std::list<cm::Train::Ptr> trains;
+    trains.push_back(cm::Train::Ptr(new Train1_t("Train of the West")));
+    trains.push_back(cm::Train::Ptr(new Train1_t("Tøffe")));
+    trains.push_back(cm::Train::Ptr(new Train2_t("Eastbound and down")));
+    trains.push_back(cm::Train::Ptr(new Train2_t("Thomas")));
+
+
+    cm::CMS cms("Haste Station", 2);
+
+    SimulationController sc(&cms);
+
+    sc.startSimulation(trains);
 
     return 0;
 }

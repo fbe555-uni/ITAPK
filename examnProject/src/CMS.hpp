@@ -13,40 +13,39 @@
 
 class SimulationController;
 
-namespace cm {
 
+namespace cm {
     class CMS {
+
+
     public:
         //Signals *************************************************************************
-        boost::signals2::signal<void(cm::Platform)> trainArrivedAtPlatform;
-        boost::signals2::signal<void(cm::Platform)> trainFullyLoaded;
+        boost::signals2::signal<void(cm::Platform *)> trainFullyLoaded;
         boost::signals2::signal<void(cm::Train::Ptr)> trainLeftStation;
+        //*********************************************************************************
 
-        //Slots ***************************************************************************
-        struct ReceiveTrain {
-            void operator()(cm::Train::Ptr train, cm::Station station) {
-                std::cout << " CMS Received train: " << train << std::endl;
-            }
-        };
+        CMS(std::string, int);
 
-        struct sendTrain {
-            void operator()(cm::Platform platform) {
-                std::cout << "CMS Send train from platform: " << platform << std::endl;
-            }
-        };
+        void Status(){
+            station.Status();
+        }
 
-        struct loadTrain {
-            void operator()(cm::Platform platform) {
-                std::cout << "CMS loaded train at platform: " << platform << std::endl;
-            }
-        };
+        void SetSimulationController(SimulationController *s);
 
-        //**********************************************************************************
-        void setSimulationController(SimulationController *s);
+        std::string getID() const;
+
+        void ReceiveTrain(cm::Train::Ptr train);
+
+        void SendTrain(cm::Platform *platform);
 
     private:
-        SimulationController *sim_;
-        std::shared_ptr<cm::Station> station_;
+        void LoadTrain(cm::Platform *platform);
+
+        std::string ID;
+        SimulationController *SimControl;
+        cm::Station station;
+
+        void DeQueueTrain();
     };
 }
 #endif //CMS_CMS_H
