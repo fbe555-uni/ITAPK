@@ -14,6 +14,7 @@
 #include <boost/variant/variant.hpp>
 #include <boost/any.hpp>
 #include <thread>
+#include <mutex>
 #include "cargo.hpp"
 
 namespace cm {
@@ -24,20 +25,21 @@ namespace cm {
     public:
         typedef std::shared_ptr<Train> Ptr;
 
-        Train() : _name("Default constructed train"), _id(nxt_id++) {}
+        Train() : _name("Default constructed train"), _id(nxt_id++), mut() {}
 
-        Train(std::string name) : _name(name), _id(nxt_id++) {}
+        Train(std::string name) : _name(name), _id(nxt_id++), mut() {}
 
         virtual ~Train() {}
 
-        Train(const Train &t) : _name(t._name), _id(nxt_id++) {}
+        Train(const Train &t) : _name(t._name), _id(nxt_id++), mut() {}
 
         Train &operator=(const Train &t) {
             _name = (t._name);
+            //TODO: consider static mutex for nxt_id
             _id = nxt_id++;
         }
 
-        Train(const Train &&t) : _name(t._name), _id(t._id) {}
+        Train(const Train &&t) : _name(t._name), _id(t._id), mut() {}
 
         Train &&operator=(const Train &&t) {
             _name = (t._name);
@@ -58,10 +60,12 @@ namespace cm {
 
         std::string getName() { return _name; }
 
+    protected:
+        std::mutex mut;
+
     private:
         int _id;
         std::string _name;
-
         static int nxt_id;
     };
 
@@ -386,12 +390,10 @@ namespace cm {
 
     //template<template<int> typename Locomotive L, template<typename H, typename... REST> typename CARRIAGE_LIST CL>
     template<typename LOCOMOTIVE, typename CARRIAGE_L>
-    struct TrainImpl : public Train {
+    class TrainImpl : public Train {
+    public:
         typedef typename MAKE_BOOST_VARIANT<CARRIAGE_L>::VARIANT_TYPE carriagevariant_t;
         typedef std::list<carriagevariant_t> carriagelist_t;
-        static const int capacity = CAPACITY_SUM<CARRIAGE_L>::value;
-        static_assert(LOCOMOTIVE::capacity >= capacity,
-                      "The constructed train does not have a sufficiently strong locomotive to pull all it's carriages.");
 
         TrainImpl(std::string name) : Train(name), carriages() {
             CARRIAGE_LIST_INITIALIZER<CARRIAGE_L, carriagelist_t>::initializeCarriageList(carriages);
@@ -399,58 +401,54 @@ namespace cm {
 
         //TODO: Rule of 5
         bool canHold(Cargo::Ptr c) {
+            mut.lock();
             bool ch = false;
             std::for_each(carriages.begin(),
                           carriages.end(),
                           [&c, &ch](carriagevariant_t cv) {
                               ch = ch || boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), cv);
                           });
+            mut.unlock();
             return ch;
         }
 
         bool load(Cargo::Ptr c) {
+            mut.lock();
             bool loaded = false;
             for(auto carriage: carriages) {
                 loaded = boost::apply_visitor(LoadVisitor<CARRIAGE_L>(c), carriage);
             }
+            mut.unlock();
             return loaded;
         };
 
         Cargo::Ptr unload() {
+            mut.lock();
             Cargo::Ptr c;
             for (auto carriage: carriages) {
                 c = boost::apply_visitor(UnloadVisitor<CARRIAGE_L>(), carriage);
                 if (c) return c;
             }
+            mut.unlock();
             return c;
         }
 
         int getTotalWeight() {
+            mut.lock();
             int total = 0;
             for (auto carriage: carriages) {
                 total += boost::apply_visitor(GetTotalWeightVisitor<CARRIAGE_L>(), carriage);
             }
+            mut.unlock();
             return total;
         }
 
-        int getCapacity() {
-            return capacity;
-        }
-
+        int getCapacity() { return capacity; }
+    private:
+        static const int capacity = CAPACITY_SUM<CARRIAGE_L>::value;
+        static_assert(LOCOMOTIVE::capacity >= capacity,
+                      "The constructed train does not have a sufficiently strong locomotive to pull all it's carriages.");
         carriagelist_t carriages;
     };
-
-/*
-   undefined reference to `
-   cm::TrainImpl<cm::Locomotive<1000>,
-        cm::CARRIAGE_LIST<
-            cm::Carriage<100, cm::CARGO_LIST<cm::Grains> >,
-            cm::Carriage<200, cm::CARGO_LIST<cm::Water, cm::Oil> >,
-            cm::Carriage<300, cm::CARGO_LIST<cm::Sheep, cm::Timber> >,
-            cm::Carriage<400, cm::CARGO_LIST<cm::Timber<cm::Coal> >
-        >
-    >::load(std::shared_ptr<cm::Cargo>)'
-collect2: error: ld returned 1 exit status
-*/
 }
 #endif //CMS_TRAINS_H
