@@ -42,7 +42,7 @@ namespace cm {
         };
 
         //**********************************************************************************
-        void setSimulationController(SimulationController* s) ;
+        void setSimulationController(SimulationController *s);
 
     private:
         SimulationController *sim_;

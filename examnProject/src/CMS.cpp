@@ -7,11 +7,11 @@
 void cm::CMS::setSimulationController(SimulationController *s) {
     sim_ = s;
 
-        sim_->trainArrivedAtStation.connect(ReceiveTrain());
+    sim_->trainArrivedAtStation.connect(ReceiveTrain());
 
-        trainArrivedAtPlatform.connect(loadTrain());
+    trainArrivedAtPlatform.connect(loadTrain());
 
-        trainFullyLoaded.connect(sendTrain());
+    trainFullyLoaded.connect(sendTrain());
 
 
 }

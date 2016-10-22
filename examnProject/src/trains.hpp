@@ -23,29 +23,39 @@ namespace cm {
     public:
         typedef std::shared_ptr<Train> Ptr;
 
-        Train(): _name("Default constructed train"), _id(nxt_id++){}
-        Train(std::string name): _name(name), _id(nxt_id++){}
-        virtual ~Train(){}
+        Train() : _name("Default constructed train"), _id(nxt_id++) {}
 
-        Train(const Train& t): _name(t._name), _id(nxt_id++){}
-        Train &operator=(const Train &t){
+        Train(std::string name) : _name(name), _id(nxt_id++) {}
+
+        virtual ~Train() {}
+
+        Train(const Train &t) : _name(t._name), _id(nxt_id++) {}
+
+        Train &operator=(const Train &t) {
             _name = (t._name);
             _id = nxt_id++;
         }
-        Train(const Train &&t): _name(t._name), _id(t._id){}
-        Train &&operator=(const Train &&t){
+
+        Train(const Train &&t) : _name(t._name), _id(t._id) {}
+
+        Train &&operator=(const Train &&t) {
             _name = (t._name);
             _id = t._id;
         }
 
         virtual bool canHold(Cargo::Ptr) = 0;
+
         virtual bool load(Cargo::Ptr) = 0;
+
         virtual Cargo::Ptr unload() = 0;
+
         virtual int getTotalWeight() = 0;
+
         virtual int getCapacity() = 0;
 
-        int getID(){return _id;}
-        std::string getName(){return _name;}
+        int getID() { return _id; }
+
+        std::string getName() { return _name; }
 
     private:
         int _id;
@@ -59,7 +69,7 @@ namespace cm {
         return out;
     }
 
-    inline std::ostream &operator<<(std::ostream &out, Train::Ptr& train_ptr){
+    inline std::ostream &operator<<(std::ostream &out, Train::Ptr &train_ptr) {
         out << *train_ptr;
         return out;
     }
@@ -167,24 +177,29 @@ namespace cm {
 
         typedef boost::mpl::int_<cap> CAPACITY;
 
-        Carriage() : cargo(), carriage_cap(cap){}
-        ~Carriage(){}
-        Carriage(const Carriage& other) :carriage_cap(other.carriage_cap){
+        Carriage() : cargo(), carriage_cap(cap) {}
+
+        ~Carriage() {}
+
+        Carriage(const Carriage &other) : carriage_cap(other.carriage_cap) {
             cargo = other.cargo;
         }
-        Carriage& operator=(const Carriage& other){
+
+        Carriage &operator=(const Carriage &other) {
             cargo = other.cargo;
             return *this;
         }
-        Carriage(const Carriage&& other):carriage_cap(other.carriage_cap){
+
+        Carriage(const Carriage &&other) : carriage_cap(other.carriage_cap) {
             cargo = std::move(other.cargo);
         }
-        Carriage& operator=(const Carriage&& other){
+
+        Carriage &operator=(const Carriage &&other) {
             cargo = std::move(other.cargo);
             return *this;
         }
 
-        bool canHold(Cargo::Ptr c) const{
+        bool canHold(Cargo::Ptr c) const {
             int total = getTotalWeight();
             if (getTotalWeight() + c->weight > carriage_cap) return false;
             if (CL_RUNTIME_CONTAINS<CL>::value(c)) return true;
@@ -199,12 +214,12 @@ namespace cm {
             } else return false;
         }
 
-        Cargo::Ptr unload(){
-            if(!cargo.empty()){
+        Cargo::Ptr unload() {
+            if (!cargo.empty()) {
                 Cargo::Ptr tmp = cargo.back();
                 cargo.pop_back();
                 return tmp;
-            }else return Cargo::Ptr();
+            } else return Cargo::Ptr();
             //TODO: implement wait for load time and return last cargo element
         }
 
@@ -248,7 +263,7 @@ namespace cm {
     };
 
     template<typename CL>
-    struct CAPACITY_SUM{
+    struct CAPACITY_SUM {
         static_assert(CL::HEAD::IS_CARRIAGE::value, "CAPACITY_SUM only works for carriages");
         static const int value = CL::HEAD::CAPACITY::value + CAPACITY_SUM<typename CL::TAIL>::value;
     };
@@ -260,8 +275,34 @@ namespace cm {
 
 
     //HAKON
+    template<typename CL>
+    class LoadVisitor : public LoadVisitor<typename CL::TAIL> {
+    public:
+        LoadVisitor(Cargo::Ptr c) : LoadVisitor<typename CL::TAIL>(c) {};
+
+        virtual bool operator()(typename CL::HEAD &e) const {
+            return e.load(cargo);
+        }
+
+        using LoadVisitor<typename CL::TAIL>::operator();
+        using LoadVisitor<typename CL::TAIL>::cargo;
+    };
+
+    template<>
+    struct LoadVisitor<CL_NULL_ELEM> : public boost::static_visitor<bool> {
+    public:
+        LoadVisitor(Cargo::Ptr c) : cargo(c) {}
+
+        LoadVisitor(const LoadVisitor &other) : cargo(other.cargo) {}
+
+        virtual bool operator()() const { return false; }
+
+        Cargo::Ptr cargo;
+    };
+
 
     //FELIX
+
 
     /**********************************************************************************
      **                          carriage visitors                                   **
@@ -269,10 +310,12 @@ namespace cm {
     template<typename CL>
     class CanHoldVisitor : public CanHoldVisitor<typename CL::TAIL> {
     public:
-        CanHoldVisitor(Cargo::Ptr c): CanHoldVisitor<typename CL::TAIL>(c){};
-        virtual bool operator()(typename CL::HEAD& e) const{
+        CanHoldVisitor(Cargo::Ptr c) : CanHoldVisitor<typename CL::TAIL>(c) {};
+
+        virtual bool operator()(typename CL::HEAD &e) const {
             return e.canHold(cargo);
         }
+
         using CanHoldVisitor<typename CL::TAIL>::operator();
         using CanHoldVisitor<typename CL::TAIL>::cargo;
 
@@ -281,49 +324,53 @@ namespace cm {
     template<>
     class CanHoldVisitor<CL_NULL_ELEM> : public boost::static_visitor<bool> {
     public:
-        CanHoldVisitor(Cargo::Ptr c) : cargo(c){}
-        CanHoldVisitor(const CanHoldVisitor& other):cargo(other.cargo){}
+        CanHoldVisitor(Cargo::Ptr c) : cargo(c) {}
 
-        virtual bool operator()() const{return false;}
+        CanHoldVisitor(const CanHoldVisitor &other) : cargo(other.cargo) {}
+
+        virtual bool operator()() const { return false; }
+
         Cargo::Ptr cargo;
     };
 
     template<typename CL>
-    class GetTotalWeightVisitor : public GetTotalWeightVisitor<typename CL::TAIL>{
+    class GetTotalWeightVisitor : public GetTotalWeightVisitor<typename CL::TAIL> {
     public:
-        virtual int operator()(typename CL::HEAD& e) const{
+        virtual int operator()(typename CL::HEAD &e) const {
             return e.getTotalWeight();
         }
+
         using GetTotalWeightVisitor<typename CL::TAIL>::operator();
     };
 
     template<>
-    class GetTotalWeightVisitor<CL_NULL_ELEM>: public boost::static_visitor<int>{
+    class GetTotalWeightVisitor<CL_NULL_ELEM> : public boost::static_visitor<int> {
     public:
-        virtual int operator()() const{
+        virtual int operator()() const {
             return 0;
         }
     };
 
     template<typename CL>
-    class UnloadVisitor : public UnloadVisitor<typename CL::TAIL>{
+    class UnloadVisitor : public UnloadVisitor<typename CL::TAIL> {
     public:
-        virtual Cargo::Ptr operator()(typename CL::HEAD& e) const{
+        virtual Cargo::Ptr operator()(typename CL::HEAD &e) const {
             return e.unload();
         }
+
         using UnloadVisitor<typename CL::TAIL>::operator();
     };
 
     template<>
-    class UnloadVisitor<CL_NULL_ELEM> : public boost::static_visitor<Cargo::Ptr>{
+    class UnloadVisitor<CL_NULL_ELEM> : public boost::static_visitor<Cargo::Ptr> {
     public:
-        virtual Cargo::Ptr operator()() const{ return Cargo::Ptr();}
+        virtual Cargo::Ptr operator()() const { return Cargo::Ptr(); }
     };
 
 
     template<typename CL, typename T>
-    struct CARRIAGE_LIST_INITIALIZER{
-        static void initializeCarriageList(T& cl){
+    struct CARRIAGE_LIST_INITIALIZER {
+        static void initializeCarriageList(T &cl) {
             typename CL::HEAD elem;
             cl.push_back(elem);
             CARRIAGE_LIST_INITIALIZER<typename CL::TAIL, T>::initializeCarriageList(cl);
@@ -332,13 +379,13 @@ namespace cm {
 
 
     template<typename T>
-    struct CARRIAGE_LIST_INITIALIZER<CL_NULL_ELEM, T>{
-        static void initializeCarriageList(T& cl){}
+    struct CARRIAGE_LIST_INITIALIZER<CL_NULL_ELEM, T> {
+        static void initializeCarriageList(T &cl) {}
     };
 
     //template<template<int> typename Locomotive L, template<typename H, typename... REST> typename CARRIAGE_LIST CL>
     template<typename LOCOMOTIVE, typename CARRIAGE_L>
-    struct TrainImpl: public Train{
+    struct TrainImpl : public Train {
         typedef typename MAKE_BOOST_VARIANT<CARRIAGE_L>::VARIANT_TYPE carriagevariant_t;
         typedef std::list<carriagevariant_t> carriagelist_t;
         static const int capacity = CAPACITY_SUM<CARRIAGE_L>::value;
@@ -360,29 +407,32 @@ namespace cm {
             return ch;
         }
 
-        bool load(Cargo::Ptr){
-            //TODO: implement this function
-            return true;
+        bool load(Cargo::Ptr c) {
+            bool loaded = false;
+            for(auto carriage: carriages) {
+                loaded = boost::apply_visitor(LoadVisitor<CARRIAGE_L>(c), carriage);
+            }
+            return loaded;
         };
 
-        Cargo::Ptr unload(){
+        Cargo::Ptr unload() {
             Cargo::Ptr c;
-            for(auto carriage: carriages){
+            for (auto carriage: carriages) {
                 c = boost::apply_visitor(UnloadVisitor<CARRIAGE_L>(), carriage);
-                if(c) return c;
+                if (c) return c;
             }
             return c;
         }
 
-        int getTotalWeight(){
+        int getTotalWeight() {
             int total = 0;
-            for(auto carriage: carriages){
+            for (auto carriage: carriages) {
                 total += boost::apply_visitor(GetTotalWeightVisitor<CARRIAGE_L>(), carriage);
             }
             return total;
         }
 
-        int getCapacity(){
+        int getCapacity() {
             return capacity;
         }
 

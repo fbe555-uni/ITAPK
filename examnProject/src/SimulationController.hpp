@@ -8,16 +8,16 @@
 #include "trains.hpp"
 #include "CMS.hpp"
 
-namespace cm{class CMS;}
+namespace cm { class CMS; }
 
 class SimulationController {
 public:
 
     //Signals ***********************************************************
-    boost::signals2::signal<void(cm::Train::Ptr,cm::Station)> trainArrivedAtStation;
+    boost::signals2::signal<void(cm::Train::Ptr, cm::Station)> trainArrivedAtStation;
     boost::signals2::signal<void(cm::Train::Ptr)> trainUnloadedAndSend;
 
-    SimulationController(cm::CMS* cms, std::list<cm::Train::Ptr>);
+    SimulationController(cm::CMS *cms, std::list<cm::Train::Ptr>);
 
     //Slots *************************************************************
     struct ReceiveTrainAndUnload {
