@@ -68,17 +68,19 @@ void cm::CMS::SendTrainToPlatform(cm::Train::Ptr train){
             platform = best_platform;
         }
     }
-    if (best_platform.trainArrive(train))
-        trainAtPlatform(&best_platform);
-    std::cout << "*** CMS received train: " << train << " at " << best_platform << std::endl;
     if (temp_load == 0) {
-        if (station.isEmpty())
+        if (station.isEmpty()){
             decommissionedTrains.push_back(train);
-        else {
+            std::cout << "Decomissioned train: " << train;
+        }else {
             station.getTrainQueue()->push(train);
             std::cout << "Added " << train << " to queue" << std::endl;
         }
+    }else if (best_platform.trainArrive(train)) {
+        trainAtPlatform(&best_platform);
+        std::cout << "*** CMS received train: " << train << " at " << best_platform << std::endl;
     }
+
 }
 
 void cm::CMS::SendTrain(cm::Platform *platform) {
