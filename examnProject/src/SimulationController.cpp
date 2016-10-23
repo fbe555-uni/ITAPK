@@ -26,7 +26,7 @@ SimulationController::~SimulationController() {
 
 void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
     event_sc = std::thread([this] {EventHandler();});
-
+    std::cout << "Simulation controller starting." << std::endl;
     while (!trains.empty()){
         SendTrain(trains.front());
         trains.pop_front();
@@ -36,6 +36,7 @@ void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
 void SimulationController::pushEvent(SimulationController::Event e){
     std::lock_guard<std::recursive_mutex> lock(cond_m);
     eventQueue.push(e);
+    lock.~lock_guard();
     cond.notify_all();
 }
 
@@ -67,13 +68,15 @@ void SimulationController::EventHandler() {
     std::unique_lock<std::recursive_mutex> lock(cond_m, std::defer_lock);
     //TODO: add end condition
     while(true){
-        lock.lock();
+        //lock.lock();
         while (eventQueue.empty()) {
             wait(lock);
         }
         Event e = eventQueue.front();
         eventQueue.pop();
         lock.unlock();
+
+        std::cout << "Handling event in sc" << std::endl;
         boost::apply_visitor(event_visitor, e);
     }
 }

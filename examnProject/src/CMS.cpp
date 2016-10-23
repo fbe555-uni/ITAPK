@@ -44,8 +44,10 @@ std::string cm::CMS::getID() const {
 
 
 void cm::CMS::pushEvent(cm::CMS::Event e){
+    //std::cout << "ready to lock for pushEvent" << std::endl;
     std::lock_guard<std::recursive_mutex> lock(cond_m);
     eventQueue.push(e);
+    lock.~lock_guard();
     cond.notify_all();
 }
 
@@ -114,7 +116,7 @@ void cm::CMS::EventHandler() {
     std::unique_lock<std::recursive_mutex> lock(cond_m, std::defer_lock);
     //TODO: add end condition
     while(true){
-        lock.lock();
+        //lock.lock();
         while (eventQueue.empty()) {
             wait(lock);
         }

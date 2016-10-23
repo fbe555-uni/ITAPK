@@ -44,16 +44,13 @@ int main() {
     */
     std::list<cm::Train::Ptr> trains;
     trains.push_back(cm::Train::Ptr(new Train1_t("Train of the West")));
-    //trains.push_back(cm::Train::Ptr(new Train1_t("Tøffe")));
-    //trains.push_back(cm::Train::Ptr(new Train2_t("Eastbound and down")));
-    //trains.push_back(cm::Train::Ptr(new Train2_t("Thomas")));
-
-
+    trains.push_back(cm::Train::Ptr(new Train1_t("Tøffe")));
+    trains.push_back(cm::Train::Ptr(new Train2_t("Eastbound and down")));
+    trains.push_back(cm::Train::Ptr(new Train2_t("Thomas")));
     cm::CMS cms("Haste Station", 2);
-
+    cms.StartCMS();
     SimulationController sc(&cms);
     sc.StartSimulation(trains);
-    cms.StartCMS();
     while(true);
     return 0;
 }
