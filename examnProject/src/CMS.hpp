@@ -51,10 +51,14 @@ namespace cm {
         void Status() const;
         std::string getID() const;
 
+        bool HasCargo();
         //receive a train
         void ReceiveTrain(cm::Train::Ptr);
 
+        int getNumDecommissionedTrains();
+
     private:
+        std::list<Train::Ptr> decommissionedTrains;
         std::string ID;
         SimulationController *SimControl;
         cm::Station station;
@@ -78,6 +82,10 @@ namespace cm {
 
         std::queue<Event> eventQueue;
         CmsHandleEventVisitor event_visitor;
+
+        Platform *calculateBestPlatform(Train::Ptr);
+
+
     };
 }
 #endif //CMS_CMS_H

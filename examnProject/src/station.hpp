@@ -55,6 +55,10 @@ namespace cm {
         std::list<Platform> *getPlatforms();
         std::queue<cm::Train::Ptr>* getTrainQueue();
         bool isFull();
+
+        bool isEmpty();
+
+        bool HasCargo();
     private:
         std::queue<cm::Train::Ptr> trainQueue;
         std::list<Platform> platforms;

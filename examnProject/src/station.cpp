@@ -45,6 +45,24 @@ bool cm::Station::isFull() {
     return true;
 }
 
+bool cm::Station::isEmpty() {
+    bool empty = true;
+    for (auto platform:platforms) {
+        if (!platform.isFree())
+            empty = false;
+    }
+    return empty;
+}
+
+bool cm::Station::HasCargo() {
+    bool hasCargo = false;
+    for (auto platform:platforms) {
+        if (!platform.getCargoList().empty())
+            return true;
+    }
+    return hasCargo;
+}
+
 
 void cm::Platform::Status() const{
     std::cout << "Cargo on platform: " << std::endl;

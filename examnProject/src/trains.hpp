@@ -56,12 +56,15 @@ namespace cm {
 
         virtual int getCapacity() = 0;
 
+        virtual int calculatePossibleLoad(std::list<Cargo::Ptr>) = 0;
+
         int getID() { return _id; }
 
         std::string getName() { return _name; }
 
-        bool isEmpty(){return getTotalWeight() == 0;}
-        bool isFull(){return getTotalWeight()>= getCapacity();}
+        bool isEmpty() { return getTotalWeight() == 0; }
+
+        bool isFull() { return getTotalWeight() >= getCapacity(); }
 
     protected:
         std::mutex mut;
@@ -78,7 +81,7 @@ namespace cm {
     }
 
     inline std::ostream &operator<<(std::ostream &out, Train::Ptr &train_ptr) {
-        if(train_ptr) out << *train_ptr;
+        if (train_ptr) out << *train_ptr;
         else out << "!!empty train pointer!!";
         return out;
     }
@@ -208,6 +211,7 @@ namespace cm {
             return *this;
         }
 
+
         bool canHold(Cargo::Ptr c) const {
             int total = getTotalWeight();
             if (getTotalWeight() + c->weight > carriage_cap) return false;
@@ -236,6 +240,10 @@ namespace cm {
             int load = 0;
             std::for_each(cargo.begin(), cargo.end(), [&load](Cargo::Ptr c) { load += c->weight; });
             return load;
+        }
+
+        int getCapacity() const {
+            return carriage_cap;
         }
 
         std::list<Cargo::Ptr> cargo;
@@ -376,6 +384,24 @@ namespace cm {
         virtual Cargo::Ptr operator()() const { return Cargo::Ptr(); }
     };
 
+    template<typename CL>
+    class GetCapacityVisitor : public GetCapacityVisitor<typename CL::TAIL> {
+    public:
+        virtual int operator()(typename CL::HEAD &e) const {
+            return e.getCapacity();
+        }
+
+        using GetCapacityVisitor<typename CL::TAIL>::operator();
+    };
+
+    template<>
+    class GetCapacityVisitor<CL_NULL_ELEM> : public boost::static_visitor<int> {
+    public:
+        virtual int operator()() const {
+            return 0;
+        }
+    };
+
 
     template<typename CL, typename T>
     struct CARRIAGE_LIST_INITIALIZER {
@@ -419,7 +445,7 @@ namespace cm {
         bool load(Cargo::Ptr c) {
             mut.lock();
             bool loaded = false;
-            for(auto carriage: carriages) {
+            for (auto carriage: carriages) {
                 loaded = boost::apply_visitor(LoadVisitor<CARRIAGE_L>(c), carriage);
             }
             mut.unlock();
@@ -448,6 +474,23 @@ namespace cm {
         }
 
         int getCapacity() { return capacity; }
+
+        int calculatePossibleLoad(std::list<Cargo::Ptr> cargo) {
+            assert(this->isEmpty());
+            int total_loaded = 0;
+            for (auto carriage:carriages) {
+                int loaded = 0;
+                for (auto c:cargo) {
+                    if (boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), carriage) &&
+                        c->weight + loaded <= boost::apply_visitor(GetCapacityVisitor<CARRIAGE_L>(), carriage)) {
+                        loaded += c->weight;
+                    }
+                }
+                total_loaded += loaded;
+            }
+            return total_loaded;
+        }
+
     private:
         static const int capacity = CAPACITY_SUM<CARRIAGE_L>::value;
         static_assert(LOCOMOTIVE::capacity >= capacity,
