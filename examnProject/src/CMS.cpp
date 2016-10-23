@@ -8,25 +8,32 @@ void cm::CMS::SetSimulationController(SimulationController *s) {
     SimControl = s;
 
     SimControl->trainArrivedAtStation.connect([&](cm::Train::Ptr t) {
-        ReceiveTrain(t);
+        eventQueue.push(Event_TrainAtStation(t));
+    });
+    trainAtPlatform.connect([&](cm::Platform* p){
+        eventQueue.push(Event_TrainAtPlatform(p));
     });
     trainFullyLoaded.connect([&](cm::Platform *p) {
-        SendTrain(p);
+        eventQueue.push(Event_TrainFullyLoaded(p));
     });
-    trainLeftStation.connect([&](cm::Train::Ptr) {
-        DequeueTrains();
+    trainLeftStation.connect([&](cm::Train::Ptr t) {
+        eventQueue.push(Event_TrainLeftStation());
     });
 }
 
-cm::CMS::CMS(std::string station_name, int num_platforms) : station(station_name, num_platforms) {
-    ID = *station.getName() + " -- Cargo controller";
+cm::CMS::CMS(std::string station_name, int num_platforms) : station(station_name, num_platforms), event_visitor(this){
+    ID = station.getName() + " -- Cargo controller";
+}
+
+void cm::CMS::Status() const {
+    station.Status();
 }
 
 std::string cm::CMS::getID() const {
     return ID;
 }
 
-void cm::CMS::ReceiveTrain(cm::Train::Ptr train) {
+void cm::CMS::SendTrainToPlatform(cm::Train::Ptr train){
     if (station.isFull()) {
         station.getTrainQueue()->push(train);
         std::cout << "Added " << train << " to queue" << std::endl;
@@ -37,13 +44,13 @@ void cm::CMS::ReceiveTrain(cm::Train::Ptr train) {
     auto platforms = station.getPlatforms();
     for (auto &platform:*platforms) {
         if (platform.trainArrive(train))
-            LoadTrain(&platform);
+            trainAtPlatform(&platform);
     }
 }
 
-
 void cm::CMS::SendTrain(cm::Platform *platform) {
     std::cout << "*** CMS send " << *platform->getTrain() << " from: " << *platform << std::endl;
+    //TODO: vores segfault kommer herfra fordi trainDepart returnerer en tom train::ptr
     trainLeftStation(platform->trainDepart());
     std::cout << std::endl;
 }
@@ -68,7 +75,7 @@ void cm::CMS::DequeueTrains() {
 }
 
 void cm::CMS::EventHandler() {
-    boost::apply_visitor(eventQueue.front());
+    boost::apply_visitor(event_visitor, eventQueue.front());
     eventQueue.pop();
 }
 
@@ -80,11 +87,11 @@ void cm::CMS::StartCMS() {
 cm::CMS::CmsHandleEventVisitor::CmsHandleEventVisitor(cm::CMS* cms): _cms(cms){}
 
 void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainAtStation& e) const {
-    _cms->ReceiveTrain(e.train);
+    _cms->SendTrainToPlatform(e.train);
 }
 
 void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainAtPlatform& e) const {
-    //start loading thread;
+    std::thread([this, e]{_cms->LoadTrain(e.platform);});
 }
 
 void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainFullyLoaded& e) const {

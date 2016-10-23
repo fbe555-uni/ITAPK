@@ -60,6 +60,9 @@ namespace cm {
 
         std::string getName() { return _name; }
 
+        bool isEmpty(){return getTotalWeight() == 0;}
+        bool isFull(){return getTotalWeight()>= getCapacity();}
+
     protected:
         std::mutex mut;
 
@@ -75,7 +78,8 @@ namespace cm {
     }
 
     inline std::ostream &operator<<(std::ostream &out, Train::Ptr &train_ptr) {
-        out << *train_ptr;
+        if(train_ptr) out << *train_ptr;
+        else out << "!!empty train pointer!!";
         return out;
     }
 

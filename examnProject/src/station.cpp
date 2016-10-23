@@ -5,7 +5,7 @@
 
 #include "station.hpp"
 
-void cm::Station::Status() {
+void cm::Station::Status() const{
     int i = 0;
     for (auto &item:platforms) {
         std::cout << "Status from " << item << ":" << std::endl;
@@ -27,8 +27,8 @@ std::list<cm::Platform> *cm::Station::getPlatforms() {
     return &platforms;
 }
 
-std::string *cm::Station::getName() {
-    return &name;
+std::string cm::Station::getName() const{
+    return name;
 }
 
 std::queue<cm::Train::Ptr> *cm::Station::getTrainQueue() {
@@ -46,7 +46,7 @@ bool cm::Station::isFull() {
 }
 
 
-void cm::Platform::Status() {
+void cm::Platform::Status() const{
     std::cout << "Cargo on platform: " << std::endl;
     for (auto item:Platform::_cargo) {
         //TODO this reference i do not understand; at item
@@ -82,7 +82,7 @@ cm::Train::Ptr cm::Platform::trainDepart() {
 
 int cm::Platform::num_id = 0;
 
-std::string cm::Platform::getID() {
+std::string cm::Platform::getID() const{
     return ID;
 }
 

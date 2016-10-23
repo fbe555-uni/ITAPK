@@ -19,8 +19,8 @@ namespace cm {
         Platform();
         //Platform(const cm::Platform&);
 
-        void Status(); // Tells if a platform is occupied.
-        std::string getID();
+        void Status() const; // Tells if a platform is occupied.
+        std::string getID() const;
 
         cm::Train::Ptr getTrain();
 
@@ -39,7 +39,7 @@ namespace cm {
         std::list<cm::Cargo::Ptr> _cargo;
     };
 
-    inline std::ostream &operator<<(std::ostream &out, Platform &platform) {
+    inline std::ostream &operator<<(std::ostream &out, const Platform &platform) {
         out << platform.getID();
         return out;
     }
@@ -49,8 +49,8 @@ namespace cm {
     public:
         Station(std::string, int);
 
-        void Status(); // Lists platforms and their status
-        std::string* getName();
+        void Status() const; // Lists platforms and their status
+        std::string getName() const;
 
         std::list<Platform> *getPlatforms();
         std::queue<cm::Train::Ptr>* getTrainQueue();
