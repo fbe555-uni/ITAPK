@@ -31,14 +31,16 @@ public:
 
     //start event handler thread
     SimulationController(cm::CMS *cms);
+    ~SimulationController();
 
     void StartSimulation(std::list<cm::Train::Ptr> &);
 
-    void ReceiveTrain(cm::Train::Ptr);
+    void pushEvent(Event e);
 private:
     cm::CMS *cms_;
 
     void EventHandler();
+    void ReceiveTrain(cm::Train::Ptr);
     void UnloadTrain(cm::Train::Ptr);
     void SendTrain(cm::Train::Ptr);
 
@@ -53,6 +55,9 @@ private:
 
     std::queue<Event> eventQueue;
     ScHandleEventVisitor event_visitor;
+    std::thread event_sc;
+    std::condition_variable cond;
+    std::recursive_mutex cond_m;
 };
 
 

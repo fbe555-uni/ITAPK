@@ -7,6 +7,7 @@
 
 
 #include <boost/signals2.hpp>
+#include <condition_variable>
 #include "trains.hpp"
 #include "station.hpp"
 #include "SimulationController.hpp"
@@ -39,20 +40,22 @@ namespace cm {
         //*********************************************************************************
 
         //constructor:
+        //TODO: rule of 5 this mother F***er
         CMS(std::string, int);
+        ~CMS();
 
         //bind to a simulation controller:
         void SetSimulationController(SimulationController*);
 
         // start thread event handler:
         void StartCMS();
+        void StopCMS();
 
         //state and status functions:
         void Status() const;
         std::string getID() const;
 
-        //receive a train
-        void ReceiveTrain(cm::Train::Ptr);
+        void pushEvent(Event e);
 
     private:
         std::string ID;
@@ -78,6 +81,9 @@ namespace cm {
 
         std::queue<Event> eventQueue;
         CmsHandleEventVisitor event_visitor;
+        std::thread event_cms;
+        std::condition_variable cond;
+        std::recursive_mutex cond_m;
     };
 }
 #endif //CMS_CMS_H

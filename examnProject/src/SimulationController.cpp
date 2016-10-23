@@ -6,27 +6,37 @@
 #include "SimulationController.hpp"
 
 //TODO fix train pointers in this function and the one below (simulationcontroller)
-SimulationController::SimulationController(cm::CMS *cms) : cms_(cms), event_visitor(this) {
+SimulationController::SimulationController(cm::CMS *cms)
+            : cms_(cms),
+              event_visitor(this),
+              cond(),
+              cond_m()
+{
     cms_->SetSimulationController(this);
     cms_->trainLeftStation.connect([&](cm::Train::Ptr t) {
         ReceiveTrain(t);
     });
     trainUnloaded.connect([&](cm::Train::Ptr t) {
-        eventQueue.push(Event_TrainUnloaded(t));
+        pushEvent(Event_TrainUnloaded(t));
     });
+}
+SimulationController::~SimulationController() {
+    event_sc.join();
 }
 
 void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
-    std::thread event_sc;
     event_sc = std::thread([this] {EventHandler();});
 
     while (!trains.empty()){
         SendTrain(trains.front());
         trains.pop_front();
     }
+}
 
-    //TODO: detect end of simulation
-    for (;;);
+void SimulationController::pushEvent(SimulationController::Event e){
+    std::lock_guard<std::recursive_mutex> lock(cond_m);
+    eventQueue.push(e);
+    cond.notify_all();
 }
 
 void SimulationController::SendTrain(cm::Train::Ptr train) {
@@ -37,7 +47,7 @@ void SimulationController::SendTrain(cm::Train::Ptr train) {
 
 void SimulationController::ReceiveTrain(cm::Train::Ptr train) {
     std::cout << "*** Simulation Controller received : " << train << std::endl;
-    eventQueue.push(Event_TrainArrived(train));
+    pushEvent(Event_TrainArrived(train));
 }
 
 void SimulationController::UnloadTrain(cm::Train::Ptr train) {
@@ -54,14 +64,25 @@ void SimulationController::UnloadTrain(cm::Train::Ptr train) {
 }
 
 void SimulationController::EventHandler() {
-    boost::apply_visitor(event_visitor, eventQueue.front());
-    eventQueue.pop();
+    std::unique_lock<std::recursive_mutex> lock(cond_m, std::defer_lock);
+    //TODO: add end condition
+    while(true){
+        lock.lock();
+        while (eventQueue.empty()) {
+            wait(lock);
+        }
+        Event e = eventQueue.front();
+        eventQueue.pop();
+        lock.unlock();
+        boost::apply_visitor(event_visitor, e);
+    }
 }
 
 SimulationController::ScHandleEventVisitor::ScHandleEventVisitor(SimulationController* sc): _sc(sc){}
 void SimulationController::ScHandleEventVisitor::operator()(const Event_TrainArrived& e) const{
     //start unloading train in a new thread, signaling train unloaded when done.
-    std::thread([this, e]{_sc->UnloadTrain(e.train);});
+    std::thread t([this, e]{_sc->UnloadTrain(e.train);});
+    t.detach();
 }
 void SimulationController::ScHandleEventVisitor::operator()(const Event_TrainUnloaded& e) const{
     _sc->SendTrain(e.train);

@@ -8,21 +8,30 @@ void cm::CMS::SetSimulationController(SimulationController *s) {
     SimControl = s;
 
     SimControl->trainArrivedAtStation.connect([&](cm::Train::Ptr t) {
-        eventQueue.push(Event_TrainAtStation(t));
+        pushEvent(Event_TrainAtStation(t));
     });
     trainAtPlatform.connect([&](cm::Platform* p){
-        eventQueue.push(Event_TrainAtPlatform(p));
+        pushEvent(Event_TrainAtPlatform(p));
     });
     trainFullyLoaded.connect([&](cm::Platform *p) {
-        eventQueue.push(Event_TrainFullyLoaded(p));
+        pushEvent(Event_TrainFullyLoaded(p));
     });
     trainLeftStation.connect([&](cm::Train::Ptr t) {
-        eventQueue.push(Event_TrainLeftStation());
+        pushEvent(Event_TrainLeftStation());
     });
 }
 
-cm::CMS::CMS(std::string station_name, int num_platforms) : station(station_name, num_platforms), event_visitor(this){
+cm::CMS::CMS(std::string station_name, int num_platforms)
+            : station(station_name, num_platforms),
+              event_visitor(this),
+              cond(),
+              cond_m()
+{
     ID = station.getName() + " -- Cargo controller";
+}
+
+cm::CMS::~CMS(){
+    event_cms.join();
 }
 
 void cm::CMS::Status() const {
@@ -31,6 +40,13 @@ void cm::CMS::Status() const {
 
 std::string cm::CMS::getID() const {
     return ID;
+}
+
+
+void cm::CMS::pushEvent(cm::CMS::Event e){
+    std::lock_guard<std::recursive_mutex> lock(cond_m);
+    eventQueue.push(e);
+    cond.notify_all();
 }
 
 void cm::CMS::SendTrainToPlatform(cm::Train::Ptr train){
@@ -45,6 +61,7 @@ void cm::CMS::SendTrainToPlatform(cm::Train::Ptr train){
     for (auto &platform:*platforms) {
         if (platform.trainArrive(train))
             trainAtPlatform(&platform);
+            break;
     }
 }
 
@@ -75,13 +92,26 @@ void cm::CMS::DequeueTrains() {
 }
 
 void cm::CMS::EventHandler() {
-    boost::apply_visitor(event_visitor, eventQueue.front());
-    eventQueue.pop();
+    std::unique_lock<std::recursive_mutex> lock(cond_m, std::defer_lock);
+    //TODO: add end condition
+    while(true){
+        lock.lock();
+        while (eventQueue.empty()) {
+            wait(lock);
+        }
+        Event e = eventQueue.front();
+        eventQueue.pop();
+        lock.unlock();
+        boost::apply_visitor(event_visitor, e);
+    }
 }
 
 void cm::CMS::StartCMS() {
-    std::thread event_cms;
     event_cms = std::thread([this] { EventHandler(); });
+}
+
+void cm::CMS::StopCMS() {
+    event_cms.join();
 }
 
 cm::CMS::CmsHandleEventVisitor::CmsHandleEventVisitor(cm::CMS* cms): _cms(cms){}
@@ -91,7 +121,8 @@ void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainAtStation& 
 }
 
 void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainAtPlatform& e) const {
-    std::thread([this, e]{_cms->LoadTrain(e.platform);});
+    std::thread t([this, e]{_cms->LoadTrain(e.platform);});
+    t.detach();
 }
 
 void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainFullyLoaded& e) const {
