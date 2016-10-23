@@ -88,9 +88,6 @@ namespace cm {
         std::queue<Event> eventQueue;
         CmsHandleEventVisitor event_visitor;
 
-        Platform *calculateBestPlatform(Train::Ptr);
-
-
         std::thread event_cms;
         std::condition_variable cond;
         std::recursive_mutex cond_m;
