@@ -58,16 +58,28 @@ namespace cm {
 
         virtual int calculatePossibleLoad(std::list<Cargo::Ptr>) = 0;
 
-        int getID() { return _id; }
+        int getID() {
+            std::lock_guard<std::recursive_mutex> lock(mut);
+            return _id;
+        }
 
-        std::string getName() { return _name; }
+        std::string getName() {
+            std::lock_guard<std::recursive_mutex> lock(mut);
+            return _name;
+        }
 
-        bool isEmpty() { return getTotalWeight() == 0; }
+        bool isEmpty() {
+            std::lock_guard<std::recursive_mutex> lock(mut);
+            return getTotalWeight() == 0;
+        }
 
-        bool isFull() { return getTotalWeight() >= getCapacity(); }
+        bool isFull() {
+            std::lock_guard<std::recursive_mutex> lock(mut);
+            return getTotalWeight() >= getCapacity();
+        }
 
     protected:
-        std::mutex mut;
+        std::recursive_mutex mut;
 
     private:
         int _id;
@@ -431,51 +443,51 @@ namespace cm {
 
         //TODO: Rule of 5
         bool canHold(Cargo::Ptr c) {
-            mut.lock();
+            std::lock_guard<std::recursive_mutex> lock(mut);
             bool ch = false;
             std::for_each(carriages.begin(),
                           carriages.end(),
                           [&c, &ch](carriagevariant_t cv) {
                               ch = ch || boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), cv);
                           });
-            mut.unlock();
             return ch;
         }
 
         bool load(Cargo::Ptr c) {
-            mut.lock();
+            std::lock_guard<std::recursive_mutex> lock(mut);
             bool loaded = false;
             for (auto carriage: carriages) {
                 loaded = boost::apply_visitor(LoadVisitor<CARRIAGE_L>(c), carriage);
             }
-            mut.unlock();
             return loaded;
         };
 
         Cargo::Ptr unload() {
-            mut.lock();
+            std::lock_guard<std::recursive_mutex> lock(mut);
             Cargo::Ptr c;
             for (auto carriage: carriages) {
                 c = boost::apply_visitor(UnloadVisitor<CARRIAGE_L>(), carriage);
                 if (c) return c;
             }
-            mut.unlock();
             return c;
         }
 
         int getTotalWeight() {
-            mut.lock();
+            std::lock_guard<std::recursive_mutex> lock(mut);
             int total = 0;
             for (auto carriage: carriages) {
                 total += boost::apply_visitor(GetTotalWeightVisitor<CARRIAGE_L>(), carriage);
             }
-            mut.unlock();
             return total;
         }
 
-        int getCapacity() { return capacity; }
+        int getCapacity() {
+            std::lock_guard<std::recursive_mutex> lock(mut);
+            return capacity;
+        }
 
         int calculatePossibleLoad(std::list<Cargo::Ptr> cargo) {
+            std::lock_guard<std::recursive_mutex> lock(mut);
             assert(this->isEmpty());
             int total_loaded = 0;
             for (auto carriage:carriages) {

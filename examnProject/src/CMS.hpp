@@ -11,12 +11,14 @@
 #include "trains.hpp"
 #include "station.hpp"
 #include "SimulationController.hpp"
+#include "ThreadSafeCout.hpp"
 
 class SimulationController;
 
 
 namespace cm {
     struct Event_TrainAtStation{
+
         Event_TrainAtStation(Train::Ptr t) : train(t){}
         Train::Ptr train;
     };

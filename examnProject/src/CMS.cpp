@@ -44,7 +44,6 @@ std::string cm::CMS::getID() const {
 
 
 void cm::CMS::pushEvent(cm::CMS::Event e){
-    //std::cout << "ready to lock for pushEvent" << std::endl;
     std::lock_guard<std::recursive_mutex> lock(cond_m);
     eventQueue.push(e);
     lock.~lock_guard();
@@ -54,7 +53,7 @@ void cm::CMS::pushEvent(cm::CMS::Event e){
 void cm::CMS::SendTrainToPlatform(cm::Train::Ptr train){
     if (station.isFull()) {
         station.getTrainQueue()->push(train);
-        std::cout << "Added " << train << " to queue" << std::endl;
+        tp::print("Added ", train, " to queue", std::endl);
         //TODO add conditional to wait for free space
         return;
     }
@@ -73,31 +72,31 @@ void cm::CMS::SendTrainToPlatform(cm::Train::Ptr train){
     if (temp_load == 0) {
         if (station.isEmpty()){
             decommissionedTrains.push_back(train);
-            std::cout << "Decomissioned train: " << train;
+            tp::print("Decomissioned train: ", train);
         }else {
             station.getTrainQueue()->push(train);
-            std::cout << "Added " << train << " to queue" << std::endl;
+            tp::print("Added ", train, " to queue", std::endl);
         }
     }else if (best_platform.trainArrive(train)) {
         trainAtPlatform(&best_platform);
-        std::cout << "*** CMS received train: " << train << " at " << best_platform << std::endl;
+        tp::print("*** CMS received train: ", train, " at ", best_platform, std::endl);
     }
 
 }
 
 void cm::CMS::SendTrain(cm::Platform *platform) {
-    std::cout << "*** CMS send " << *platform->getTrain() << " from: " << *platform << std::endl;
+    tp::print("*** CMS send ", *platform->getTrain(), " from: ", *platform, std::endl);
     //TODO: vores segfault kommer herfra fordi trainDepart returnerer en tom train::ptr
     trainLeftStation(platform->trainDepart());
-    std::cout << std::endl;
+
 }
 
 
 void cm::CMS::LoadTrain(cm::Platform *platform) {
-    std::cout << "*** CMS loading " << *platform->getTrain() << " at: " << *platform << std::endl;
+    tp::print("*** CMS loading ", *platform->getTrain(), " at: ", *platform, std::endl);
     std::for_each(platform->getCargoList().begin(), platform->getCargoList().end(),
                   [&platform](Cargo::Ptr c) { platform->getTrain()->load(c); });
-    std::cout << "*** CMS loaded " << *platform->getTrain() << " at: " << *platform << std::endl;
+    tp::print("*** CMS loaded ", *platform->getTrain(), " at: ", *platform, std::endl);
     trainFullyLoaded(platform);
 }
 
@@ -107,7 +106,7 @@ void cm::CMS::DequeueTrains() {
         station.getTrainQueue()->pop();
         if (platform.trainArrive(train)) {
             LoadTrain(&platform);
-            std::cout << "Removed " << *train << " from queue" << std::endl;
+            tp::print("Removed ", *train, " from queue", std::endl);
         }
     }
 }
@@ -120,6 +119,7 @@ void cm::CMS::EventHandler() {
         while (eventQueue.empty()) {
             wait(lock);
         }
+        lock.lock();
         Event e = eventQueue.front();
         eventQueue.pop();
         lock.unlock();

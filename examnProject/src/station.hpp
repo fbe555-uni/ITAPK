@@ -7,6 +7,7 @@
 #include <queue>
 #include "trains.hpp"
 #include "cargo.hpp"
+#include "ThreadSafeCout.hpp"
 
 #ifndef CMS_STATION_H
 #define CMS_STATION_H

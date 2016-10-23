@@ -10,6 +10,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/cargo.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/SimulationController.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/CMS.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/ThreadSafeCout.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/SimulationController.hpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/trains.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />

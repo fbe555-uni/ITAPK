@@ -8,7 +8,7 @@
 void cm::Station::Status() const{
     int i = 0;
     for (auto &item:platforms) {
-        std::cout << "Status from " << item << ":" << std::endl;
+        tp::print("Status from ", item, ":", std::endl);
         item.Status();
     }
 }
@@ -65,12 +65,12 @@ bool cm::Station::HasCargo() {
 
 
 void cm::Platform::Status() const{
-    std::cout << "Cargo on platform: " << std::endl;
+    tp::print("Cargo on platform: ", std::endl);
     for (auto item:Platform::_cargo) {
         //TODO this reference i do not understand; at item
-        std::cout << item << std::endl;
+        tp::print(item, std::endl);
     }
-    std::cout << "Train on platform: " << *_train << std::endl;
+    tp::print("Train on platform: ", *_train, std::endl);
 }
 
 cm::Platform::Platform() {

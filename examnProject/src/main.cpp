@@ -28,13 +28,6 @@ int main() {
     trainList.push_back(cm::Train::Ptr(new Train2_t("Second train")));
     trainList.push_back(cm::Train::Ptr(new Train1_t("Third train")));
 
-    std::cout << "Can \"" << trainList[0] << "\" take 50kg coal?: "
-              << std::to_string(trainList[0]->canHold(std::make_shared<cm::Coal>(50))) << std::endl;
-    std::cout << "Can \"" << trainList[1] << "\" take 200kg grains?: "
-              << std::to_string(trainList[1]->canHold(std::make_shared<cm::Grains>(200))) << std::endl;
-    std::cout << "Can \"" << trainList[2] << "\" take 50kg cows?: "
-              << std::to_string(trainList[2]->canHold(std::make_shared<cm::Cows>(50))) << std::endl;
-
     cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep> > mixedCarriage = cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep> > ();
     //cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep, cm::Cows> > illegalCarriage1 = cm::Carriage<100, cm::CARGO_LIST<cm::Timber, cm::Grains, cm::Sheep, cm::Cows> > ();
     //cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water> > tankerCarriage = cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water> >();
