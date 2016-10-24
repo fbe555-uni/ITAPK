@@ -224,6 +224,8 @@ namespace cm{
         template<typename T>
         inline static bool value(std::shared_ptr<T>& c){
             //std::cout << typeid(*c).name() << " " << typeid(typename CL::HEAD()).name()<< std::endl;;
+            Cargo* c_ptr = c.get();
+            typename CL::HEAD* other_ptr = dynamic_cast<typename CL::HEAD*>(c.get());
             if(dynamic_cast<typename CL::HEAD*>(c.get())){
                 //std::cout << "returned true" << std::endl;
                 return true;

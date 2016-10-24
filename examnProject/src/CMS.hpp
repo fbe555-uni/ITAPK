@@ -64,6 +64,8 @@ namespace cm {
 
         int getNumDecommissionedTrains();
 
+        void addCargo(const std::list<Cargo::Ptr>& cargo, int platformNumber = -1);
+
     private:
         std::list<Train::Ptr> decommissionedTrains;
         std::string ID;

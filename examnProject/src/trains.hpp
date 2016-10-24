@@ -197,7 +197,6 @@ namespace cm {
         typedef boost::mpl::bool_<true> IS_CARRIAGE;
 
         typedef IS_A_VALID_CARGO_LIST<CL> META_INFO;
-        typedef CL CARGO_LIST;
 
         typedef boost::mpl::int_<cap> CAPACITY;
 
@@ -227,10 +226,14 @@ namespace cm {
         bool canHold(Cargo::Ptr c) const {
             int total = getTotalWeight();
             if (getTotalWeight() + c->weight > carriage_cap) return false;
-            if (CL_RUNTIME_CONTAINS<CL>::value(c)) return true;
+            bool tmp = CL_RUNTIME_CONTAINS<CL>::value(c);
+            if (tmp) return true;
             return false;
         }
 
+        bool acceptableType(Cargo::Ptr c) const{
+
+        }
         bool load(Cargo::Ptr c) {
             if (canHold(c)) {
                 std::this_thread::sleep_for(std::chrono::seconds(c->loadTime));
@@ -490,11 +493,12 @@ namespace cm {
             std::lock_guard<std::recursive_mutex> lock(mut);
             assert(this->isEmpty());
             int total_loaded = 0;
-            for (auto carriage:carriages) {
+            for (carriagevariant_t& carriage:carriages) {
                 int loaded = 0;
                 for (auto c:cargo) {
-                    if (boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), carriage) &&
-                        c->weight + loaded <= boost::apply_visitor(GetCapacityVisitor<CARRIAGE_L>(), carriage)) {
+                    bool typeCompat = boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), carriage);
+                    bool weightCompat = c->weight + loaded <= boost::apply_visitor(GetCapacityVisitor<CARRIAGE_L>(), carriage);
+                    if(typeCompat && weightCompat) {
                         loaded += c->weight;
                     }
                 }

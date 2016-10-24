@@ -4,11 +4,18 @@
 
 
 #include "station.hpp"
+template<typename T, typename ... R>
+void test(T first, R... rest){
+    test(rest...);
+};
 
+void test(){
+    std::cout << "Rock bottom";
+}
 void cm::Station::Status() const{
     int i = 0;
     for (auto &item:platforms) {
-        tp::print("Status from ", item, ":", std::endl);
+        tp::print("Status from ", item, ":", "\n\r");
         item.Status();
     }
 }
@@ -65,12 +72,12 @@ bool cm::Station::HasCargo() {
 
 
 void cm::Platform::Status() const{
-    tp::print("Cargo on platform: ", std::endl);
+    tp::print("Cargo on platform: ", "\n\r");
     for (auto item:Platform::_cargo) {
         //TODO this reference i do not understand; at item
-        tp::print(item, std::endl);
+        tp::print(item, "\n\r");
     }
-    tp::print("Train on platform: ", *_train, std::endl);
+    tp::print("Train on platform: ", _train, "\n\r");
 }
 
 cm::Platform::Platform() {
@@ -110,6 +117,14 @@ cm::Train::Ptr cm::Platform::getTrain() {
 
 std::list<cm::Cargo::Ptr> cm::Platform::getCargoList() {
     return _cargo;
+}
+
+
+void cm::Platform::addCargo(const std::list<cm::Cargo::Ptr>& cargo){
+    for(auto c : cargo){
+        //make a new copy of each element in the list
+        _cargo.push_back(cm::Cargo::Ptr(new cm::Cargo(*c)));
+    }
 }
 
 bool cm::Platform::isFree() {

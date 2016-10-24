@@ -26,7 +26,7 @@ SimulationController::~SimulationController() {
 
 void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
     event_sc = std::thread([this] {EventHandler();});
-    tp::print("Simulation controller starting.", std::endl);
+    tp::print("Simulation controller starting.");
     while (!trains.empty()){
         SendTrain(trains.front());
         trains.pop_front();
@@ -42,12 +42,12 @@ void SimulationController::pushEvent(SimulationController::Event e){
 
 void SimulationController::SendTrain(cm::Train::Ptr train) {
     //TODO MAYBE add composer StringStream to all strings
-    tp::print("*** Simulation Controller send ", train, " to ", cms_->getID(), std::endl);
+    tp::print("*** Simulation Controller send ", train, " to ", cms_->getID());
     trainArrivedAtStation(train);
 }
 
 void SimulationController::ReceiveTrain(cm::Train::Ptr train) {
-    tp::print("*** Simulation Controller received : ", train, std::endl);
+    tp::print("*** Simulation Controller received : ", train);
     pushEvent(Event_TrainArrived(train));
 }
 
@@ -56,11 +56,11 @@ void SimulationController::UnloadTrain(cm::Train::Ptr train) {
         tp::print("!!Received null train for unloading!!");
         return;
     }
-    tp::print("*** Simulation Controller unloading :", train, std::endl);
+    tp::print("*** Simulation Controller unloading :", train);
     while(!train->isEmpty()){
         train->unload();
     }
-    tp::print("*** Simulation Controller unloaded : ", train, std::endl);
+    tp::print("*** Simulation Controller unloaded : ", train);
     trainUnloaded(train);
 }
 
@@ -77,7 +77,7 @@ void SimulationController::EventHandler() {
         eventQueue.pop();
         lock.unlock();
 
-        tp::print("Handling event in sc", std::endl);
+        tp::print("Handling event in sc");
         boost::apply_visitor(event_visitor, e);
     }
 }
