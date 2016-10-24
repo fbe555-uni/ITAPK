@@ -101,12 +101,23 @@ void cm::CMS::SendTrain(cm::Platform *platform) {
 
 void cm::CMS::LoadTrain(cm::Platform *platform) {
     tp::print("*** CMS loading ", platform->getTrain(), " at: ", platform);
+    auto cargoList_ptr = platform->getCargoList();
+    auto train_ptr = platform->getTrain();
+    for(auto it = cargoList_ptr->begin(); it != cargoList_ptr->end(); ++it){
+        if(train_ptr->load(*it)){
+            tp::print("loaded ", *it);
+            cargoList_ptr->erase(it);
+        }
+    }
+    /*
     platform->getCargoList()->erase(
             std::remove_if(platform->getCargoList()->begin(),
                            platform->getCargoList()->end(),
                            [platform](cm::Cargo::Ptr &c) { return platform->getTrain()->load(c); }),
             platform->getCargoList()->end());
-    tp::print("*** CMS loaded ", platform->getTrain(), " at: ", platform);
+    */
+     tp::print("*** CMS loaded ", platform->getTrain(), " at: ", platform);
+
     trainFullyLoaded(platform);
 }
 
