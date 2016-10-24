@@ -18,8 +18,6 @@ namespace cm {
     class Platform {
     public:
         Platform();
-        //Platform(const cm::Platform&);
-
         void Status() const; // Tells if a platform is occupied.
         std::string getID() const;
 

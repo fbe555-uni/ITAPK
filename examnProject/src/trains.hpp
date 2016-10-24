@@ -19,8 +19,6 @@
 #include "ThreadSafeCout.hpp"
 
 namespace cm {
-    //Train instance creation will have the following syntax
-    //static Train::Ptr&& Train::getInstance<Locomotive<Capacity>, CarriageList<Carriage<CargoList<Cargo...> >...> >();
 
     class Train {
     public:
@@ -110,7 +108,7 @@ namespace cm {
      *********************************************************************/
 
 
-    //Second assertion says that if any of the Cargo types are liquid Cargo types, all must be.
+    //first assertion says that if any of the Cargo types are liquid Cargo types, all must be.
     template<bool, typename E, typename L>
     struct ALL_OR_NONE_ARE_LIQUID;
     template<typename E, typename L>
@@ -128,7 +126,7 @@ namespace cm {
         static const bool value = ALL_OR_NONE_ARE_LIQUID<true, typename CL::HEAD, typename CL::TAIL>::value;
     };
 
-    //Third assertion says that one may not mix different kinds of livestock in one carriage
+    //second assertion says that one may not mix different kinds of livestock in one carriage
     //OBS: in the current implementation CARGO_LIST<Sheep, Sheep> is illegal.
     template<bool prevLivestock, bool currLivestock, typename REST>
     struct ONLY_ONE_KIND_OF_LIVESTOCK;
@@ -291,8 +289,6 @@ namespace cm {
         static const int value = 0;
     };
 
-
-    //HAKON
     template<typename CL>
     class LoadVisitor : public LoadVisitor<typename CL::TAIL> {
     public:
@@ -317,10 +313,6 @@ namespace cm {
 
         Cargo::Ptr cargo;
     };
-
-
-    //FELIX
-
 
     /**********************************************************************************
      **                          carriage visitors                                   **
@@ -444,11 +436,10 @@ namespace cm {
         bool load(Cargo::Ptr c) {
             std::lock_guard<std::recursive_mutex> lock(mut);
             //tp::print("Loading ", c);
-            bool loaded = false;
             for (auto& carriage: carriages) {
-                loaded = boost::apply_visitor(LoadVisitor<CARRIAGE_L>(c), carriage);
+                if(boost::apply_visitor(LoadVisitor<CARRIAGE_L>(c), carriage))return true;
             }
-            return loaded;
+            return false;
         };
 
         Cargo::Ptr unload() {

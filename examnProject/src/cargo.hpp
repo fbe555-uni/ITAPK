@@ -150,18 +150,6 @@ namespace cm{
         typedef CL_NULL_ELEM TAIL;
     };
 
-    /*
-    template<typename... CARGO_TYPES>
-    struct Cargo_LIST{
-        typedef CARGO_LIST<
-    };
-
-    template<typename first, typename ... rest>
-    struct CARGO_LIST{
-        typedef CL<first, CARGO_LIST<rest...>::LIST > LIST;
-    };
-     */
-
     /*******************************************************************
      **                      Cargolist utilities                      **
      *******************************************************************/
