@@ -11,14 +11,14 @@
 #include <string.h>
 
 #ifndef LOAD_SPEED_MULTIPLIER
-#define LOAD_SPEED_MULTIPLIER 1
+#define LOAD_SPEED_MULTIPLIER 1.0
 #endif
 namespace cm{
 
     //Constants
-    const double BASE_LOAD_FACTOR = 1/LOAD_SPEED_MULTIPLIER;
+    const double BASE_LOAD_FACTOR = 1.0/LOAD_SPEED_MULTIPLIER;
     const double LIQUID_LOAD_FACTOR = 0.5/LOAD_SPEED_MULTIPLIER;
-    const double LIVESTOCK_LOAD_FACTOR = 2/LOAD_SPEED_MULTIPLIER;
+    const double LIVESTOCK_LOAD_FACTOR = 2.0/LOAD_SPEED_MULTIPLIER;
 
     //Cargo struct
     class Cargo{
