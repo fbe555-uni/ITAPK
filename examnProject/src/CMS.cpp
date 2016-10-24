@@ -31,8 +31,7 @@ cm::CMS::CMS(std::string station_name, int num_platforms)
 }
 
 cm::CMS::~CMS() {
-    running = false;
-    event_cms.join();
+    if(running) StopCMS();
 }
 
 void cm::CMS::addCargo(std::list<Cargo::Ptr> &cargo, int platformNumber) {
@@ -146,7 +145,7 @@ void cm::CMS::StartCMS() {
 
 void cm::CMS::StopCMS() {
     tp::print("Stopping CMS");
-    running = false;
+    PushEvent(Event_Shutdown());
     event_cms.join();
 }
 
@@ -177,4 +176,8 @@ void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainFullyLoaded
 
 void cm::CMS::CmsHandleEventVisitor::operator()(const cm::Event_TrainLeftStation &e) const {
     _cms->DequeueTrains();
+}
+
+void cm::CMS::CmsHandleEventVisitor::operator()(const Event_Shutdown& e) const{
+    _cms->running = false;
 }

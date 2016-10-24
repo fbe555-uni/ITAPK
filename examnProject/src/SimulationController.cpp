@@ -23,8 +23,7 @@ SimulationController::SimulationController(cm::CMS *cms)
 
 }
 SimulationController::~SimulationController() {
-    running = false;
-    event_sc.join();
+    if(running) StopSimulation();
 }
 
 void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
@@ -41,7 +40,7 @@ void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
 void SimulationController::StopSimulation() {
     cms_->StopCMS();
     tp::print("Stopping simulation controller");
-    running = false;
+    PushEvent(Event_Shutdown());
     event_sc.join();
 }
 
@@ -101,4 +100,7 @@ void SimulationController::ScHandleEventVisitor::operator()(const Event_TrainArr
 }
 void SimulationController::ScHandleEventVisitor::operator()(const Event_TrainUnloaded& e) const{
     _sc->SendTrain(e.train);
+}
+void SimulationController::ScHandleEventVisitor::operator()(const Event_Shutdown &e) const {
+    _sc->running = false;
 }

@@ -23,6 +23,8 @@ namespace cm{
     //Cargo struct
     class Cargo{
     public:
+        typedef boost::mpl::bool_<false> IS_LIQUID;
+        typedef boost::mpl::bool_<false> IS_LIVESTOCK;
         typedef std::shared_ptr<Cargo> Ptr;
         Cargo(int w, double lt) : weight(w), loadTime(lt)
         {
@@ -54,36 +56,42 @@ namespace cm{
 
     class Oil : public Cargo{
     public:
+        typedef boost::mpl::bool_<true> IS_LIQUID;
         Oil(int w): Cargo(w, LIQUID_LOAD_FACTOR*w){}
         ~Oil(){};
     };
 
     class Gasoline: public Cargo{
     public:
+        typedef boost::mpl::bool_<true> IS_LIQUID;
         Gasoline(int w): Cargo(w, LIQUID_LOAD_FACTOR*w){}
         ~Gasoline(){};
     };
 
     class Water: public Cargo{
     public:
+        typedef boost::mpl::bool_<true> IS_LIQUID;
         Water(int w): Cargo(w, LIQUID_LOAD_FACTOR*w){}
         ~Water(){};
     };
 
     class Sheep : public Cargo{
     public:
+        typedef boost::mpl::bool_<true> IS_LIVESTOCK;
         Sheep(int w): Cargo(w, LIVESTOCK_LOAD_FACTOR*w){}
         ~Sheep(){};
     };
 
     class Cows : public Cargo{
     public:
+        typedef boost::mpl::bool_<true> IS_LIVESTOCK;
         Cows(int w): Cargo(w, LIVESTOCK_LOAD_FACTOR*w){}
         ~Cows(){};
     };
 
     class Pigs : public Cargo{
     public:
+        typedef boost::mpl::bool_<true> IS_LIVESTOCK;
         Pigs(int w): Cargo(w, LIVESTOCK_LOAD_FACTOR*w){}
         ~Pigs(){};
     };
@@ -99,43 +107,12 @@ namespace cm{
      *******************************************************************/
     template <typename CT>
     struct IS_LIQUID_CARGO{
-        static const bool value = false;
+        static const bool value = CT::IS_LIQUID::value;
     };
-
-    template <>
-    struct IS_LIQUID_CARGO<Oil>{
-        static const bool value = true;
-    };
-
-    template <>
-    struct IS_LIQUID_CARGO<Gasoline>{
-        static const bool value = true;
-    };
-
-    template <>
-    struct IS_LIQUID_CARGO<Water>{
-        static const bool value = true;
-    };
-
 
     template <typename CT>
     struct IS_LIVESTOCK_CARGO{
-        static const bool value = false;
-    };
-
-    template <>
-    struct IS_LIVESTOCK_CARGO<Sheep>{
-        static const bool value = true;
-    };
-
-    template <>
-    struct IS_LIVESTOCK_CARGO<Cows>{
-        static const bool value = true;
-    };
-
-    template <>
-    struct IS_LIVESTOCK_CARGO<Pigs>{
-        static const bool value = true;
+        static const bool value = CT::IS_LIVESTOCK::value;
     };
 
     // is same type tmp boolean

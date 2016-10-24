@@ -20,10 +20,11 @@ public:
     Event_TrainUnloaded(cm::Train::Ptr t): train(t){}
     cm::Train::Ptr train;
 };
+struct Event_Shutdown{};
 
 class SimulationController {
 public:
-    typedef boost::variant<Event_TrainArrived, Event_TrainUnloaded> Event;
+    typedef boost::variant<Event_TrainArrived, Event_TrainUnloaded, Event_Shutdown> Event;
     //Signals ***********************************************************
     boost::signals2::signal<void(cm::Train::Ptr)> trainArrivedAtStation;
     boost::signals2::signal<void(cm::Train::Ptr)> trainUnloaded;
@@ -51,6 +52,7 @@ private:
         ScHandleEventVisitor(SimulationController* sc);
         void operator()(const Event_TrainArrived& e) const;
         void operator()(const Event_TrainUnloaded& e) const;
+        void operator()(const Event_Shutdown& e) const;
     private:
         SimulationController* _sc;
     };

@@ -18,7 +18,6 @@ class SimulationController;
 
 namespace cm {
     struct Event_TrainAtStation{
-
         Event_TrainAtStation(Train::Ptr t) : train(t){}
         Train::Ptr train;
     };
@@ -31,10 +30,11 @@ namespace cm {
         Platform* platform_ptr;
     };
     struct Event_TrainLeftStation{};
+    struct Event_Shutdown{};
 
     class CMS {
     public:
-        typedef boost::variant<Event_TrainAtStation, Event_TrainAtPlatform, Event_TrainFullyLoaded, Event_TrainLeftStation> Event;
+        typedef boost::variant<Event_TrainAtStation, Event_TrainAtPlatform, Event_TrainFullyLoaded, Event_TrainLeftStation, Event_Shutdown> Event;
         //Signals *************************************************************************
         boost::signals2::signal<void(cm::Platform*)> trainAtPlatform;
         boost::signals2::signal<void(cm::Platform*)> trainFullyLoaded;
@@ -87,6 +87,7 @@ namespace cm {
             void operator()(const Event_TrainAtPlatform& e) const;
             void operator()(const Event_TrainFullyLoaded& e) const;
             void operator()(const Event_TrainLeftStation& e) const;
+            void operator()(const Event_Shutdown& e) const;
         private:
             CMS* _cms;
         };

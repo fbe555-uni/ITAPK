@@ -181,9 +181,16 @@ namespace cm {
     struct Carriage {
         typedef boost::mpl::bool_<true> IS_CARRIAGE;
 
+        typedef boost::mpl::int_<cap> CAPACITY;
+
+
         typedef IS_A_VALID_CARGO_LIST<CL> META_INFO;
 
-        typedef boost::mpl::int_<cap> CAPACITY;
+        const bool isTanker = META_INFO::IS_TANKER::value;
+        const bool hasLivestock = META_INFO::HAS_LIVESTOCK::value;
+
+        const int carriage_cap;
+        std::list<Cargo::Ptr> cargo;
 
         Carriage() : cargo(), carriage_cap(cap) {}
 
@@ -245,12 +252,6 @@ namespace cm {
         int getCapacity() const {
             return carriage_cap;
         }
-
-        std::list<Cargo::Ptr> cargo;
-        const bool isTanker = META_INFO::IS_TANKER::value;
-        const bool hasLivestock = META_INFO::HAS_LIVESTOCK::value;
-        const int carriage_cap;
-
     };
 
 
@@ -335,7 +336,6 @@ namespace cm {
 
         using CanHoldVisitor<typename CL::TAIL>::operator();
         using CanHoldVisitor<typename CL::TAIL>::cargo;
-
     };
 
     template<>
