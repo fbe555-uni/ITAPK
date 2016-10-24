@@ -10,26 +10,28 @@
 #include <typeinfo>
 #include <string.h>
 
-
+#ifndef LOAD_SPEED_MULTIPLIER
+#define LOAD_SPEED_MULTIPLIER 1
+#endif
 namespace cm{
 
     //Constants
-    const double BASE_LOAD_FACTOR = 1;
-    const double LIQUID_LOAD_FACTOR = 0.5;
-    const double LIVESTOCK_LOAD_FACTOR = 2;
+    const double BASE_LOAD_FACTOR = 1/LOAD_SPEED_MULTIPLIER;
+    const double LIQUID_LOAD_FACTOR = 0.5/LOAD_SPEED_MULTIPLIER;
+    const double LIVESTOCK_LOAD_FACTOR = 2/LOAD_SPEED_MULTIPLIER;
 
     //Cargo struct
     class Cargo{
     public:
         typedef std::shared_ptr<Cargo> Ptr;
-        Cargo(int w, int lt) : weight(w), loadTime(lt)
+        Cargo(int w, double lt) : weight(w), loadTime(lt)
         {
         }
 
         virtual ~Cargo(){}
 
         const int weight;
-        const int loadTime;
+        const double loadTime;
     };
 
     class Timber : public Cargo{

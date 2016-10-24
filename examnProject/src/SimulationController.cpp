@@ -10,22 +10,27 @@ SimulationController::SimulationController(cm::CMS *cms)
             : cms_(cms),
               event_visitor(this),
               cond(),
-              cond_m()
+              cond_m(),
+              running(false)
 {
     cms_->SetSimulationController(this);
     cms_->trainLeftStation.connect([&](cm::Train::Ptr t) {
         ReceiveTrain(t);
     });
     trainUnloaded.connect([&](cm::Train::Ptr t) {
-        pushEvent(Event_TrainUnloaded(t));
+        PushEvent(Event_TrainUnloaded(t));
     });
+
 }
 SimulationController::~SimulationController() {
+    running = false;
     event_sc.join();
 }
 
 void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
+    running = true;
     event_sc = std::thread([this] {EventHandler();});
+    cms_->StartCMS();
     tp::print("Simulation controller starting.");
     while (!trains.empty()){
         SendTrain(trains.front());
@@ -33,7 +38,14 @@ void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
     }
 }
 
-void SimulationController::pushEvent(SimulationController::Event e){
+void SimulationController::StopSimulation() {
+    cms_->StopCMS();
+    tp::print("Stopping simulation controller");
+    running = false;
+    event_sc.join();
+}
+
+void SimulationController::PushEvent(SimulationController::Event e){
     std::lock_guard<std::recursive_mutex> lock(cond_m);
     eventQueue.push(e);
     lock.~lock_guard();
@@ -48,7 +60,7 @@ void SimulationController::SendTrain(cm::Train::Ptr train) {
 
 void SimulationController::ReceiveTrain(cm::Train::Ptr train) {
     tp::print("*** Simulation Controller received : ", train);
-    pushEvent(Event_TrainArrived(train));
+    PushEvent(Event_TrainArrived(train));
 }
 
 void SimulationController::UnloadTrain(cm::Train::Ptr train) {
@@ -67,7 +79,7 @@ void SimulationController::UnloadTrain(cm::Train::Ptr train) {
 void SimulationController::EventHandler() {
     std::unique_lock<std::recursive_mutex> lock(cond_m, std::defer_lock);
     //TODO: add end condition
-    while(true){
+    while(running){
         //lock.lock();
         while (eventQueue.empty()) {
             wait(lock);
@@ -77,7 +89,6 @@ void SimulationController::EventHandler() {
         eventQueue.pop();
         lock.unlock();
 
-        tp::print("Handling event in sc");
         boost::apply_visitor(event_visitor, e);
     }
 }

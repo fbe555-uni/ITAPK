@@ -54,23 +54,25 @@ namespace cm {
         void StopCMS();
 
         //state and status functions:
-        void Status() const;
+
         std::string getID() const;
 
         bool HasCargo();
-        //receive a train
-        void ReceiveTrain(cm::Train::Ptr);
-        void pushEvent(Event e);
+
+        void PushEvent(Event e);
 
         int getNumDecommissionedTrains();
 
-        void addCargo(const std::list<Cargo::Ptr>& cargo, int platformNumber = -1);
+        void addCargo(std::list<Cargo::Ptr>& cargo, int platformNumber = -1);
 
     private:
-        std::list<Train::Ptr> decommissionedTrains;
+        volatile bool running;
         std::string ID;
-        SimulationController *SimControl;
+        SimulationController *simControl;
         cm::Station station;
+        std::list<Train::Ptr> decommissionedTrains;
+
+
 
         void EventHandler();
         void SendTrainToPlatform(Train::Ptr train);
@@ -95,6 +97,7 @@ namespace cm {
         std::thread event_cms;
         std::condition_variable cond;
         std::recursive_mutex cond_m;
+
     };
 }
 #endif //CMS_CMS_H

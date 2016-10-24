@@ -57,7 +57,7 @@ namespace cm {
 
         virtual int getCapacity() = 0;
 
-        virtual int calculatePossibleLoad(std::list<Cargo::Ptr>*) = 0;
+        virtual int calculatePossibleLoad(const std::list<Cargo::Ptr> * const cargo) = 0;
 
         int getID() {
             std::lock_guard<std::recursive_mutex> lock(mut);
@@ -89,7 +89,7 @@ namespace cm {
     };
 
     inline std::ostream &operator<<(std::ostream &out, Train &train) {
-        out << train.getName() << " (uid: " << train.getID() << ")";
+        out << train.getName() << " (uid: " << train.getID() << ", tw: "<< train.getTotalWeight()<< ")";
         return out;
     }
 
@@ -99,32 +99,16 @@ namespace cm {
         return out;
     }
 
+    inline std::ostream &operator<<(std::ostream &out, Train* train_ptr){
+        if (train_ptr) out << *train_ptr;
+        else out << "!!empty train pointer!!";
+        return out;
+    }
+
     /*********************************************************************
      **                ASSERTION structs for carriage                   **
      *********************************************************************/
 
-    //First assertion is that all elements are Cargo classes
-    //TODO: fix all elements are cargo
-    /*
-    template<bool, typename CL>
-    struct ALL_ELEMENTS_ARE_CARGO;
-
-    template<typename CL>
-    struct ALL_ELEMENTS_ARE_CARGO<true, CL>{
-        static const bool value = ALL_ELEMENTS_ARE_CARGO<
-                IS_CARGO<typename CL::HEAD>::value,
-                typename CL::TAIL>::value;
-    };
-    template<>
-    struct ALL_ELEMENTS_ARE_CARGO<true, CL_NULL_ELEM>{
-        static const bool value = true;
-    };
-
-    template<typename CL>
-    struct ASSERT_IS_CARGO{
-        static const bool value = ALL_ELEMENTS_ARE_CARGO<IS_CARGO<typename CL::HEAD>::value, typename CL::TAIL>::value;
-    };
-    */
 
     //Second assertion says that if any of the Cargo types are liquid Cargo types, all must be.
     template<bool, typename E, typename L>
@@ -237,7 +221,7 @@ namespace cm {
         }
         bool load(Cargo::Ptr c) {
             if (canHold(c)) {
-                std::this_thread::sleep_for(std::chrono::seconds(c->loadTime));
+                std::this_thread::sleep_for(std::chrono::milliseconds((int)(c->loadTime*1000)));
                 cargo.push_back(c);
                 return true;
             } else return false;
@@ -247,7 +231,7 @@ namespace cm {
             if (!cargo.empty()) {
                 Cargo::Ptr tmp = cargo.back();
                 cargo.pop_back();
-                std::this_thread::sleep_for(std::chrono::seconds(tmp->loadTime));
+                std::this_thread::sleep_for(std::chrono::milliseconds((int)(tmp->loadTime*1000)));
                 return tmp;
             } else return Cargo::Ptr();
         }
@@ -459,8 +443,9 @@ namespace cm {
 
         bool load(Cargo::Ptr c) {
             std::lock_guard<std::recursive_mutex> lock(mut);
+            //tp::print("Loading ", c);
             bool loaded = false;
-            for (auto carriage: carriages) {
+            for (auto& carriage: carriages) {
                 loaded = boost::apply_visitor(LoadVisitor<CARRIAGE_L>(c), carriage);
             }
             return loaded;
@@ -469,7 +454,7 @@ namespace cm {
         Cargo::Ptr unload() {
             std::lock_guard<std::recursive_mutex> lock(mut);
             Cargo::Ptr c;
-            for (auto carriage: carriages) {
+            for (auto& carriage: carriages) {
                 c = boost::apply_visitor(UnloadVisitor<CARRIAGE_L>(), carriage);
                 if (c) return c;
             }
@@ -490,18 +475,17 @@ namespace cm {
             return capacity;
         }
 
-        int calculatePossibleLoad(std::list<Cargo::Ptr>* cargo) {
+        int calculatePossibleLoad(const std::list<Cargo::Ptr> * const cargo) {
             std::lock_guard<std::recursive_mutex> lock(mut);
             assert(this->isEmpty());
             int total_loaded = 0;
             for (carriagevariant_t& carriage:carriages) {
                 int loaded = 0;
-                for (Cargo::Ptr& c:*cargo) {
-                    bool typeCompat = boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), carriage);
-                    bool weightCompat = c->weight + loaded <= boost::apply_visitor(GetCapacityVisitor<CARRIAGE_L>(), carriage);
-                    tp::print(c, " could be loaded: ", typeCompat, " ", weightCompat, " for ", carriage.which(), " ", typeid(this).name());
-                    if(typeCompat && weightCompat) {
-
+                for (const Cargo::Ptr& c:*cargo) {
+                    //tp::print(c, " could be loaded: ", typeCompat, " ", weightCompat, " for ", carriage.which(), " ", typeid(this).name());
+                    if(boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), carriage)
+                        && c->weight + loaded <= boost::apply_visitor(GetCapacityVisitor<CARRIAGE_L>(), carriage))
+                    {
                         loaded += c->weight;
                     }
                 }
