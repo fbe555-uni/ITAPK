@@ -35,7 +35,7 @@ public:
     ~SimulationController();
 
     void StartSimulation(std::list<cm::Train::Ptr> &);
-    void StopSimulation();
+    std::chrono::duration<double> StopSimulation();
 
     void PushEvent(Event e);
 private:
@@ -63,6 +63,8 @@ private:
     std::thread event_sc;
     std::condition_variable cond;
     std::recursive_mutex cond_m;
+
+    std::chrono::time_point<std::chrono::system_clock> simTime;
 };
 
 

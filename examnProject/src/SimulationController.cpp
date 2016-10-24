@@ -11,7 +11,8 @@ SimulationController::SimulationController(cm::CMS *cms)
               event_visitor(this),
               cond(),
               cond_m(),
-              running(false)
+              running(false),
+              simTime()
 {
     cms_->SetSimulationController(this);
     cms_->trainLeftStation.connect([&](cm::Train::Ptr t) {
@@ -30,6 +31,7 @@ void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
     running = true;
     event_sc = std::thread([this] {EventHandler();});
     cms_->StartCMS();
+    simTime = std::chrono::system_clock::now();
     tp::print("Simulation controller starting.");
     while (!trains.empty()){
         SendTrain(trains.front());
@@ -37,11 +39,12 @@ void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
     }
 }
 
-void SimulationController::StopSimulation() {
+std::chrono::duration<double> SimulationController::StopSimulation() {
     cms_->StopCMS();
     tp::print("Stopping simulation controller");
     PushEvent(Event_Shutdown());
     event_sc.join();
+    return std::chrono::system_clock::now()-simTime;
 }
 
 void SimulationController::PushEvent(SimulationController::Event e){

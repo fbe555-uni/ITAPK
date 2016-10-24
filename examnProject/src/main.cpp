@@ -54,9 +54,9 @@ int main() {
     while(cms.getNumDecommissionedTrains() < num_trains){
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
-    sc.StopSimulation();
+    auto dur = sc.StopSimulation();
     tp::print("**********************************************");
-    tp::print("*  Simulation ended."); //TODO:: add timer
+    tp::print("*  Simulation ended, after: ", dur.count(), " seconds (", dur.count()*LOAD_SPEED_MULTIPLIER, " realtime seconds)");
     tp::print("*  Station has been emptied: ", !cms.HasCargo());
     tp::print("**********************************************");
 
