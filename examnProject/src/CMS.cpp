@@ -101,11 +101,13 @@ void cm::CMS::SendTrain(cm::Platform *platform) {
 
 void cm::CMS::LoadTrain(cm::Platform *platform) {
     tp::print("*** CMS loading ", platform->getTrain(), " at: ", platform);
-    platform->getCargoList()->erase(
+    for (auto )
+   /* platform->getCargoList()->erase(
             std::remove_if(platform->getCargoList()->begin(),
                            platform->getCargoList()->end(),
                            [platform](cm::Cargo::Ptr &c) { return platform->getTrain()->load(c); }),
             platform->getCargoList()->end());
+            */
     tp::print("*** CMS loaded ", platform->getTrain(), " at: ", platform);
     trainFullyLoaded(platform);
 }
