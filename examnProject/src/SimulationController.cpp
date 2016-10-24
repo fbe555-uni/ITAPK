@@ -17,7 +17,7 @@ SimulationController::SimulationController(cm::CMS *cms)
         ReceiveTrain(t);
     });
     trainUnloaded.connect([&](cm::Train::Ptr t) {
-        pushEvent(Event_TrainUnloaded(t));
+        PushEvent(Event_TrainUnloaded(t));
     });
 }
 SimulationController::~SimulationController() {
@@ -33,7 +33,7 @@ void SimulationController::StartSimulation(std::list<cm::Train::Ptr> &trains) {
     }
 }
 
-void SimulationController::pushEvent(SimulationController::Event e){
+void SimulationController::PushEvent(SimulationController::Event e){
     std::lock_guard<std::recursive_mutex> lock(cond_m);
     eventQueue.push(e);
     lock.~lock_guard();
@@ -48,7 +48,7 @@ void SimulationController::SendTrain(cm::Train::Ptr train) {
 
 void SimulationController::ReceiveTrain(cm::Train::Ptr train) {
     tp::print("*** Simulation Controller received : ", train);
-    pushEvent(Event_TrainArrived(train));
+    PushEvent(Event_TrainArrived(train));
 }
 
 void SimulationController::UnloadTrain(cm::Train::Ptr train) {

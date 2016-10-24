@@ -12,13 +12,6 @@ void test(T first, R... rest){
 void test(){
     std::cout << "Rock bottom";
 }
-void cm::Station::Status() const{
-    int i = 0;
-    for (auto &item:platforms) {
-        tp::print("Status from ", item, ":", "\n\r");
-        item.Status();
-    }
-}
 
 cm::Station::Station(std::string n, int num_platforms) : platforms(), trainQueue() {
     name = n;
@@ -61,7 +54,7 @@ bool cm::Station::isEmpty() {
     return empty;
 }
 
-bool cm::Station::HasCargo() {
+bool cm::Station::hasCargo() {
     bool hasCargo = false;
     for (auto platform:platforms) {
         if (!platform.getCargoList().empty())
@@ -73,34 +66,34 @@ bool cm::Station::HasCargo() {
 
 void cm::Platform::Status() const{
     tp::print("Cargo on platform: ", "\n\r");
-    for (auto item:Platform::_cargo) {
+    for (auto item:Platform::cargo) {
         //TODO this reference i do not understand; at item
         tp::print(item, "\n\r");
     }
-    tp::print("Train on platform: ", _train, "\n\r");
+    tp::print("Train on platform: ", train, "\n\r");
 }
 
 cm::Platform::Platform() {
     num_id++;
-    ID = "Platform #" + std::to_string(num_id);
+    id = "Platform #" + std::to_string(num_id);
     //Smart pointer version of nullptr
-    _train = cm::Train::Ptr();
+    train = cm::Train::Ptr();
 }
 
 bool cm::Platform::trainArrive(cm::Train::Ptr t) {
-    if (!_train) {
-        _train = t;
+    if (!train) {
+        train = t;
         return true;
     } else
         return false;
 }
 
 cm::Train::Ptr cm::Platform::trainDepart() {
-    cm::Train::Ptr tmp_train = _train;
-    if (!_train)
-        return _train;
+    cm::Train::Ptr tmp_train = train;
+    if (!train)
+        return train;
     else {
-        _train = cm::Train::Ptr();
+        train = cm::Train::Ptr();
         return tmp_train;
     }
 }
@@ -108,25 +101,25 @@ cm::Train::Ptr cm::Platform::trainDepart() {
 int cm::Platform::num_id = 0;
 
 std::string cm::Platform::getID() const{
-    return ID;
+    return id;
 }
 
 cm::Train::Ptr cm::Platform::getTrain() {
-    return _train;
+    return train;
 }
 
 std::list<cm::Cargo::Ptr> cm::Platform::getCargoList() {
-    return _cargo;
+    return cargo;
 }
 
 
-void cm::Platform::addCargo(const std::list<cm::Cargo::Ptr>& cargo){
-    for(auto c : cargo){
+void cm::Platform::addCargo(const std::list<cm::Cargo::Ptr>& c){
+    for(auto item : c){
         //make a new copy of each element in the list
-        _cargo.push_back(cm::Cargo::Ptr(new cm::Cargo(*c)));
+        cargo.push_back(cm::Cargo::Ptr(new cm::Cargo(*item)));
     }
 }
 
 bool cm::Platform::isFree() {
-    return _train == cm::Train::Ptr();
+    return train == cm::Train::Ptr();
 }

@@ -35,7 +35,7 @@ public:
 
     void StartSimulation(std::list<cm::Train::Ptr> &);
 
-    void pushEvent(Event e);
+    void PushEvent(Event e);
 private:
     cm::CMS *cms_;
 
@@ -52,6 +52,7 @@ private:
     private:
         SimulationController* _sc;
     };
+
 
     std::queue<Event> eventQueue;
     ScHandleEventVisitor event_visitor;

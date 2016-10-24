@@ -102,28 +102,6 @@ namespace cm {
      **                ASSERTION structs for carriage                   **
      *********************************************************************/
 
-    //First assertion is that all elements are Cargo classes
-    //TODO: fix all elements are cargo
-    /*
-    template<bool, typename CL>
-    struct ALL_ELEMENTS_ARE_CARGO;
-
-    template<typename CL>
-    struct ALL_ELEMENTS_ARE_CARGO<true, CL>{
-        static const bool value = ALL_ELEMENTS_ARE_CARGO<
-                IS_CARGO<typename CL::HEAD>::value,
-                typename CL::TAIL>::value;
-    };
-    template<>
-    struct ALL_ELEMENTS_ARE_CARGO<true, CL_NULL_ELEM>{
-        static const bool value = true;
-    };
-
-    template<typename CL>
-    struct ASSERT_IS_CARGO{
-        static const bool value = ALL_ELEMENTS_ARE_CARGO<IS_CARGO<typename CL::HEAD>::value, typename CL::TAIL>::value;
-    };
-    */
 
     //Second assertion says that if any of the Cargo types are liquid Cargo types, all must be.
     template<bool, typename E, typename L>

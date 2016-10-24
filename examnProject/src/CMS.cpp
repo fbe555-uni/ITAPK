@@ -5,19 +5,19 @@
 #include "CMS.hpp"
 
 void cm::CMS::SetSimulationController(SimulationController *s) {
-    SimControl = s;
+    simControl = s;
 
-    SimControl->trainArrivedAtStation.connect([&](cm::Train::Ptr t) {
-        pushEvent(Event_TrainAtStation(t));
+    simControl->trainArrivedAtStation.connect([&](cm::Train::Ptr t) {
+        PushEvent(Event_TrainAtStation(t));
     });
     trainAtPlatform.connect([&](cm::Platform* p){
-        pushEvent(Event_TrainAtPlatform(p));
+        PushEvent(Event_TrainAtPlatform(p));
     });
     trainFullyLoaded.connect([&](cm::Platform *p) {
-        pushEvent(Event_TrainFullyLoaded(p));
+        PushEvent(Event_TrainFullyLoaded(p));
     });
     trainLeftStation.connect([&](cm::Train::Ptr t) {
-        pushEvent(Event_TrainLeftStation());
+        PushEvent(Event_TrainLeftStation());
     });
 }
 
@@ -41,16 +41,12 @@ void cm::CMS::addCargo(const std::list<Cargo::Ptr>& cargo, int platformNumber) {
     }
 }
 
-void cm::CMS::Status() const {
-    station.Status();
-}
-
 std::string cm::CMS::getID() const {
     return ID;
 }
 
 
-void cm::CMS::pushEvent(cm::CMS::Event e){
+void cm::CMS::PushEvent(cm::CMS::Event e){
     std::lock_guard<std::recursive_mutex> lock(cond_m);
     eventQueue.push(e);
     lock.~lock_guard();
@@ -145,7 +141,7 @@ void cm::CMS::StopCMS() {
 }
 
 bool cm::CMS::HasCargo() {
-    return station.HasCargo();
+    return station.hasCargo();
 }
 
 
