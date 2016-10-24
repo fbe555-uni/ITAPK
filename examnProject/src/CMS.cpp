@@ -70,6 +70,7 @@ void cm::CMS::SendTrainToPlatform(cm::Train::Ptr train){
     std::list<Platform>* platforms = station.getPlatforms();
     int temp_load = 0;
     for (auto& platform: *platforms) {
+        tp::print(platform.getCargoList()->front());
         auto platform_load = train->calculatePossibleLoad(platform.getCargoList());
         if (platform_load > temp_load) {
             temp_load = platform_load;
@@ -101,7 +102,7 @@ void cm::CMS::SendTrain(cm::Platform *platform) {
 
 void cm::CMS::LoadTrain(cm::Platform *platform) {
     tp::print("*** CMS loading ", platform->getTrain(), " at: ", platform);
-    std::for_each(platform->getCargoList().begin(), platform->getCargoList().end(),
+    std::for_each(platform->getCargoList()->begin(), platform->getCargoList()->end(),
                   [&platform](Cargo::Ptr c) { platform->getTrain()->load(c); });
     tp::print("*** CMS loaded ", platform->getTrain(), " at: ", platform);
     trainFullyLoaded(platform);

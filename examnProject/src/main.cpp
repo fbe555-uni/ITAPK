@@ -22,7 +22,7 @@ int main() {
                     cm::Carriage<250, cm::CARGO_LIST<cm::Sheep, cm::Timber> >,
                     cm::Carriage<350, cm::CARGO_LIST<cm::Grains, cm::Pigs> >
             > > Train2_t;
-
+    /*
     std::vector<cm::Train::Ptr> trainList;
     trainList.push_back(cm::Train::Ptr(new Train1_t("First train")));
     trainList.push_back(cm::Train::Ptr(new Train2_t("Second train")));
@@ -34,6 +34,7 @@ int main() {
     //cm::Carriage<100, cm::CARGO_LIST<int, cm::Timber, cm::Grains> > notCargoCarriage = cm::Carriage<100, cm::CARGO_LIST<int, cm::Timber, cm::Grains> > ();
     //cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water, cm::Coal> > illegalCarriage2 = cm::Carriage<100, cm::CARGO_LIST<cm::Oil, cm::Water, cm::Coal> >();
     tp::print("train ", trainList[0], " can hold 10 cows: ", trainList[0]->canHold(cm::Cargo::Ptr(new cm::Cows(10))));
+    */
 
     std::list<cm::Cargo::Ptr> cargo1;
     cargo1.insert(cargo1.begin(), 20, cm::Cargo::Ptr(new cm::Timber(20)));

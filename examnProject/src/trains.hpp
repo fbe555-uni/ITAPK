@@ -16,6 +16,7 @@
 #include <thread>
 #include <mutex>
 #include "cargo.hpp"
+#include "ThreadSafeCout.hpp"
 
 namespace cm {
     //Train instance creation will have the following syntax
@@ -56,7 +57,7 @@ namespace cm {
 
         virtual int getCapacity() = 0;
 
-        virtual int calculatePossibleLoad(std::list<Cargo::Ptr>) = 0;
+        virtual int calculatePossibleLoad(std::list<Cargo::Ptr>*) = 0;
 
         int getID() {
             std::lock_guard<std::recursive_mutex> lock(mut);
@@ -489,16 +490,18 @@ namespace cm {
             return capacity;
         }
 
-        int calculatePossibleLoad(std::list<Cargo::Ptr> cargo) {
+        int calculatePossibleLoad(std::list<Cargo::Ptr>* cargo) {
             std::lock_guard<std::recursive_mutex> lock(mut);
             assert(this->isEmpty());
             int total_loaded = 0;
             for (carriagevariant_t& carriage:carriages) {
                 int loaded = 0;
-                for (auto c:cargo) {
+                for (Cargo::Ptr& c:*cargo) {
                     bool typeCompat = boost::apply_visitor(CanHoldVisitor<CARRIAGE_L>(c), carriage);
                     bool weightCompat = c->weight + loaded <= boost::apply_visitor(GetCapacityVisitor<CARRIAGE_L>(), carriage);
+                    tp::print(c, " could be loaded: ", typeCompat, " ", weightCompat, " for ", carriage.which(), " ", typeid(this).name());
                     if(typeCompat && weightCompat) {
+
                         loaded += c->weight;
                     }
                 }

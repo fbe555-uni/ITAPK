@@ -25,7 +25,7 @@ namespace cm {
 
         cm::Train::Ptr getTrain();
 
-        std::list<cm::Cargo::Ptr> getCargoList();
+        std::list<cm::Cargo::Ptr>* getCargoList();
         void addCargo(const std::list<cm::Cargo::Ptr>& cargo);
 
         //returns false if there is already a train

@@ -64,7 +64,7 @@ bool cm::Station::isEmpty() {
 bool cm::Station::HasCargo() {
     bool hasCargo = false;
     for (auto platform:platforms) {
-        if (!platform.getCargoList().empty())
+        if (!platform.getCargoList()->empty())
             return true;
     }
     return hasCargo;
@@ -115,8 +115,8 @@ cm::Train::Ptr cm::Platform::getTrain() {
     return _train;
 }
 
-std::list<cm::Cargo::Ptr> cm::Platform::getCargoList() {
-    return _cargo;
+std::list<cm::Cargo::Ptr>* cm::Platform::getCargoList() {
+    return &_cargo;
 }
 
 
