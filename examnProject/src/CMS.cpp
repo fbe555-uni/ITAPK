@@ -159,6 +159,12 @@ int cm::CMS::getNumDecommissionedTrains() {
     return (int) decommissionedTrains.size();
 }
 
+void cm::CMS::Status() {
+
+        station.Status();
+
+}
+
 
 cm::CMS::CmsHandleEventVisitor::CmsHandleEventVisitor(cm::CMS *cms) : _cms(cms) {}
 

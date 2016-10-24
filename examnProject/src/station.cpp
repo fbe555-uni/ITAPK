@@ -55,14 +55,21 @@ bool cm::Station::hasCargo() {
     return hasCargo;
 }
 
+void cm::Station::Status() {
+    tp::print("Status from platforms: ");
+    for (auto& platform:platforms) {
+        platform.Status();
+    }
+
+}
+
 
 void cm::Platform::Status() const{
-    tp::print("Cargo on platform: ", "\n\r");
-    for (auto item:Platform::cargo) {
-        //TODO this reference i do not understand; at item
-        tp::print(item, "\n\r");
+    tp::print("Cargo on ", this, ":");
+    for (auto& item:Platform::cargo) {
+        tp::print(item);
     }
-    tp::print("Train on platform: ", train, "\n\r");
+    tp::print("Train on ",this, ": ", train);
 }
 
 cm::Platform::Platform() {

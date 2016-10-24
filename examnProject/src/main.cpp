@@ -1,4 +1,4 @@
-#define LOAD_SPEED_MULTIPLIER 500
+#define LOAD_SPEED_MULTIPLIER 2000
 
 #include <iostream>
 #include <boost/signals2.hpp>
@@ -42,8 +42,8 @@ int main() {
     std::list<cm::Train::Ptr> trains;
     trains.push_back(cm::Train::Ptr(new Train1_t("Train of the West")));
     trains.push_back(cm::Train::Ptr(new Train1_t("Tøffe")));
-    trains.push_back(cm::Train::Ptr(new Train2_t("Eastbound and down")));
-    trains.push_back(cm::Train::Ptr(new Train2_t("Thomas")));
+    //trains.push_back(cm::Train::Ptr(new Train2_t("Eastbound and down")));
+    //trains.push_back(cm::Train::Ptr(new Train2_t("Thomas")));
     int num_trains = trains.size();
 
     cm::CMS cms("Haste Station", 2);
@@ -54,6 +54,7 @@ int main() {
     while(cms.getNumDecommissionedTrains() < num_trains){
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+    cms.Status();
     sc.StopSimulation();
     tp::print("**********************************************");
     tp::print("*  Simulation ended."); //TODO:: add timer

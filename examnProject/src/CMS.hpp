@@ -46,6 +46,8 @@ namespace cm {
         CMS(std::string, int);
         ~CMS();
 
+
+        void Status();
         //bind to a simulation controller:
         void SetSimulationController(SimulationController*);
 

@@ -69,6 +69,8 @@ namespace cm {
 
         bool hasCargo();
 
+        void Status();
+
     private:
         std::queue<Train::Ptr> trainQueue;
         std::list<Platform> platforms;
